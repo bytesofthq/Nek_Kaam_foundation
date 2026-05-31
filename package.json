@@ -1,0 +1,12 @@
+{
+  "name": "nek-kaam-foundation",
+  "version": "1.0.0",
+  "scripts": {
+    "server": "cd Backend && nodemon server.js",
+    "client": "npm run dev --prefix my-app",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.0"
+  }
+}
