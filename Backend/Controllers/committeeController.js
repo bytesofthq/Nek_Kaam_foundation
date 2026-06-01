@@ -4,7 +4,7 @@ const createCommitteeMember = async (req, res) => {
   try {
     const { photo, name, designation, phoneNumber, email, address, bio, order } = req.body;
 
-    if (!photo || !name || !designation) {
+    if (!name || !designation) {
       return res.status(400).json({
         success: false,
         message: 'Photo, name and designation are required'
