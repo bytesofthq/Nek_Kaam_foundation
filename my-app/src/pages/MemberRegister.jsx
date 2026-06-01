@@ -40,6 +40,37 @@ const MemberRegister = () => {
     }
   };
 
+const states = [
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chhattisgarh",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttar Pradesh",
+  "Uttarakhand",
+  "West Bengal"
+];
+
   return (
     <div className="min-h-screen bg-gradient-to-r from-green-600 to-green-800 flex items-center justify-center py-12 px-4">
       <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full mt-10">
@@ -112,8 +143,7 @@ const MemberRegister = () => {
 
           <div>
             <label className="block text-gray-700 font-semibold mb-2">State</label>
-            <input
-              type="text"
+            <select
               name="state"
               value={formData.state}
               onChange={handleChange}
@@ -121,7 +151,14 @@ const MemberRegister = () => {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
               placeholder="Your state"
               disabled={loading}
-            />
+            >
+              <option value="">Select State</option>
+              {states.map((state) => (
+                <option key={state} value={state}>
+                  {state}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div>

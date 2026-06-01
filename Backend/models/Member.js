@@ -55,13 +55,12 @@ const memberSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Auto-generate member ID before saving
-memberSchema.pre('save', async function(next) {
-  if (!this.memberId) {
+// Auto-generate member ID before validation
+memberSchema.pre('validate', async function() {
+  if (this.isNew && !this.memberId) {
     const count = await mongoose.model('Member').countDocuments();
     this.memberId = `NKF${String(count + 1).padStart(6, '0')}`;
   }
-  next();
 });
 
 module.exports = mongoose.model('Member', memberSchema);

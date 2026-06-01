@@ -32,10 +32,17 @@ const { errorHandler } = require('./middleware/errorMiddleware');
 
 const app = express();
 
+// Enable CORS (must be before any other middleware or routes to intercept preflight OPTIONS requests)
+app.use(cors({
+  origin: ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174', 'http://127.0.0.1:5173', process.env.FRONTEND_URL],
+  credentials: true, // ✅ Important for cookies
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS']
+}));
+
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)
-.then(() => console.log('✅ MongoDB Connected'))
-.catch((err) => console.error('❌ MongoDB Connection Error:', err));
+  .then(() => console.log('✅ MongoDB Connected'))
+  .catch((err) => console.error('❌ MongoDB Connection Error:', err));
 
 // Security middleware
 app.use(helmet({
@@ -59,16 +66,21 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 
 // Data sanitization
+// Fix for Express 5 where req.query is read-only (needed for xss-clean compatibility)
+app.use((req, res, next) => {
+  if (req.query) {
+    Object.defineProperty(req, 'query', {
+      value: { ...req.query },
+      writable: true,
+      configurable: true,
+      enumerable: true
+    });
+  }
+  next();
+});
 // app.use(mongoSanitize());
 app.use(xss());
 
-
-app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:5173', process.env.FRONTEND_URL],
-  credentials: true, // ✅ Important for cookies
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
 
 // Logging
 if (process.env.NODE_ENV === 'development') {
