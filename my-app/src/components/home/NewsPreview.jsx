@@ -34,12 +34,12 @@ const NewsPreview = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {news.map((item) => (
             <div key={item._id} className="bg-gray-50 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
-              <div className="bg-gradient-to-r from-blue-400 to-blue-600 h-40" />
+              <div className="bg-gradient-to-r from-green-400 to-green-600 h-40" />
               <div className="p-6">
                 <p className="text-sm text-gray-500 mb-2">{formatDate(item.createdAt)}</p>
                 <h3 className="text-xl font-bold mb-2">{item.title}</h3>
                 <p className="text-gray-600 mb-4 line-clamp-2">{item.content}</p>
-                <Link to={`#`} className="text-blue-600 hover:text-blue-800">
+                <Link to={`#`} className="text-green-600 hover:text-green-800">
                   Read More →
                 </Link>
               </div>

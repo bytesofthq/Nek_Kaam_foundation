@@ -32,15 +32,15 @@ const ProjectsPreview = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {projects.map((project) => (
             <div key={project._id} className="bg-gray-50 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
-              <div className="bg-gradient-to-r from-blue-400 to-blue-600 h-40" />
+              <div className="bg-gradient-to-r from-green-400 to-green-600 h-40" />
               <div className="p-6">
                 <h3 className="text-xl font-bold mb-2">{project.title}</h3>
                 <p className="text-gray-600 mb-4 line-clamp-2">{project.description}</p>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm bg-blue-100 text-blue-600 px-3 py-1 rounded-full">
+                  <span className="text-sm bg-green-100 text-green-600 px-3 py-1 rounded-full">
                     {project.status}
                   </span>
-                  <Link to={`/projects/${project._id}`} className="text-blue-600 hover:text-blue-800">
+                  <Link to={`/projects/${project._id}`} className="text-green-600 hover:text-green-800">
                     View →
                   </Link>
                 </div>

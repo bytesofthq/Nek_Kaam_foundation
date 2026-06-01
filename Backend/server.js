@@ -59,12 +59,12 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 
 // Data sanitization
-app.use(mongoSanitize());
+// app.use(mongoSanitize());
 app.use(xss());
 
 
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: ['http://localhost:3000', 'http://localhost:5173', process.env.FRONTEND_URL],
   credentials: true, // ✅ Important for cookies
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']

@@ -28,7 +28,7 @@ const MemberLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-600 to-blue-800 flex items-center justify-center py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-r from-green-600 to-green-800 flex items-center justify-center py-12 px-4">
       <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
         <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">Member Login</h1>
 
@@ -46,7 +46,7 @@ const MemberLogin = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
               placeholder="your@email.com"
               disabled={loading}
             />
@@ -59,7 +59,7 @@ const MemberLogin = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
               placeholder="••••••••"
               disabled={loading}
             />
@@ -78,7 +78,7 @@ const MemberLogin = () => {
 
         <p className="text-center text-gray-600 mt-6">
           Don't have an account?{' '}
-          <a href="/member-register" className="text-blue-600 hover:underline font-semibold">
+          <a href="/member-register" className="text-green-600 hover:underline font-semibold">
             Register here
           </a>
         </p>

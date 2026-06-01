@@ -24,7 +24,7 @@ const Committee = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+      <section className="bg-gradient-to-r from-green-600 to-green-800 text-white py-16">
         <div className="max-w-7xl mx-auto px-4">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Committee Members</h1>
           <p className="text-xl text-gray-100">Meet the people guiding our mission</p>
@@ -40,14 +40,14 @@ const Committee = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {members.map((member) => (
                 <div key={member._id} className="bg-gray-50 rounded-lg shadow-md overflow-hidden">
-                  <div className="bg-gradient-to-r from-blue-400 to-blue-600 h-40" />
+                  <div className="bg-gradient-to-r from-green-400 to-green-600 h-40" />
                   <div className="p-6 text-center">
                     <h3 className="text-xl font-bold mb-2">{member.name}</h3>
-                    <p className="text-blue-600 font-semibold mb-2">{member.position}</p>
+                    <p className="text-green-600 font-semibold mb-2">{member.position}</p>
                     <p className="text-gray-600 text-sm mb-4">{member.bio}</p>
                     {member.email && (
                       <p className="text-sm text-gray-500">
-                        <a href={`mailto:${member.email}`} className="text-blue-600 hover:underline">
+                        <a href={`mailto:${member.email}`} className="text-green-600 hover:underline">
                           {member.email}
                         </a>
                       </p>

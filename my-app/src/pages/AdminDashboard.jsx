@@ -25,10 +25,10 @@ const AdminDashboard = () => {
   return (
     <div className="bg-gray-50 min-h-screen">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-8">
+      <div className="bg-gradient-to-r from-green-600 to-green-800 text-white py-8">
         <div className="max-w-7xl mx-auto px-4">
           <h1 className="text-4xl font-bold mb-2">Admin Dashboard</h1>
-          <p className="text-blue-100">Welcome back, {admin?.username}</p>
+          <p className="text-green-100">Welcome back, {admin?.username}</p>
         </div>
       </div>
 
@@ -41,7 +41,7 @@ const AdminDashboard = () => {
               onClick={() => setActiveTab(tab.id)}
               className={`px-6 py-2 rounded-lg font-semibold transition ${
                 activeTab === tab.id
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-green-600 text-white'
                   : 'bg-white text-gray-700 hover:bg-gray-100'
               }`}
             >
@@ -56,9 +56,9 @@ const AdminDashboard = () => {
             <div>
               <h2 className="text-2xl font-bold mb-6">Dashboard Overview</h2>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="bg-blue-50 rounded-lg p-6">
+                <div className="bg-green-50 rounded-lg p-6">
                   <p className="text-gray-600 text-sm">Total Projects</p>
-                  <p className="text-3xl font-bold text-blue-600">15</p>
+                  <p className="text-3xl font-bold text-green-600">15</p>
                 </div>
                 <div className="bg-green-50 rounded-lg p-6">
                   <p className="text-gray-600 text-sm">Total Members</p>

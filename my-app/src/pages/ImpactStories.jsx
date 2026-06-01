@@ -24,7 +24,7 @@ const ImpactStories = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+      <section className="bg-gradient-to-r from-green-600 to-green-800 text-white py-16">
         <div className="max-w-7xl mx-auto px-4">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Impact Stories</h1>
           <p className="text-xl text-gray-100">Real stories of transformation</p>
@@ -41,7 +41,7 @@ const ImpactStories = () => {
               {stories.map((story) => (
                 <div key={story._id} className="bg-gray-50 rounded-lg shadow-md overflow-hidden">
                   <div className="grid grid-cols-1 md:grid-cols-2">
-                    <div className="bg-gradient-to-r from-blue-400 to-blue-600 h-40 md:h-full" />
+                    <div className="bg-gradient-to-r from-green-400 to-green-600 h-40 md:h-full" />
                     <div className="p-8">
                       <h3 className="text-2xl font-bold mb-4">{story.title}</h3>
                       <p className="text-gray-700 mb-4">{story.description}</p>

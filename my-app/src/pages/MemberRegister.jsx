@@ -6,12 +6,12 @@ import Loader from '../components/common/Loader';
 
 const MemberRegister = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    password: '',
-    confirmPassword: '',
+    fullName: '',
+    phoneNumber: '',
     address: '',
+    city: '',
+    state: '',
+    pinCode: '',
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -28,12 +28,6 @@ const MemberRegister = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-
-    if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
-      return;
-    }
-
     setLoading(true);
 
     try {
@@ -47,8 +41,8 @@ const MemberRegister = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-600 to-blue-800 flex items-center justify-center py-12 px-4">
-      <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
+    <div className="min-h-screen bg-gradient-to-r from-green-600 to-green-800 flex items-center justify-center py-12 px-4">
+      <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full mt-10">
         <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">Member Registration</h1>
 
         {error && (
@@ -62,39 +56,28 @@ const MemberRegister = () => {
             <label className="block text-gray-700 font-semibold mb-2">Full Name</label>
             <input
               type="text"
-              name="name"
-              value={formData.name}
+              name="fullName"
+              value={formData.fullName}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600"
-              placeholder="Your name"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
+              placeholder="Your full name"
               disabled={loading}
             />
           </div>
 
           <div>
-            <label className="block text-gray-700 font-semibold mb-2">Email</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600"
-              placeholder="your@email.com"
-              disabled={loading}
-            />
-          </div>
-
-          <div>
-            <label className="block text-gray-700 font-semibold mb-2">Phone</label>
+            <label className="block text-gray-700 font-semibold mb-2">Phone Number</label>
             <input
               type="tel"
-              name="phone"
-              value={formData.phone}
+              name="phoneNumber"
+              value={formData.phoneNumber}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600"
-              placeholder="Your phone number"
+              required
+              pattern="[0-9]{10}"
+              title="Please enter a valid 10-digit phone number"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
+              placeholder="10 digit phone number"
               disabled={loading}
             />
           </div>
@@ -106,36 +89,53 @@ const MemberRegister = () => {
               name="address"
               value={formData.address}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600"
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
               placeholder="Your address"
               disabled={loading}
             />
           </div>
 
           <div>
-            <label className="block text-gray-700 font-semibold mb-2">Password</label>
+            <label className="block text-gray-700 font-semibold mb-2">City</label>
             <input
-              type="password"
-              name="password"
-              value={formData.password}
+              type="text"
+              name="city"
+              value={formData.city}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600"
-              placeholder="••••••••"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
+              placeholder="Your city"
               disabled={loading}
             />
           </div>
 
           <div>
-            <label className="block text-gray-700 font-semibold mb-2">Confirm Password</label>
+            <label className="block text-gray-700 font-semibold mb-2">State</label>
             <input
-              type="password"
-              name="confirmPassword"
-              value={formData.confirmPassword}
+              type="text"
+              name="state"
+              value={formData.state}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600"
-              placeholder="••••••••"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
+              placeholder="Your state"
+              disabled={loading}
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-700 font-semibold mb-2">Pin Code</label>
+            <input
+              type="text"
+              name="pinCode"
+              value={formData.pinCode}
+              onChange={handleChange}
+              required
+              pattern="[0-9]{6}"
+              title="Please enter a valid 6-digit pin code"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
+              placeholder="6 digit pin code"
               disabled={loading}
             />
           </div>
@@ -153,7 +153,7 @@ const MemberRegister = () => {
 
         <p className="text-center text-gray-600 mt-6">
           Already have an account?{' '}
-          <Link to="/member-login" className="text-blue-600 hover:underline font-semibold">
+          <Link to="/member-login" className="text-green-600 hover:underline font-semibold">
             Login here
           </Link>
         </p>

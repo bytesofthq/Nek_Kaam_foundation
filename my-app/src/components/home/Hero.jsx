@@ -3,7 +3,7 @@ import Button from '../common/Button';
 
 const Hero = () => {
   return (
-    <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-20 md:py-32">
+    <section className="bg-gradient-to-r from-green-600 to-green-800 text-white py-20 md:py-32">
       <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center gap-8">
         <div className="flex-1">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">Welcome to Nek Kaam Foundation</h1>
@@ -17,7 +17,7 @@ const Hero = () => {
               </Button>
             </Link>
             <Link to="/contact">
-              <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-blue-600">
+              <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-green-600">
                 Get Involved
               </Button>
             </Link>
@@ -28,7 +28,7 @@ const Hero = () => {
             <p className="text-center text-lg font-semibold mb-4">
               Together, we can make a difference
             </p>
-            <div className="w-32 h-32 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg mx-auto" />
+            <div className="w-32 h-32 bg-gradient-to-br from-green-400 to-green-600 rounded-lg mx-auto" />
           </div>
         </div>
       </div>

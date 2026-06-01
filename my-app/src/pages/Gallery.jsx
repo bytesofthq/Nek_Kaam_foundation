@@ -24,7 +24,7 @@ const Gallery = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+      <section className="bg-gradient-to-r from-green-600 to-green-800 text-white py-16">
         <div className="max-w-7xl mx-auto px-4">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Gallery</h1>
           <p className="text-xl text-gray-100">Visual stories of our impact</p>
@@ -40,7 +40,7 @@ const Gallery = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {images.map((image) => (
                 <div key={image._id} className="rounded-lg shadow-md overflow-hidden hover:shadow-lg transition cursor-pointer group">
-                  <div className="bg-gradient-to-r from-blue-400 to-blue-600 h-48 relative overflow-hidden">
+                  <div className="bg-gradient-to-r from-green-400 to-green-600 h-48 relative overflow-hidden">
                     <div className="w-full h-full flex items-center justify-center text-white text-center p-4">
                       <p className="text-sm">{image.title}</p>
                     </div>

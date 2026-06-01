@@ -20,37 +20,37 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
           {/* Logo */}
-          <Link to="/" className="text-2xl font-bold text-blue-600">
+          <Link to="/" className="text-2xl font-bold text-green-600">
             Nek Kaam
           </Link>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-6">
-            <Link to="/" className="text-gray-700 hover:text-blue-600 transition">
+            <Link to="/" className="text-gray-700 hover:text-green-600 transition">
               Home
             </Link>
-            <Link to="/about" className="text-gray-700 hover:text-blue-600 transition">
+            <Link to="/about" className="text-gray-700 hover:text-green-600 transition">
               About
             </Link>
-            <Link to="/projects" className="text-gray-700 hover:text-blue-600 transition">
+            <Link to="/projects" className="text-gray-700 hover:text-green-600 transition">
               Projects
             </Link>
-            <Link to="/activities" className="text-gray-700 hover:text-blue-600 transition">
+            <Link to="/activities" className="text-gray-700 hover:text-green-600 transition">
               Activities
             </Link>
-            <Link to="/gallery" className="text-gray-700 hover:text-blue-600 transition">
+            <Link to="/gallery" className="text-gray-700 hover:text-green-600 transition">
               Gallery
             </Link>
-            <Link to="/impact-stories" className="text-gray-700 hover:text-blue-600 transition">
+            <Link to="/impact-stories" className="text-gray-700 hover:text-green-600 transition">
               Impact Stories
             </Link>
-            <Link to="/committee" className="text-gray-700 hover:text-blue-600 transition">
+            <Link to="/committee" className="text-gray-700 hover:text-green-600 transition">
               Committee
             </Link>
-            <Link to="/transparency" className="text-gray-700 hover:text-blue-600 transition">
+            <Link to="/transparency" className="text-gray-700 hover:text-green-600 transition">
               Transparency
             </Link>
-            <Link to="/contact" className="text-gray-700 hover:text-blue-600 transition">
+            <Link to="/contact" className="text-gray-700 hover:text-green-600 transition">
               Contact
             </Link>
           </div>
@@ -104,31 +104,31 @@ const Navbar = () => {
         {/* Mobile Menu */}
         {isOpen && (
           <div className="md:hidden mt-4 space-y-3 pb-4">
-            <Link to="/" className="block text-gray-700 hover:text-blue-600">
+            <Link to="/" className="block text-gray-700 hover:text-green-600">
               Home
             </Link>
-            <Link to="/about" className="block text-gray-700 hover:text-blue-600">
+            <Link to="/about" className="block text-gray-700 hover:text-green-600">
               About
             </Link>
-            <Link to="/projects" className="block text-gray-700 hover:text-blue-600">
+            <Link to="/projects" className="block text-gray-700 hover:text-green-600">
               Projects
             </Link>
-            <Link to="/activities" className="block text-gray-700 hover:text-blue-600">
+            <Link to="/activities" className="block text-gray-700 hover:text-green-600">
               Activities
             </Link>
-            <Link to="/gallery" className="block text-gray-700 hover:text-blue-600">
+            <Link to="/gallery" className="block text-gray-700 hover:text-green-600">
               Gallery
             </Link>
-            <Link to="/impact-stories" className="block text-gray-700 hover:text-blue-600">
+            <Link to="/impact-stories" className="block text-gray-700 hover:text-green-600">
               Impact Stories
             </Link>
-            <Link to="/committee" className="block text-gray-700 hover:text-blue-600">
+            <Link to="/committee" className="block text-gray-700 hover:text-green-600">
               Committee
             </Link>
-            <Link to="/transparency" className="block text-gray-700 hover:text-blue-600">
+            <Link to="/transparency" className="block text-gray-700 hover:text-green-600">
               Transparency
             </Link>
-            <Link to="/contact" className="block text-gray-700 hover:text-blue-600">
+            <Link to="/contact" className="block text-gray-700 hover:text-green-600">
               Contact
             </Link>
 

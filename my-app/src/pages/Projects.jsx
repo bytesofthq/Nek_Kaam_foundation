@@ -25,7 +25,7 @@ const Projects = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+      <section className="bg-gradient-to-r from-green-600 to-green-800 text-white py-16">
         <div className="max-w-7xl mx-auto px-4">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Our Projects</h1>
           <p className="text-xl text-gray-100">Making a lasting impact</p>
@@ -41,12 +41,12 @@ const Projects = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {projects.map((project) => (
                 <div key={project._id} className="bg-gray-50 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
-                  <div className="bg-gradient-to-r from-blue-400 to-blue-600 h-40" />
+                  <div className="bg-gradient-to-r from-green-400 to-green-600 h-40" />
                   <div className="p-6">
                     <h3 className="text-xl font-bold mb-2">{project.title}</h3>
                     <p className="text-gray-600 mb-4">{project.description}</p>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm bg-blue-100 text-blue-600 px-3 py-1 rounded-full">
+                      <span className="text-sm bg-green-100 text-green-600 px-3 py-1 rounded-full">
                         {project.status}
                       </span>
                       <span className="text-sm text-gray-500">

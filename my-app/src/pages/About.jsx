@@ -2,7 +2,7 @@ const About = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+      <section className="bg-gradient-to-r from-green-600 to-green-800 text-white py-16">
         <div className="max-w-7xl mx-auto px-4">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">About Nek Kaam Foundation</h1>
           <p className="text-xl text-gray-100">Empowering communities, changing lives</p>
@@ -14,19 +14,19 @@ const About = () => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-gray-50 rounded-lg shadow-md p-8">
-              <h3 className="text-2xl font-bold text-blue-600 mb-4">Our Mission</h3>
+              <h3 className="text-2xl font-bold text-green-600 mb-4">Our Mission</h3>
               <p className="text-gray-700">
                 To empower underprivileged communities through education, healthcare, skill development, and environmental conservation.
               </p>
             </div>
             <div className="bg-gray-50 rounded-lg shadow-md p-8">
-              <h3 className="text-2xl font-bold text-blue-600 mb-4">Our Vision</h3>
+              <h3 className="text-2xl font-bold text-green-600 mb-4">Our Vision</h3>
               <p className="text-gray-700">
                 A society where every individual has access to education, healthcare, and opportunities to lead a dignified life.
               </p>
             </div>
             <div className="bg-gray-50 rounded-lg shadow-md p-8">
-              <h3 className="text-2xl font-bold text-blue-600 mb-4">Our Values</h3>
+              <h3 className="text-2xl font-bold text-green-600 mb-4">Our Values</h3>
               <p className="text-gray-700">
                 Integrity, compassion, transparency, and a commitment to sustainable social change.
               </p>
@@ -60,7 +60,7 @@ const About = () => {
               { name: 'Emily Davis', role: 'Finance Manager' },
             ].map((member, index) => (
               <div key={index} className="bg-gray-50 rounded-lg shadow-md overflow-hidden text-center">
-                <div className="bg-gradient-to-r from-blue-400 to-blue-600 h-40" />
+                <div className="bg-gradient-to-r from-green-400 to-green-600 h-40" />
                 <div className="p-6">
                   <h3 className="text-xl font-bold">{member.name}</h3>
                   <p className="text-gray-600">{member.role}</p>
