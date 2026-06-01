@@ -25,6 +25,9 @@ out/
 .env.test.local
 .env.production.local
 *.env
+Backend/.env
+my-app/.env
+
 
 # System Files and IDEs
 .DS_Store
