@@ -73,6 +73,7 @@ export const activityAPI = {
 
 // Fund endpoints
 export const fundAPI = {
+  getTotalCollections:()=>api.get('/api/funds/collections/total'),
   getCollections: () => api.get('/api/funds/collections'),
   getUsage: () => api.get('/api/funds/usage'),
   createCollection: (data) => api.post('/api/funds/collections', data),
@@ -83,8 +84,16 @@ export const fundAPI = {
 export const impactStoryAPI = {
   getAll: () => api.get('/api/impact-stories'),
   getById: (id) => api.get(`/api/impact-stories/${id}`),
-  create: (data) => api.post('/api/impact-stories', data),
-  update: (id, data) => api.put(`/api/impact-stories/${id}`, data),
+  create: (data) => api.post('/api/impact-stories', data, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  }),
+  update: (id, data) => api.put(`/api/impact-stories/${id}`, data, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  }),
   delete: (id) => api.delete(`/api/impact-stories/${id}`),
 };
 
@@ -129,6 +138,11 @@ export const messageAPI = {
   sendMessage: (data) => api.post('/api/messages', data),
   getMessages: () => api.get('/api/messages'),
   getMessageById: (id) => api.get(`/api/messages/${id}`),
+};
+
+// Dashboard endpoints
+export const dashboardAPI = {
+  getStats: () => api.get('/api/dashboard/stats'),
 };
 
 // Public endpoints (no auth required)

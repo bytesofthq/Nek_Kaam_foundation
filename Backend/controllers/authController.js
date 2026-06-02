@@ -5,6 +5,90 @@ const Admin = require('../models/Admin');
 const Member = require('../models/Member');
 
 
+
+const adminRegister = async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+
+    if (!name || !email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required"
+      });
+    }
+
+    const existingAdmin = await Admin.findOne({ email });
+
+    if (existingAdmin) {
+      return res.status(400).json({
+        success: false,
+        message: "Admin already exists"
+      });
+    }
+
+    const admin = await Admin.create({
+      name,
+      email,
+      password
+    });
+
+    const token = jwt.sign(
+      {
+        id: admin._id,
+        email: admin.email,
+        role: admin.role,
+        type: "admin"
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    const refreshToken = jwt.sign(
+      {
+        id: admin._id,
+        type: "admin"
+      },
+      process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET,
+      { expiresIn: "30d" }
+    );
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      path: "/"
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      path: "/"
+    });
+
+    return res.status(201).json({
+      success: true,
+      token,
+      admin: {
+        id: admin._id,
+        name: admin.name,
+        email: admin.email,
+        role: admin.role,
+        profilePicture: admin.profilePicture
+      }
+    });
+
+  } catch (err) {
+    console.error("Error while registering admin:", err);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    });
+  }
+};
 const adminLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -74,6 +158,7 @@ const adminLogin = async (req, res) => {
     
     res.status(200).json({
       success: true,
+      token,
       admin: {
         id: admin._id,
         name: admin.name,
@@ -149,6 +234,7 @@ const memberLogin = async (req, res) => {
     
     res.status(200).json({
       success: true,
+      token,
       member: {
         id: member._id,
         memberId: member.memberId,
@@ -233,6 +319,7 @@ const verifyMember = async (req, res) => {
 };
 
 module.exports = {
+  adminRegister,
   adminLogin,
   memberLogin,
   logout,

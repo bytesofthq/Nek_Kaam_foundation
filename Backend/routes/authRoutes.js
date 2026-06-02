@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const { protect, verifyMember, refreshAdminToken, refreshMemberToken } = require('../middleware/authMiddleware');
 const {
+  adminRegister,
   adminLogin,
   memberLogin,
   logout,
@@ -10,6 +11,8 @@ const {
   verifyMember: verifyMemberController
 } = require('../controllers/authController');
 
+
+router.post('/admin/register', adminRegister);
 router.post('/admin/login', adminLogin);
 router.post('/member/login', memberLogin);
 router.post('/logout', logout);

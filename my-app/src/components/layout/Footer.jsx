@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Mail, Phone, MapPin } from 'lucide-react';
+import bytesoftlogo from '../../assets/image.png';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -102,6 +103,19 @@ const Footer = () => {
               Terms of Service
             </Link>
           </div>
+        </div>
+        <div className="pt-4 flex justify-center text-sm text-gray-400">
+          <p className="flex items-center gap-1.5">
+            <span>Developed and Managed by</span>
+            <a 
+              href="https://www.bytesoft.in" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center hover:opacity-85 transition-opacity"
+            >
+              <img src={bytesoftlogo} alt="Bytesoft" className="h-5 w-auto object-contain" />
+            </a>
+          </p>
         </div>
       </div>
     </footer>

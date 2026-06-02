@@ -35,10 +35,10 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, []);
 
-  const adminLogin = async (username, password) => {
+  const adminLogin = async (email, password) => {
     try {
       setError(null);
-      const response = await authAPI.adminLogin({ username, password });
+      const response = await authAPI.adminLogin({ email, password });
       localStorage.setItem('adminToken', response.data.token);
       setAdmin(response.data.admin);
       return response.data;

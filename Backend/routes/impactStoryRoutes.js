@@ -3,12 +3,42 @@ const express = require('express');
 const router = express.Router();
 const ImpactStory = require('../models/ImpactStory');
 const { protect, adminOnly } = require('../middleware/authMiddleware');
+const multer = require('multer');
+const cloudinary = require('../config/cloudinary');
 
+const storage = multer.memoryStorage();
+const upload = multer({
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
+});
 
-router.post('/', protect, adminOnly, async (req, res) => {
+const uploadToCloudinary = (fileBuffer) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: 'nek_kaam_impact_stories' },
+      (error, result) => {
+        if (error) return reject(error);
+        resolve(result);
+      }
+    );
+    stream.end(fileBuffer);
+  });
+};
+
+router.post('/', protect, adminOnly, upload.single('image'), async (req, res) => {
   try {
+    let images = [];
+    if (req.file) {
+      const result = await uploadToCloudinary(req.file.buffer);
+      images.push({
+        url: result.secure_url,
+        publicId: result.public_id
+      });
+    }
+
     const story = await ImpactStory.create({
       ...req.body,
+      images,
       addedBy: req.admin._id
     });
     res.status(201).json({ success: true, story });
@@ -71,11 +101,20 @@ router.get('/:id', async (req, res) => {
 });
 
 
-router.put('/:id', protect, adminOnly, async (req, res) => {
+router.put('/:id', protect, adminOnly, upload.single('image'), async (req, res) => {
   try {
+    let updateData = { ...req.body };
+    if (req.file) {
+      const result = await uploadToCloudinary(req.file.buffer);
+      updateData.images = [{
+        url: result.secure_url,
+        publicId: result.public_id
+      }];
+    }
+
     const story = await ImpactStory.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      updateData,
       { new: true, runValidators: true }
     );
     res.json({ success: true, story });

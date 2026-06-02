@@ -20,7 +20,6 @@ const impactStorySchema = new mongoose.Schema({
     maxlength: [2000, 'Story cannot exceed 2000 characters']
   },
   images: [{
-    type: String,
     url: String,
     publicId: String
   }],
