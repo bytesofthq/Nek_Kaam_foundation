@@ -1,69 +1,136 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { testimonialAPI } from '../../services/api';
-import Loader from '../common/Loader';
-import { Star } from 'lucide-react';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
+import { Quote, ChevronLeft, ChevronRight, Star } from 'lucide-react';
+
+const defaultTestimonials = [
+  {
+    _id: '1',
+    name: 'Mohammed Arif',
+    review: 'Nek Kaam Foundation helped us during the most difficult time of our life. Their support for my daughter\'s marriage was truly a blessing from Allah.',
+    designation: 'Beneficiary,UP',
+    rating: 5,
+  },
+  {
+    _id: '2',
+    name: 'Mohd Shuaib',
+    review: 'The foundation installed a water pump in our village. Now our children don\'t have to walk miles to get water . We are forever grateful.',
+    designation: 'Village Resident, Delhi',
+    rating: 5,
+  },
+  {
+    _id: '3',
+    name: 'Abdur Rahman',
+    review: 'The madrasa renovation and AC installation has improved our students\' learning environment significantly. May Allah reward everyone involved.',
+    designation: 'Village Resident, UP',
+    rating: 5,
+  },
+  {
+    _id: '4',
+    name: 'Kamil khan',
+    review: 'What impresses me most is their transparency. They show exactly where every rupee goes. That\'s why I became a member and actively contribute.',
+    designation: 'Foundation Member',
+    rating: 5,
+  },
+];
 
 const Testimonials = () => {
-  const [testimonials, setTestimonials] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [testimonials, setTestimonials] = useState(defaultTestimonials);
+  const [current, setCurrent] = useState(0);
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true });
 
   useEffect(() => {
-    const fetchTestimonials = async () => {
+    const fetch = async () => {
       try {
-        const response = await testimonialAPI.getAll();
-        setTestimonials(response.data.slice(0, 3));
-      } catch (error) {
-        console.error('Failed to fetch testimonials:', error);
-      } finally {
-        setLoading(false);
-      }
+        const res = await testimonialAPI.getAll();
+        const data = res.data?.testimonials || res.data || [];
+        if (data.length > 0) setTestimonials(data);
+      } catch {}
     };
-
-    fetchTestimonials();
+    fetch();
   }, []);
 
-  if (loading) return <Loader />;
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % testimonials.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [testimonials.length]);
 
-  const defaultTestimonials = [
-    {
-      name: 'John Doe',
-      role: 'Beneficiary',
-      message: 'Nek Kaam Foundation changed my life. Their education program gave me the skills I needed to get a job.',
-      rating: 5,
-    },
-    {
-      name: 'Jane Smith',
-      role: 'Volunteer',
-      message: 'Being part of this foundation is truly rewarding. We are making a real difference in people\'s lives.',
-      rating: 5,
-    },
-    {
-      name: 'Ahmed Khan',
-      role: 'Community Member',
-      message: 'The healthcare initiatives have been instrumental in improving health awareness in our community.',
-      rating: 5,
-    },
-  ];
+  const prev = () => setCurrent((c) => (c - 1 + testimonials.length) % testimonials.length);
+  const next = () => setCurrent((c) => (c + 1) % testimonials.length);
 
   return (
-    <section className="py-16 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Testimonials</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {(testimonials.length > 0 ? testimonials : defaultTestimonials).map((testimonial, index) => (
-            <div key={index} className="bg-white rounded-lg shadow-md p-8">
-              <div className="flex gap-1 mb-4">
-                {[...Array(testimonial.rating || 5)].map((_, i) => (
-                  <Star key={i} size={16} className="fill-yellow-400 text-yellow-400" />
+    <section ref={ref} className="py-20 bg-gradient-to-br from-green-900 via-green-800 to-emerald-900 overflow-hidden">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-14"
+        >
+          <span className="inline-block bg-white/10 text-white font-semibold text-sm px-4 py-1.5 rounded-full mb-4">
+            Testimonials
+          </span>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
+            What People <span className="text-yellow-400">Say About Us</span>
+          </h2>
+          <p className="text-green-200 max-w-xl mx-auto">
+            Real words from the families and communities we've had the honor of serving.
+          </p>
+        </motion.div>
+
+        <div className="relative">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={current}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.4 }}
+              className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8 md:p-12 text-center"
+            >
+              <Quote size={48} className="text-yellow-400 mx-auto mb-6 opacity-60" />
+              <p className="text-white/90 text-lg md:text-xl leading-relaxed mb-8 font-light italic">
+                "{testimonials[current].review}"
+              </p>
+              <div className="flex justify-center gap-1 mb-4">
+                {[...Array(testimonials[current].rating || 5)].map((_, i) => (
+                  <Star key={i} size={18} className="text-yellow-400 fill-yellow-400" />
                 ))}
               </div>
-              <p className="text-gray-600 mb-6 italic">"{testimonial.message}"</p>
               <div>
-                <p className="font-bold">{testimonial.name}</p>
-                <p className="text-sm text-gray-500">{testimonial.role}</p>
+                <p className="text-white font-bold text-lg">{testimonials[current].name}</p>
+                <p className="text-green-300 text-sm">{testimonials[current].designation || 'Foundation Member'}</p>
               </div>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Navigation */}
+          <div className="flex justify-center items-center gap-4 mt-8">
+            <button
+              onClick={prev}
+              className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white transition"
+            >
+              <ChevronLeft size={20} />
+            </button>
+            <div className="flex gap-2">
+              {testimonials.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrent(i)}
+                  className={`rounded-full transition-all duration-300 ${i === current ? 'w-6 h-2 bg-yellow-400' : 'w-2 h-2 bg-white/30'}`}
+                />
+              ))}
             </div>
-          ))}
+            <button
+              onClick={next}
+              className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white transition"
+            >
+              <ChevronRight size={20} />
+            </button>
+          </div>
         </div>
       </div>
     </section>

@@ -1,7 +1,22 @@
 import { useEffect, useState } from 'react';
 import { impactStoryAPI } from '../services/api';
 import Loader from '../components/common/Loader';
-import { Calendar, MapPin, User } from 'lucide-react';
+import { Calendar, MapPin, User, Heart, Sparkles } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: (i) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.1,
+      duration: 0.6,
+      ease: [0.215, 0.610, 0.355, 1.000],
+    },
+  }),
+};
 
 const ImpactStories = () => {
   const [stories, setStories] = useState([]);
@@ -11,7 +26,6 @@ const ImpactStories = () => {
     const fetchStories = async () => {
       try {
         const response = await impactStoryAPI.getAll();
-        console.log(response.data.stories);
         setStories(response.data.stories || []);
       } catch (error) {
         console.error('Failed to fetch impact stories:', error);
@@ -23,67 +37,137 @@ const ImpactStories = () => {
     fetchStories();
   }, []);
 
+  const demoStories = [
+    {
+      _id: 'd1',
+      title: "Clean Water Changes Zahid's Family Life",
+      personName: 'Zahid Ansari',
+      story: 'For years, my family had to fetch drinking water from a dirty canal or walk over a kilometer to get clean water. After Nek Kaam Foundation installed the water hand pump in our ward, our life has changed. We have clean water right outside our house. My children no longer fall sick from water-borne diseases.',
+      location: 'Patna, Bihar',
+      date: '2024-03-12',
+      images: [{ url: 'https://images.unsplash.com/photo-1588614959060-4d144f28b207?auto=format&fit=crop&q=80&w=600' }]
+    },
+    {
+      _id: 'd2',
+      title: 'Eid Prayers in a Beautiful & Clean Eid Gah',
+      personName: 'Maulana Aslam',
+      story: "Our Eid Gah was in very bad shape with broken walls and debris. Nek Kaam Foundation stepped in and did a complete renovation. The community was overjoyed to see the clean, beautiful prayer ground on Eid morning. We thank all the members of the foundation for their contribution.",
+      location: 'Bihar Sharif, Bihar',
+      date: '2024-06-15',
+      images: [{ url: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&q=80&w=600' }]
+    }
+  ];
+
+  const displayStories = stories.length > 0 ? stories : demoStories;
+
   return (
-    <div>
+    <div className="bg-gray-50 min-h-screen">
+      <Helmet>
+        <title>Impact Stories - Nek Kaam Foundation</title>
+        <meta name="description" content="Read real stories of transformation and impact created by Nek Kaam Foundation in Bihar communities." />
+      </Helmet>
+
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-green-600 to-green-800 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Impact Stories</h1>
-          <p className="text-xl text-gray-100">Real stories of transformation</p>
+      <section className="bg-gradient-to-br from-green-800 to-emerald-900 text-white py-20 relative overflow-hidden">
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-yellow-400/10 rounded-full blur-3xl" />
+        <div className="max-w-7xl mx-auto px-4 relative">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <span className="inline-flex items-center gap-1 bg-white/15 font-semibold text-sm px-4 py-1.5 rounded-full mb-4">
+              <Sparkles size={14} className="text-yellow-300" /> Real Impact
+            </span>
+            <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Stories of Transformation</h1>
+            <p className="text-green-100 text-xl max-w-2xl">
+              Every donation and project creates a real change. Read the stories of families and communities touched by our work.
+            </p>
+          </motion.div>
         </div>
       </section>
 
       {/* Stories List */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
+      <section className="py-16">
+        <div className="max-w-6xl mx-auto px-4">
           {loading ? (
-            <Loader />
-          ) : stories.length > 0 ? (
-            <div className="space-y-8">
-              {stories.map((story) => (
-                <div key={story._id} className="bg-gray-50 rounded-2xl shadow-lg overflow-hidden border border-gray-100 transition hover:shadow-xl duration-300">
-                  <div className="grid grid-cols-1 md:grid-cols-2 min-h-[300px]">
-                    <div className="h-64 md:h-auto relative overflow-hidden bg-gray-100 flex items-center justify-center">
+            <div className="flex justify-center py-20">
+              <Loader />
+            </div>
+          ) : displayStories.length > 0 ? (
+            <div className="space-y-10">
+              {displayStories.map((story, index) => (
+                <motion.div
+                  key={story._id}
+                  custom={index}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: '-50px' }}
+                  variants={cardVariants}
+                  className="bg-white rounded-3xl shadow-lg hover:shadow-2xl overflow-hidden border border-gray-100 transition-all duration-300 group"
+                >
+                  <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[350px]">
+                    {/* Image side */}
+                    <div className="lg:col-span-5 h-64 lg:h-auto relative overflow-hidden bg-gray-100">
                       {story.images && story.images.length > 0 && story.images[0].url ? (
                         <img
                           src={story.images[0].url}
                           alt={story.title}
-                          className="w-full h-full object-cover transition-all duration-300 hover:scale-105"
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                      ) : story.image ? (
+                        <img
+                          src={story.image}
+                          alt={story.title}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                         />
                       ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white p-6 font-bold text-center">
-                          {story.title}
+                        <div className="w-full h-full bg-gradient-to-br from-green-500 to-emerald-700 flex flex-col items-center justify-center text-white p-8 text-center">
+                          <Heart size={48} className="mb-3 animate-pulse text-yellow-300" />
+                          <h4 className="font-extrabold text-lg">{story.title}</h4>
                         </div>
                       )}
-                    </div>
-                    <div className="p-8 flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-2xl font-bold mb-4 text-gray-800">{story.title}</h3>
-                        <p className="text-gray-600 mb-6 leading-relaxed whitespace-pre-wrap">{story.story}</p>
+                      <div className="absolute top-4 left-4 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                        📍 {story.location}
                       </div>
-                      
-                      <div className="space-y-3 border-t border-gray-200/80 pt-4">
-                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                          <User size={16} className="text-green-600" />
-                          <span><strong>Beneficiary:</strong> {story.personName}</span>
+                    </div>
+
+                    {/* Content side */}
+                    <div className="lg:col-span-7 p-8 md:p-10 flex flex-col justify-between">
+                      <div>
+                        <h3 className="text-2xl md:text-3xl font-extrabold mb-4 text-gray-800 group-hover:text-green-700 transition-colors duration-300">
+                          {story.title}
+                        </h3>
+                        <p className="text-gray-600 mb-6 leading-relaxed whitespace-pre-wrap text-sm md:text-base">
+                          "{story.story}"
+                        </p>
+                      </div>
+
+                      <div className="flex flex-wrap items-center justify-between gap-4 border-t border-gray-100 pt-6">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-bold text-sm">
+                            {story.personName.charAt(0)}
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-400 font-medium">Beneficiary</p>
+                            <p className="text-sm font-bold text-gray-800">{story.personName}</p>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                          <MapPin size={16} className="text-green-600" />
-                          <span><strong>Location:</strong> {story.location}</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                          <Calendar size={16} className="text-green-600" />
-                          <span><strong>Date:</strong> {new Date(story.date).toLocaleDateString()}</span>
+
+                        <div className="flex items-center gap-4 text-xs text-gray-400 font-semibold">
+                          <span className="flex items-center gap-1">
+                            <MapPin size={14} className="text-green-600" /> {story.location}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Calendar size={14} className="text-green-600" /> {new Date(story.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
+                          </span>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           ) : (
-            <div className="text-center py-12">
-              <p className="text-gray-600 text-lg">No impact stories found</p>
+            <div className="text-center py-20 bg-white rounded-3xl shadow-sm border border-gray-100">
+              <span className="text-5xl">❤️</span>
+              <p className="text-gray-500 text-lg mt-4 font-semibold">No impact stories found.</p>
             </div>
           )}
         </div>
