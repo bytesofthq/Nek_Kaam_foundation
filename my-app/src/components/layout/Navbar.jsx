@@ -6,7 +6,7 @@ import Button from '../common/Button';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { isAdminLoggedIn, isMemberLoggedIn, logout } = useAuth();
+  const { isAdminLoggedIn, logout } = useAuth();
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -55,7 +55,6 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Auth Links */}
           <div className="hidden md:flex items-center gap-4">
             {isAdminLoggedIn ? (
               <>
@@ -68,20 +67,9 @@ const Navbar = () => {
                   <LogOut size={16} />
                 </Button>
               </>
-            ) : isMemberLoggedIn ? (
-              <>
-                <Link to="/member-dashboard">
-                  <Button variant="primary" size="sm">
-                    Dashboard
-                  </Button>
-                </Link>
-                <Button onClick={handleLogout} variant="outline" size="sm">
-                  <LogOut size={16} />
-                </Button>
-              </>
             ) : (
               <>
-                <Link to="/member-login">
+                <Link to="/login">
                   <Button variant="outline" size="sm">
                     Login
                   </Button>
@@ -143,20 +131,9 @@ const Navbar = () => {
                   Logout
                 </Button>
               </>
-            ) : isMemberLoggedIn ? (
-              <>
-                <Link to="/member-dashboard" className="block">
-                  <Button variant="primary" size="sm" className="w-full">
-                    Dashboard
-                  </Button>
-                </Link>
-                <Button onClick={handleLogout} variant="outline" size="sm" className="w-full">
-                  Logout
-                </Button>
-              </>
             ) : (
               <>
-                <Link to="/member-login" className="block">
+                <Link to="/login" className="block">
                   <Button variant="outline" size="sm" className="w-full">
                     Login
                   </Button>

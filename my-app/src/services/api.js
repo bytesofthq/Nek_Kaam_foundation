@@ -12,7 +12,7 @@ const api = axios.create({
 
 // Add token to requests
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('adminToken') || localStorage.getItem('memberToken');
+  const token = localStorage.getItem('adminToken');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -25,7 +25,6 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('adminToken');
-      localStorage.removeItem('memberToken');
       window.location.href = '/login';
     }
     return Promise.reject(error);
@@ -35,18 +34,14 @@ api.interceptors.response.use(
 // Auth endpoints
 export const authAPI = {
   adminLogin: (credentials) => api.post('/api/auth/admin/login', credentials),
-  memberLogin: (credentials) => api.post('/api/auth/member/login', credentials),
   logout: () => api.post('/api/auth/logout'),
   verifyAdmin: () => api.get('/api/auth/verify'),
-  verifyMember: () => api.get('/api/auth/member/verify'),
 };
 
 // Member endpoints
 export const memberAPI = {
   register: (data) => api.post('/api/members/register', data),
-  getProfile: () => api.get('/api/members/profile'),
-  updateProfile: (data) => api.put('/api/members/profile', data),
-  getAllMembers: () => api.get('/api/members'),
+  getAllMembers: (params) => api.get('/api/members', { params }),
   getMemberById: (id) => api.get(`/api/members/${id}`),
   deleteMember: (id) => api.delete(`/api/members/${id}`),
   getMemberCount: () => api.get('/api/members/stats/count'),
@@ -75,9 +70,12 @@ export const activityAPI = {
 export const fundAPI = {
   getTotalCollections:()=>api.get('/api/funds/collections/total'),
   getCollections: () => api.get('/api/funds/collections'),
-  getUsage: () => api.get('/api/funds/usage'),
+  getUsage: (params) => api.get('/api/funds/usages', { params }),
   createCollection: (data) => api.post('/api/funds/collections', data),
-  createUsage: (data) => api.post('/api/funds/usage', data),
+  createUsage: (data) => api.post('/api/funds/usages', data),
+  deleteCollection: (id) => api.delete(`/api/funds/collections/${id}`),
+  deleteUsage: (id) => api.delete(`/api/funds/usages/${id}`),
+  getSummary: () => api.get('/api/funds/summary'),
 };
 
 // Impact Story endpoints

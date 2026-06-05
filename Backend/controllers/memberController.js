@@ -35,7 +35,7 @@ const registerMember = async (req, res) => {
     
     res.status(201).json({
       success: true,
-      message: 'Registration successful! Please login.',
+      message: 'Registration successful!',
       member: {
         id: member._id,
         memberId: member.memberId,
@@ -53,72 +53,6 @@ const registerMember = async (req, res) => {
   }
 };
 
-
-const getMemberProfile = async (req, res) => {
-  try {
-    const member = await Member.findById(req.member._id);
-    
-    if (!member) {
-      return res.status(404).json({ 
-        success: false, 
-        message: 'Member not found' 
-      });
-    }
-    
-    res.status(200).json({
-      success: true,
-      member: {
-        id: member._id,
-        memberId: member.memberId,
-        fullName: member.fullName,
-        phoneNumber: member.phoneNumber,
-        address: member.address,
-        city: member.city,
-        state: member.state,
-        pinCode: member.pinCode,
-        joinDate: member.joinDate,
-        lastLogin: member.lastLogin
-      }
-    });
-  } catch (error) {
-    res.status(500).json({ 
-      success: false, 
-      message: error.message 
-    });
-  }
-};
-
-
-const updateMemberProfile = async (req, res) => {
-  try {
-    const { fullName, address, city, state, pinCode } = req.body;
-    
-    const member = await Member.findByIdAndUpdate(
-      req.member._id,
-      { fullName, address, city, state, pinCode },
-      { new: true, runValidators: true }
-    );
-    
-    res.status(200).json({
-      success: true,
-      member: {
-        id: member._id,
-        memberId: member.memberId,
-        fullName: member.fullName,
-        phoneNumber: member.phoneNumber,
-        address: member.address,
-        city: member.city,
-        state: member.state,
-        pinCode: member.pinCode
-      }
-    });
-  } catch (error) {
-    res.status(500).json({ 
-      success: false, 
-      message: error.message 
-    });
-  }
-};
 
 
 const getAllMembers = async (req, res) => {
@@ -230,8 +164,6 @@ const getMemberCount = async (req, res) => {
 
 module.exports = {
   registerMember,
-  getMemberProfile,
-  updateMemberProfile,
   getAllMembers,
   getMemberById,
   deleteMember,
