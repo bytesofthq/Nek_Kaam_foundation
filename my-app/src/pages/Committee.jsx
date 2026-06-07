@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { committeeAPI } from '../services/api';
 import Loader from '../components/common/Loader';
+import { useLanguage } from '../context/LanguageContext';
 
 const Committee = () => {
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const fetchMembers = async () => {
@@ -26,8 +28,8 @@ const Committee = () => {
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-green-600 to-green-800 text-white py-16">
         <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Committee Members</h1>
-          <p className="text-xl text-gray-100">Meet the people guiding our mission</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">{t('committee.title')}</h1>
+          <p className="text-xl text-gray-100">{t('committee.subtitle')}</p>
         </div>
       </section>
 
@@ -58,7 +60,7 @@ const Committee = () => {
             </div>
           ) : (
             <div className="text-center py-12">
-              <p className="text-gray-600 text-lg">No committee members found</p>
+              <p className="text-gray-600 text-lg">{t('common.noCommittee')}</p>
             </div>
           )}
         </div>

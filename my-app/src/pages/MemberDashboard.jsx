@@ -3,9 +3,11 @@ import { useAuth } from '../context/AuthContext';
 import Loader from '../components/common/Loader';
 import Button from '../components/common/Button';
 import { memberAPI } from '../services/api';
+import { useLanguage } from '../context/LanguageContext';
 
 const MemberDashboard = () => {
   const { member, isMemberLoggedIn } = useAuth();
+  const { t } = useLanguage();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
@@ -53,17 +55,17 @@ const MemberDashboard = () => {
   return (
     <div className="bg-gray-50 min-h-screen py-12">
       <div className="max-w-3xl mx-auto px-4">
-        <h1 className="text-4xl font-bold mb-8 text-gray-800">Member Dashboard</h1>
+        <h1 className="text-4xl font-bold mb-8 text-gray-800">{t('dashboard.memberTitle')}</h1>
 
         {/* Profile Card */}
         <div className="bg-white rounded-lg shadow-lg p-8">
-          <h2 className="text-2xl font-bold mb-6">My Profile</h2>
+          <h2 className="text-2xl font-bold mb-6">{t('dashboard.myProfile')}</h2>
 
           {isEditing ? (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-gray-700 font-semibold mb-2">Name</label>
+                  <label className="block text-gray-700 font-semibold mb-2">{t('dashboard.name')}</label>
                   <input
                     type="text"
                     name="name"
@@ -73,7 +75,7 @@ const MemberDashboard = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-700 font-semibold mb-2">Email</label>
+                  <label className="block text-gray-700 font-semibold mb-2">{t('dashboard.email')}</label>
                   <input
                     type="email"
                     name="email"
@@ -85,7 +87,7 @@ const MemberDashboard = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-gray-700 font-semibold mb-2">Phone</label>
+                  <label className="block text-gray-700 font-semibold mb-2">{t('dashboard.phone')}</label>
                   <input
                     type="tel"
                     name="phone"
@@ -95,7 +97,7 @@ const MemberDashboard = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-700 font-semibold mb-2">Address</label>
+                  <label className="block text-gray-700 font-semibold mb-2">{t('dashboard.address')}</label>
                   <input
                     type="text"
                     name="address"
@@ -107,14 +109,14 @@ const MemberDashboard = () => {
               </div>
               <div className="flex gap-4">
                 <Button type="submit" variant="primary">
-                  Save Changes
+                  {t('dashboard.saveChanges')}
                 </Button>
                 <Button
                   type="button"
                   variant="secondary"
                   onClick={() => setIsEditing(false)}
                 >
-                  Cancel
+                  {t('dashboard.cancel')}
                 </Button>
               </div>
             </form>
@@ -122,24 +124,24 @@ const MemberDashboard = () => {
             <div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
-                  <p className="text-gray-600 text-sm">Name</p>
+                  <p className="text-gray-600 text-sm">{t('dashboard.name')}</p>
                   <p className="text-xl font-semibold">{profile?.name}</p>
                 </div>
                 <div>
-                  <p className="text-gray-600 text-sm">Email</p>
+                  <p className="text-gray-600 text-sm">{t('dashboard.email')}</p>
                   <p className="text-xl font-semibold">{profile?.email}</p>
                 </div>
                 <div>
-                  <p className="text-gray-600 text-sm">Phone</p>
-                  <p className="text-xl font-semibold">{profile?.phone || 'N/A'}</p>
+                  <p className="text-gray-600 text-sm">{t('dashboard.phone')}</p>
+                  <p className="text-xl font-semibold">{profile?.phone || t('dashboard.na')}</p>
                 </div>
                 <div>
-                  <p className="text-gray-600 text-sm">Address</p>
-                  <p className="text-xl font-semibold">{profile?.address || 'N/A'}</p>
+                  <p className="text-gray-600 text-sm">{t('dashboard.address')}</p>
+                  <p className="text-xl font-semibold">{profile?.address || t('dashboard.na')}</p>
                 </div>
               </div>
               <Button onClick={() => setIsEditing(true)} variant="primary">
-                Edit Profile
+                {t('dashboard.editProfile')}
               </Button>
             </div>
           )}

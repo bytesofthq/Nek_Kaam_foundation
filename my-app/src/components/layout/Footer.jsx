@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
 import { Mail, Phone, MapPin } from 'lucide-react';
 import bytesoftlogo from '../../assets/image.png';
+import { useLanguage } from '../../context/LanguageContext';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const { t } = useLanguage();
 
   return (
     <footer className="bg-gray-800 text-gray-200 pt-12 pb-6">
@@ -13,18 +15,16 @@ const Footer = () => {
           {/* About Section */}
           <div>
             <h3 className="text-white text-lg font-bold mb-4">Nek Kaam Foundation</h3>
-            <p className="text-sm text-gray-400">
-              Dedicated to making a positive impact in our community through various initiatives and programs.
-            </p>
+            <p className="text-sm text-gray-400">{t('footer.aboutText')}</p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-white font-bold mb-4">Quick Links</h4>
+            <h4 className="text-white font-bold mb-4">{t('footer.quickLinks')}</h4>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link to="/about" className="hover:text-white transition">
-                  About Us
+                  {t('common.aboutUs')}
                 </Link>
               </li>
               <li>
@@ -47,7 +47,7 @@ const Footer = () => {
 
           {/* Resources */}
           <div>
-            <h4 className="text-white font-bold mb-4">Resources</h4>
+            <h4 className="text-white font-bold mb-4">{t('footer.resources')}</h4>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link to="/impact-stories" className="hover:text-white transition">
@@ -74,7 +74,7 @@ const Footer = () => {
 
           {/* Contact Info */}
           <div>
-            <h4 className="text-white font-bold mb-4">Contact Info</h4>
+            <h4 className="text-white font-bold mb-4">{t('footer.contactInfo')}</h4>
             <div className="space-y-3 text-sm">
               <div className="flex items-center gap-2">
                 <Phone size={16} />
@@ -97,16 +97,16 @@ const Footer = () => {
           <p>&copy; {currentYear} Nek Kaam Foundation. All rights reserved.</p>
           <div className="flex gap-6 mt-4 md:mt-0">
             <Link to="#" className="hover:text-white transition">
-              Privacy Policy
+              {t('footer.privacyPolicy')}
             </Link>
             <Link to="#" className="hover:text-white transition">
-              Terms of Service
+              {t('footer.termsOfService')}
             </Link>
           </div>
         </div>
         <div className="pt-4 flex justify-center text-sm text-gray-400">
           <p className="flex items-center gap-1.5">
-            <span>Developed and Managed by</span>
+            <span>{t('footer.developedBy')}</span>
             <a 
               href="https://www.bytesoft.in" 
               target="_blank" 

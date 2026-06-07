@@ -3,8 +3,10 @@ import { useNavigate, Link } from 'react-router-dom';
 import { memberAPI } from '../services/api';
 import Button from '../components/common/Button';
 import Loader from '../components/common/Loader';
+import { useLanguage } from '../context/LanguageContext';
 
 const MemberRegister = () => {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     fullName: '',
     phoneNumber: '',
@@ -34,7 +36,7 @@ const MemberRegister = () => {
       await memberAPI.register(formData);
       navigate('/member-login');
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed');
+      setError(err.response?.data?.message || t('register.registrationFailed'));
     } finally {
       setLoading(false);
     }
@@ -74,7 +76,7 @@ const states = [
   return (
     <div className="min-h-screen bg-gradient-to-r from-green-600 to-green-800 flex items-center justify-center py-12 px-4">
       <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full mt-10">
-        <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">Member Registration</h1>
+        <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">{t('register.title')}</h1>
 
         {error && (
           <div className="bg-red-100 text-red-600 p-4 rounded-lg mb-4">
@@ -84,7 +86,7 @@ const states = [
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-gray-700 font-semibold mb-2">Full Name</label>
+            <label className="block text-gray-700 font-semibold mb-2">{t('register.fullName')}</label>
             <input
               type="text"
               name="fullName"
@@ -92,13 +94,13 @@ const states = [
               onChange={handleChange}
               required
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
-              placeholder="Your full name"
+              placeholder={t('register.placeholders.fullName')}
               disabled={loading}
             />
           </div>
 
           <div>
-            <label className="block text-gray-700 font-semibold mb-2">Phone Number</label>
+            <label className="block text-gray-700 font-semibold mb-2">{t('register.phoneNumber')}</label>
             <input
               type="tel"
               name="phoneNumber"
@@ -108,13 +110,13 @@ const states = [
               pattern="[0-9]{10}"
               title="Please enter a valid 10-digit phone number"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
-              placeholder="10 digit phone number"
+              placeholder={t('register.placeholders.phoneNumber')}
               disabled={loading}
             />
           </div>
 
           <div>
-            <label className="block text-gray-700 font-semibold mb-2">Address</label>
+            <label className="block text-gray-700 font-semibold mb-2">{t('register.address')}</label>
             <input
               type="text"
               name="address"
@@ -122,13 +124,13 @@ const states = [
               onChange={handleChange}
               required
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
-              placeholder="Your address"
+              placeholder={t('register.placeholders.address')}
               disabled={loading}
             />
           </div>
 
           <div>
-            <label className="block text-gray-700 font-semibold mb-2">City</label>
+            <label className="block text-gray-700 font-semibold mb-2">{t('register.city')}</label>
             <input
               type="text"
               name="city"
@@ -136,23 +138,23 @@ const states = [
               onChange={handleChange}
               required
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
-              placeholder="Your city"
+              placeholder={t('register.placeholders.city')}
               disabled={loading}
             />
           </div>
 
           <div>
-            <label className="block text-gray-700 font-semibold mb-2">State</label>
+            <label className="block text-gray-700 font-semibold mb-2">{t('register.state')}</label>
             <select
               name="state"
               value={formData.state}
               onChange={handleChange}
               required
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
-              placeholder="Your state"
+              placeholder={t('register.placeholders.state')}
               disabled={loading}
             >
-              <option value="">Select State</option>
+              <option value="">{t('register.stateSelect')}</option>
               {states.map((state) => (
                 <option key={state} value={state}>
                   {state}
@@ -162,7 +164,7 @@ const states = [
           </div>
 
           <div>
-            <label className="block text-gray-700 font-semibold mb-2">Pin Code</label>
+            <label className="block text-gray-700 font-semibold mb-2">{t('register.pinCode')}</label>
             <input
               type="text"
               name="pinCode"
@@ -172,7 +174,7 @@ const states = [
               pattern="[0-9]{6}"
               title="Please enter a valid 6-digit pin code"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
-              placeholder="6 digit pin code"
+              placeholder={t('register.placeholders.pinCode')}
               disabled={loading}
             />
           </div>
@@ -184,14 +186,14 @@ const states = [
             disabled={loading}
             className="w-full"
           >
-            {loading ? 'Registering...' : 'Register'}
+            {loading ? t('register.registering') : t('common.register')}
           </Button>
         </form>
 
         <p className="text-center text-gray-600 mt-6">
-          Already have an account?{' '}
+          {t('register.haveAccount')}{' '}
           <Link to="/member-login" className="text-green-600 hover:underline font-semibold">
-            Login here
+            {t('register.loginHere')}
           </Link>
         </p>
       </div>

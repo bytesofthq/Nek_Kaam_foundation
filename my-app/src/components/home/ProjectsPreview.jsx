@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import { projectAPI } from '../../services/api';
 import Loader from '../common/Loader';
 import Button from '../common/Button';
+import { useLanguage } from '../../context/LanguageContext';
 
 const ProjectsPreview = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -28,7 +30,7 @@ const ProjectsPreview = () => {
   return (
     <section className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Our Projects</h2>
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">{t('home.projectsTitle')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {projects.map((project) => (
             <div key={project._id} className="bg-gray-50 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
@@ -41,7 +43,7 @@ const ProjectsPreview = () => {
                     {project.status}
                   </span>
                   <Link to={`/projects/${project._id}`} className="text-green-600 hover:text-green-800">
-                    View →
+                    {t('home.view')} →
                   </Link>
                 </div>
               </div>
@@ -51,7 +53,7 @@ const ProjectsPreview = () => {
         <div className="text-center mt-12">
           <Link to="/projects">
             <Button variant="primary" size="lg">
-              View All Projects
+              {t('home.viewAllProjects')}
             </Button>
           </Link>
         </div>

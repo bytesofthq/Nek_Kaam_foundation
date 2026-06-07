@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { messageAPI } from '../services/api';
 import Button from '../components/common/Button';
 import Loader from '../components/common/Loader';
+import { useLanguage } from '../context/LanguageContext';
 
 const Contact = () => {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -51,8 +53,8 @@ const Contact = () => {
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-green-600 to-green-800 text-white py-16">
         <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Contact Us</h1>
-          <p className="text-xl text-gray-100">We'd love to hear from you</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">{t('contact.title')}</h1>
+          <p className="text-xl text-gray-100">{t('contact.subtitle')}</p>
         </div>
       </section>
 
@@ -62,22 +64,22 @@ const Contact = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             {/* Contact Information */}
             <div>
-              <h2 className="text-2xl font-bold mb-8">Get in Touch</h2>
+              <h2 className="text-2xl font-bold mb-8">{t('contact.getInTouch')}</h2>
               <div className="space-y-6">
                 <div>
-                  <h3 className="font-bold text-lg mb-2">Address</h3>
+                  <h3 className="font-bold text-lg mb-2">{t('contact.address')}</h3>
                   <p className="text-gray-600">123 Main Street, City, Country 12345</p>
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg mb-2">Phone</h3>
+                  <h3 className="font-bold text-lg mb-2">{t('contact.phone')}</h3>
                   <p className="text-gray-600">+1 (555) 123-4567</p>
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg mb-2">Email</h3>
+                  <h3 className="font-bold text-lg mb-2">{t('contact.email')}</h3>
                   <p className="text-gray-600">info@nekkaam.org</p>
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg mb-2">Hours</h3>
+                  <h3 className="font-bold text-lg mb-2">{t('contact.hours')}</h3>
                   <p className="text-gray-600">Monday - Friday: 9:00 AM - 6:00 PM</p>
                   <p className="text-gray-600">Saturday: 10:00 AM - 4:00 PM</p>
                 </div>
@@ -86,10 +88,10 @@ const Contact = () => {
 
             {/* Contact Form */}
             <div>
-              <h2 className="text-2xl font-bold mb-8">Send us a Message</h2>
+              <h2 className="text-2xl font-bold mb-8">{t('contact.sendMessage')}</h2>
               {success && (
                 <div className="bg-green-100 text-green-600 p-4 rounded-lg mb-4">
-                  Message sent successfully! We'll get back to you soon.
+                  {t('contact.success')}
                 </div>
               )}
               {error && (
@@ -99,7 +101,7 @@ const Contact = () => {
               )}
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-gray-700 font-semibold mb-2">Name</label>
+                  <label className="block text-gray-700 font-semibold mb-2">{t('contact.name')}</label>
                   <input
                     type="text"
                     name="name"
@@ -107,11 +109,11 @@ const Contact = () => {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
-                    placeholder="Your name"
+                    placeholder={t('contact.placeholders.name')}
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-700 font-semibold mb-2">Email</label>
+                  <label className="block text-gray-700 font-semibold mb-2">{t('contact.email')}</label>
                   <input
                     type="email"
                     name="email"
@@ -119,22 +121,22 @@ const Contact = () => {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
-                    placeholder="Your email"
+                    placeholder={t('contact.placeholders.email')}
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-700 font-semibold mb-2">Phone</label>
+                  <label className="block text-gray-700 font-semibold mb-2">{t('contact.phone')}</label>
                   <input
                     type="tel"
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
-                    placeholder="Your phone"
+                    placeholder={t('contact.placeholders.phone')}
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-700 font-semibold mb-2">Subject</label>
+                  <label className="block text-gray-700 font-semibold mb-2">{t('contact.subject')}</label>
                   <input
                     type="text"
                     name="subject"
@@ -142,11 +144,11 @@ const Contact = () => {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
-                    placeholder="Message subject"
+                    placeholder={t('contact.placeholders.subject')}
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-700 font-semibold mb-2">Message</label>
+                  <label className="block text-gray-700 font-semibold mb-2">{t('contact.message')}</label>
                   <textarea
                     name="message"
                     value={formData.message}
@@ -154,7 +156,7 @@ const Contact = () => {
                     required
                     rows="5"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
-                    placeholder="Your message"
+                    placeholder={t('contact.placeholders.message')}
                   />
                 </div>
                 <Button
@@ -164,7 +166,7 @@ const Contact = () => {
                   disabled={loading}
                   className="w-full"
                 >
-                  {loading ? 'Sending...' : 'Send Message'}
+                  {loading ? t('common.sending') : t('contact.sendMessage')}
                 </Button>
               </form>
             </div>

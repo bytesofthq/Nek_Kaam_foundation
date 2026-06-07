@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, LogOut } from 'lucide-react';
+import { Menu, X, LogOut, Globe } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useLanguage } from '../../context/LanguageContext';
 import Button from '../common/Button';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { isAdminLoggedIn, isMemberLoggedIn, logout } = useAuth();
+  const { language, setLanguage, t } = useLanguage();
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -16,55 +18,57 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 py-4">
-        <div className="flex justify-between items-center">
-          {/* Logo */}
-          <Link to="/" className="text-2xl font-bold text-green-600">
-            Nek Kaam
+    <nav className="sticky top-0 z-50 border-b border-white/60 bg-white/90 backdrop-blur-xl shadow-[0_8px_30px_rgba(15,23,42,0.06)]">
+      <div className="max-w-7xl mx-auto px-4 py-3 md:py-4">
+        <div className="flex items-center justify-between gap-4">
+          <Link to="/" className="flex items-center gap-3 group min-w-0">
+            <div className="h-11 w-11 rounded-2xl bg-gradient-to-br from-green-600 to-green-800 shadow-md flex items-center justify-center text-white font-extrabold">
+              NK
+            </div>
+            <div className="min-w-0">
+              <div className="text-lg md:text-2xl font-extrabold tracking-tight text-gray-900 group-hover:text-green-700 transition truncate">
+                Nek Kaam
+              </div>
+              <div className="hidden sm:block text-xs md:text-sm text-gray-500 truncate">
+                {t('home.title')}
+              </div>
+            </div>
           </Link>
 
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-6">
-            <Link to="/" className="text-gray-700 hover:text-green-600 transition">
-              Home
-            </Link>
-            <Link to="/about" className="text-gray-700 hover:text-green-600 transition">
-              About
-            </Link>
-            <Link to="/projects" className="text-gray-700 hover:text-green-600 transition">
-              Projects
-            </Link>
-            <Link to="/activities" className="text-gray-700 hover:text-green-600 transition">
-              Activities
-            </Link>
-            <Link to="/gallery" className="text-gray-700 hover:text-green-600 transition">
-              Gallery
-            </Link>
-            <Link to="/impact-stories" className="text-gray-700 hover:text-green-600 transition">
-              Impact Stories
-            </Link>
-            <Link to="/committee" className="text-gray-700 hover:text-green-600 transition">
-              Committee
-            </Link>
-            <Link to="/transparency" className="text-gray-700 hover:text-green-600 transition">
-              Transparency
-            </Link>
-            <Link to="/contact" className="text-gray-700 hover:text-green-600 transition">
-              Contact
-            </Link>
-          </div>
+          <div className="hidden md:flex items-center gap-3 lg:gap-4">
+            <div className="flex items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5">
+              <Globe size={16} className="text-green-700" />
+              <span className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
+                {t('nav.language')}
+              </span>
+              <div className="ml-1 inline-flex rounded-full bg-white p-1 shadow-sm ring-1 ring-gray-200">
+                <button
+                  type="button"
+                  onClick={() => setLanguage('en')}
+                  aria-pressed={language === 'en'}
+                  className={`rounded-full px-3 py-1 text-sm font-semibold transition ${language === 'en' ? 'bg-green-600 text-white shadow-sm' : 'text-gray-600 hover:text-green-700'}`}
+                >
+                  EN
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setLanguage('hi')}
+                  aria-pressed={language === 'hi'}
+                  className={`rounded-full px-3 py-1 text-sm font-semibold transition ${language === 'hi' ? 'bg-green-600 text-white shadow-sm' : 'text-gray-600 hover:text-green-700'}`}
+                >
+                  HI
+                </button>
+              </div>
+            </div>
 
-          {/* Auth Links */}
-          <div className="hidden md:flex items-center gap-4">
             {isAdminLoggedIn ? (
               <>
                 <Link to="/admin-dashboard">
                   <Button variant="primary" size="sm">
-                    Admin Dashboard
+                    {t('nav.adminDashboard')}
                   </Button>
                 </Link>
-                <Button onClick={handleLogout} variant="outline" size="sm">
+                <Button onClick={handleLogout} variant="outline" size="sm" className="px-3">
                   <LogOut size={16} />
                 </Button>
               </>
@@ -72,10 +76,10 @@ const Navbar = () => {
               <>
                 <Link to="/member-dashboard">
                   <Button variant="primary" size="sm">
-                    Dashboard
+                    {t('nav.memberDashboard')}
                   </Button>
                 </Link>
-                <Button onClick={handleLogout} variant="outline" size="sm">
+                <Button onClick={handleLogout} variant="outline" size="sm" className="px-3">
                   <LogOut size={16} />
                 </Button>
               </>
@@ -83,91 +87,140 @@ const Navbar = () => {
               <>
                 <Link to="/member-login">
                   <Button variant="outline" size="sm">
-                    Login
+                    {t('nav.login')}
                   </Button>
                 </Link>
                 <Link to="/member-register">
                   <Button variant="primary" size="sm">
-                    Register
+                    {t('nav.register')}
                   </Button>
                 </Link>
               </>
             )}
           </div>
 
-          {/* Mobile Menu Button */}
-          <button className="md:hidden" onClick={toggleMenu}>
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          <button
+            type="button"
+            className="md:hidden inline-flex items-center justify-center rounded-2xl border border-gray-200 bg-white p-3 text-gray-700 shadow-sm active:scale-95 transition-transform"
+            onClick={toggleMenu}
+            aria-label={isOpen ? 'Close menu' : 'Open menu'}
+          >
+            {isOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
 
-        {/* Mobile Menu */}
-        {isOpen && (
-          <div className="md:hidden mt-4 space-y-3 pb-4">
-            <Link to="/" className="block text-gray-700 hover:text-green-600">
-              Home
+        <div className="hidden md:flex items-center justify-center gap-2 lg:gap-4 pt-4">
+          {[
+            ['nav.home', '/'],
+            ['nav.about', '/about'],
+            ['nav.projects', '/projects'],
+            ['nav.activities', '/activities'],
+            ['nav.gallery', '/gallery'],
+            ['nav.impactStories', '/impact-stories'],
+            ['nav.committee', '/committee'],
+            ['nav.transparency', '/transparency'],
+            ['nav.contact', '/contact'],
+          ].map(([labelKey, path]) => (
+            <Link
+              key={path}
+              to={path}
+              className="rounded-full px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-green-50 hover:text-green-700"
+            >
+              {t(labelKey)}
             </Link>
-            <Link to="/about" className="block text-gray-700 hover:text-green-600">
-              About
-            </Link>
-            <Link to="/projects" className="block text-gray-700 hover:text-green-600">
-              Projects
-            </Link>
-            <Link to="/activities" className="block text-gray-700 hover:text-green-600">
-              Activities
-            </Link>
-            <Link to="/gallery" className="block text-gray-700 hover:text-green-600">
-              Gallery
-            </Link>
-            <Link to="/impact-stories" className="block text-gray-700 hover:text-green-600">
-              Impact Stories
-            </Link>
-            <Link to="/committee" className="block text-gray-700 hover:text-green-600">
-              Committee
-            </Link>
-            <Link to="/transparency" className="block text-gray-700 hover:text-green-600">
-              Transparency
-            </Link>
-            <Link to="/contact" className="block text-gray-700 hover:text-green-600">
-              Contact
-            </Link>
+          ))}
+        </div>
 
-            {isAdminLoggedIn ? (
-              <>
-                <Link to="/admin-dashboard" className="block">
-                  <Button variant="primary" size="sm" className="w-full">
-                    Admin Dashboard
-                  </Button>
+        {isOpen && (
+          <div className="md:hidden mt-4 overflow-hidden rounded-[28px] border border-gray-200 bg-white shadow-2xl">
+            <div className="border-b border-gray-100 px-4 py-4">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <div className="text-xs font-semibold uppercase tracking-[0.24em] text-gray-400">
+                    {t('nav.language')}
+                  </div>
+                  <div className="mt-2 inline-flex rounded-full bg-gray-100 p-1">
+                    <button
+                      type="button"
+                      onClick={() => setLanguage('en')}
+                      className={`rounded-full px-4 py-2 text-sm font-semibold transition ${language === 'en' ? 'bg-green-600 text-white shadow-sm' : 'text-gray-600'}`}
+                    >
+                      English
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setLanguage('hi')}
+                      className={`rounded-full px-4 py-2 text-sm font-semibold transition ${language === 'hi' ? 'bg-green-600 text-white shadow-sm' : 'text-gray-600'}`}
+                    >
+                      हिंदी
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  {isAdminLoggedIn ? (
+                    <Link to="/admin-dashboard" onClick={() => setIsOpen(false)}>
+                      <Button variant="primary" size="sm">
+                        {t('nav.adminDashboard')}
+                      </Button>
+                    </Link>
+                  ) : isMemberLoggedIn ? (
+                    <Link to="/member-dashboard" onClick={() => setIsOpen(false)}>
+                      <Button variant="primary" size="sm">
+                        {t('nav.memberDashboard')}
+                      </Button>
+                    </Link>
+                  ) : (
+                    <Link to="/member-login" onClick={() => setIsOpen(false)}>
+                      <Button variant="outline" size="sm">
+                        {t('nav.login')}
+                      </Button>
+                    </Link>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 p-4">
+              {[
+                ['nav.home', '/'],
+                ['nav.about', '/about'],
+                ['nav.projects', '/projects'],
+                ['nav.activities', '/activities'],
+                ['nav.gallery', '/gallery'],
+                ['nav.impactStories', '/impact-stories'],
+                ['nav.committee', '/committee'],
+                ['nav.transparency', '/transparency'],
+                ['nav.contact', '/contact'],
+              ].map(([labelKey, path]) => (
+                <Link
+                  key={path}
+                  to={path}
+                  onClick={() => setIsOpen(false)}
+                  className="rounded-2xl bg-gray-50 px-4 py-4 text-sm font-semibold text-gray-700 transition hover:bg-green-50 hover:text-green-700 active:scale-[0.99]"
+                >
+                  {t(labelKey)}
                 </Link>
-                <Button onClick={handleLogout} variant="outline" size="sm" className="w-full">
-                  Logout
+              ))}
+            </div>
+
+            <div className="border-t border-gray-100 p-4">
+              {isAdminLoggedIn ? (
+                <Button onClick={handleLogout} variant="outline" size="sm" className="w-full py-3">
+                  {t('nav.logout')}
                 </Button>
-              </>
-            ) : isMemberLoggedIn ? (
-              <>
-                <Link to="/member-dashboard" className="block">
-                  <Button variant="primary" size="sm" className="w-full">
-                    Dashboard
-                  </Button>
-                </Link>
-                <Button onClick={handleLogout} variant="outline" size="sm" className="w-full">
-                  Logout
+              ) : isMemberLoggedIn ? (
+                <Button onClick={handleLogout} variant="outline" size="sm" className="w-full py-3">
+                  {t('nav.logout')}
                 </Button>
-              </>
-            ) : (
-              <>
-                <Link to="/member-login" className="block">
-                  <Button variant="outline" size="sm" className="w-full">
-                    Login
+              ) : (
+                <Link to="/member-register" onClick={() => setIsOpen(false)}>
+                  <Button variant="primary" size="sm" className="w-full py-3">
+                    {t('nav.register')}
                   </Button>
                 </Link>
-                <Link to="/member-register" className="block">
-                  <Button variant="primary" size="sm" className="w-full">
-                    Register
-                  </Button>
-                </Link>
-              </>
-            )}
+              )}
+            </div>
           </div>
         )}
       </div>

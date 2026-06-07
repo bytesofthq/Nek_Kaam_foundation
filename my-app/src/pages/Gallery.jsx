@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { galleryAPI } from '../services/api';
 import Loader from '../components/common/Loader';
+import { useLanguage } from '../context/LanguageContext';
 
 const Gallery = () => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const fetchGallery = async () => {
@@ -26,8 +28,8 @@ const Gallery = () => {
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-green-600 to-green-800 text-white py-16">
         <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Gallery</h1>
-          <p className="text-xl text-gray-100">Visual stories of our impact</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">{t('gallery.title')}</h1>
+          <p className="text-xl text-gray-100">{t('gallery.subtitle')}</p>
         </div>
       </section>
 
@@ -54,7 +56,7 @@ const Gallery = () => {
             </div>
           ) : (
             <div className="text-center py-12">
-              <p className="text-gray-600 text-lg">No gallery items found</p>
+              <p className="text-gray-600 text-lg">{t('common.noGallery')}</p>
             </div>
           )}
         </div>

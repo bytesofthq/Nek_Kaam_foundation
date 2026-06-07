@@ -5,9 +5,11 @@ import Button from '../components/common/Button';
 import Loader from '../components/common/Loader';
 import { impactStoryAPI, dashboardAPI } from '../services/api';
 import { Plus, Trash2, Calendar, MapPin, User, FileText, Image as ImageIcon, Upload, X } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 const AdminDashboard = () => {
   const { admin, isAdminLoggedIn } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
 
@@ -113,7 +115,7 @@ const AdminDashboard = () => {
 
     try {
       await impactStoryAPI.create(formData);
-      setFormSuccess('Impact story created successfully!');
+      setFormSuccess(t('dashboard.impactStoryCreated'));
       setStoryForm({
         title: '',
         personName: '',
@@ -126,19 +128,19 @@ const AdminDashboard = () => {
       setShowCreateForm(false);
       fetchStories();
     } catch (error) {
-      setFormError(error.response?.data?.message || 'Failed to create impact story');
+      setFormError(error.response?.data?.message || t('dashboard.createImpactStoryFailed'));
     } finally {
       setSubmittingStory(false);
     }
   };
 
   const handleDeleteStory = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this impact story?')) return;
+    if (!window.confirm(t('dashboard.deleteImpactStoryConfirm'))) return;
     try {
       await impactStoryAPI.delete(id);
       fetchStories();
     } catch (error) {
-      alert('Failed to delete story');
+      alert(t('dashboard.deleteStoryFailed'));
     }
   };
 
@@ -147,13 +149,13 @@ const AdminDashboard = () => {
   }
 
   const adminTabs = [
-    { id: 'overview', label: 'Overview' },
-    { id: 'projects', label: 'Projects' },
-    { id: 'members', label: 'Members' },
-    { id: 'activities', label: 'Activities' },
-    { id: 'impactStories', label: 'Impact Stories' },
-    { id: 'funds', label: 'Funds' },
-    { id: 'settings', label: 'Settings' },
+    { id: 'overview', label: t('dashboard.overview') },
+    { id: 'projects', label: t('dashboard.projects') },
+    { id: 'members', label: t('dashboard.members') },
+    { id: 'activities', label: t('dashboard.activities') },
+    { id: 'impactStories', label: t('dashboard.impactStories') },
+    { id: 'funds', label: t('dashboard.funds') },
+    { id: 'settings', label: t('dashboard.settings') },
   ];
 
 
@@ -179,8 +181,8 @@ useEffect(() => {
       <div className="bg-gradient-to-r from-green-600 to-green-800 text-white py-8 shadow-md">
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
           <div>
-            <h1 className="text-4xl font-bold mb-2">Admin Dashboard</h1>
-            <p className="text-green-100">Welcome back, {admin?.name || admin?.email}</p>
+            <h1 className="text-4xl font-bold mb-2">{t('dashboard.adminTitle')}</h1>
+            <p className="text-green-100">{t('dashboard.adminWelcome')} {admin?.name || admin?.email}</p>
           </div>
         </div>
       </div>
@@ -207,22 +209,22 @@ useEffect(() => {
         <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
           {activeTab === 'overview' && (
             <div>
-              <h2 className="text-2xl font-bold mb-6 text-gray-800">Dashboard Overview</h2>
+              <h2 className="text-2xl font-bold mb-6 text-gray-800">{t('dashboard.dashboardOverview')}</h2>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div className="bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-xl p-6 transition hover:shadow-md">
-                  <p className="text-gray-600 text-sm font-semibold">Total Projects</p>
+                  <p className="text-gray-600 text-sm font-semibold">{t('dashboard.totalProjects')}</p>
                   <p className="text-3xl font-extrabold text-green-700 mt-2">{stats.totalProjects}</p>
                 </div>
                 <div className="bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-xl p-6 transition hover:shadow-md">
-                  <p className="text-gray-600 text-sm font-semibold">Total Members</p>
+                  <p className="text-gray-600 text-sm font-semibold">{t('dashboard.totalMembers')}</p>
                   <p className="text-3xl font-extrabold text-green-700 mt-2">{stats.totalMembers}</p>
                 </div>
                 <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 border border-yellow-200 rounded-xl p-6 transition hover:shadow-md">
-                  <p className="text-gray-600 text-sm font-semibold">Active Activities</p>
+                  <p className="text-gray-600 text-sm font-semibold">{t('dashboard.activeActivities')}</p>
                   <p className="text-3xl font-extrabold text-yellow-700 mt-2">{stats.totalActivities}</p>
                 </div>
                 <div className="bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 rounded-xl p-6 transition hover:shadow-md">
-                  <p className="text-gray-600 text-sm font-semibold">Funds Collected</p>
+                  <p className="text-gray-600 text-sm font-semibold">{t('dashboard.fundsCollected')}</p>
                   <p className="text-3xl font-extrabold text-purple-700 mt-2">₹{stats.totalFundsReceived?.toLocaleString() || "0"}</p>
                 </div>
               </div>
@@ -231,38 +233,38 @@ useEffect(() => {
 
           {activeTab === 'projects' && (
             <div>
-              <h2 className="text-2xl font-bold mb-6">Manage Projects</h2>
+              <h2 className="text-2xl font-bold mb-6">{t('dashboard.manageProjects')}</h2>
               <Button variant="primary" className="mb-6">
-                Create New Project
+                {t('dashboard.createNewProject')}
               </Button>
-              <p className="text-gray-600">Project management interface would go here</p>
+              <p className="text-gray-600">{t('dashboard.projectPlaceholder')}</p>
             </div>
           )}
 
           {activeTab === 'members' && (
             <div>
-              <h2 className="text-2xl font-bold mb-6">Manage Members</h2>
+              <h2 className="text-2xl font-bold mb-6">{t('dashboard.manageMembers')}</h2>
               <Button variant="primary" className="mb-6">
-                View All Members
+                {t('dashboard.viewAllMembers')}
               </Button>
-              <p className="text-gray-600">Member management interface would go here</p>
+              <p className="text-gray-600">{t('dashboard.memberPlaceholder')}</p>
             </div>
           )}
 
           {activeTab === 'activities' && (
             <div>
-              <h2 className="text-2xl font-bold mb-6">Manage Activities</h2>
+              <h2 className="text-2xl font-bold mb-6">{t('dashboard.manageActivities')}</h2>
               <Button variant="primary" className="mb-6">
-                Create New Activity
+                {t('dashboard.createNewActivity')}
               </Button>
-              <p className="text-gray-600">Activity management interface would go here</p>
+              <p className="text-gray-600">{t('dashboard.activityPlaceholder')}</p>
             </div>
           )}
 
           {activeTab === 'impactStories' && (
             <div>
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-800">Manage Impact Stories</h2>
+                <h2 className="text-2xl font-bold text-gray-800">{t('dashboard.manageImpactStories')}</h2>
                 <Button
                   onClick={() => {
                     setShowCreateForm(!showCreateForm);
@@ -274,7 +276,7 @@ useEffect(() => {
                   className="flex items-center gap-2 bg-green-600 hover:bg-green-700"
                 >
                   <Plus size={18} />
-                  {showCreateForm ? 'View Stories List' : 'Create New Story'}
+                  {showCreateForm ? t('dashboard.viewStoriesList') : t('dashboard.createNewStory')}
                 </Button>
               </div>
 
@@ -286,7 +288,7 @@ useEffect(() => {
 
               {showCreateForm ? (
                 <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 max-w-2xl mx-auto shadow-sm">
-                  <h3 className="text-xl font-semibold mb-6 text-gray-800">Create Impact Story</h3>
+                  <h3 className="text-xl font-semibold mb-6 text-gray-800">{t('dashboard.createImpactStory')}</h3>
                   {formError && (
                     <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-r-lg mb-4 text-sm">
                       {formError}
@@ -296,7 +298,7 @@ useEffect(() => {
                   <form onSubmit={handleCreateStory} className="space-y-4">
                     <div>
                       <label className="block text-gray-700 font-semibold mb-1 text-sm flex items-center gap-1.5">
-                        <FileText size={16} className="text-gray-400" /> Title
+                        <FileText size={16} className="text-gray-400" /> {t('dashboard.title')}
                       </label>
                       <input
                         type="text"
@@ -307,14 +309,14 @@ useEffect(() => {
                         minLength={5}
                         maxLength={150}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-600 transition"
-                        placeholder="e.g. Clean Water Initiative Success"
+                          placeholder={t('dashboard.storyTitlePlaceholder')}
                       />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-gray-700 font-semibold mb-1 text-sm flex items-center gap-1.5">
-                          <User size={16} className="text-gray-400" /> Beneficiary / Person Name
+                          <User size={16} className="text-gray-400" /> {t('dashboard.beneficiaryPersonName')}
                         </label>
                         <input
                           type="text"
@@ -323,13 +325,13 @@ useEffect(() => {
                           onChange={handleInputChange}
                           required
                           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-600 transition"
-                          placeholder="e.g. Ramesh Kumar / Sharma Family"
+                          placeholder={t('dashboard.personNamePlaceholder')}
                         />
                       </div>
 
                       <div>
                         <label className="block text-gray-700 font-semibold mb-1 text-sm flex items-center gap-1.5">
-                          <MapPin size={16} className="text-gray-400" /> Location
+                          <MapPin size={16} className="text-gray-400" /> {t('dashboard.location')}
                         </label>
                         <input
                           type="text"
@@ -338,7 +340,7 @@ useEffect(() => {
                           onChange={handleInputChange}
                           required
                           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-600 transition"
-                          placeholder="e.g. Patna, Bihar"
+                          placeholder={t('dashboard.locationPlaceholder')}
                         />
                       </div>
                     </div>
@@ -346,7 +348,7 @@ useEffect(() => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-gray-700 font-semibold mb-1 text-sm flex items-center gap-1.5">
-                          <Calendar size={16} className="text-gray-400" /> Date
+                          <Calendar size={16} className="text-gray-400" /> {t('dashboard.date')}
                         </label>
                         <input
                           type="date"
@@ -360,7 +362,7 @@ useEffect(() => {
 
                       <div>
                         <label className="block text-gray-700 font-semibold mb-1 text-sm flex items-center gap-1.5">
-                          <ImageIcon size={16} className="text-gray-400" /> Upload Image
+                          <ImageIcon size={16} className="text-gray-400" /> {t('dashboard.uploadImage')}
                         </label>
                         {imagePreview ? (
                           <div className="relative w-full h-32 rounded-lg overflow-hidden border border-gray-200 group">
@@ -369,7 +371,7 @@ useEffect(() => {
                               type="button"
                               onClick={handleRemoveImage}
                               className="absolute top-2 right-2 bg-red-600 hover:bg-red-700 text-white rounded-full p-1.5 shadow-md transition transform hover:scale-110 active:scale-95 z-10"
-                              title="Remove image"
+                              title={t('dashboard.removeImage')}
                             >
                               <X size={14} />
                             </button>
@@ -384,15 +386,15 @@ useEffect(() => {
                               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                             />
                             <Upload size={20} className="text-gray-400 mb-1" />
-                            <p className="text-xs text-gray-500 font-semibold">Click to upload image</p>
-                            <p className="text-[10px] text-gray-400 mt-0.5">PNG, JPG up to 5MB</p>
+                            <p className="text-xs text-gray-500 font-semibold">{t('dashboard.clickToUploadImage')}</p>
+                            <p className="text-[10px] text-gray-400 mt-0.5">{t('dashboard.uploadFormats')}</p>
                           </div>
                         )}
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-gray-700 font-semibold mb-1 text-sm">Story Description</label>
+                      <label className="block text-gray-700 font-semibold mb-1 text-sm">{t('dashboard.storyDescription')}</label>
                       <textarea
                         name="story"
                         value={storyForm.story}
@@ -401,7 +403,7 @@ useEffect(() => {
                         maxLength={2000}
                         rows={6}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-600 transition"
-                        placeholder="Detail the story of transformation..."
+                        placeholder={t('dashboard.storyDescriptionPlaceholder')}
                       />
                     </div>
 
@@ -412,7 +414,7 @@ useEffect(() => {
                         variant="outline"
                         className="px-5 py-2"
                       >
-                        Cancel
+                        {t('dashboard.cancel')}
                       </Button>
                       <Button
                         type="submit"
@@ -420,7 +422,7 @@ useEffect(() => {
                         variant="primary"
                         className="px-6 py-2 bg-green-600 hover:bg-green-700"
                       >
-                        {submittingStory ? 'Submitting...' : 'Save Story'}
+                        {submittingStory ? t('dashboard.submitting') : t('dashboard.saveStory')}
                       </Button>
                     </div>
                   </form>
@@ -436,11 +438,11 @@ useEffect(() => {
                       <table className="min-w-full divide-y divide-gray-200 bg-white">
                         <thead className="bg-gray-50">
                           <tr>
-                            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Beneficiary</th>
-                            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Title</th>
-                            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Location</th>
-                            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
-                            <th className="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
+                            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">{t('dashboard.beneficiary')}</th>
+                            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">{t('dashboard.title')}</th>
+                            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">{t('dashboard.location')}</th>
+                            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">{t('dashboard.date')}</th>
+                            <th className="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">{t('dashboard.actions')}</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200">
@@ -462,7 +464,7 @@ useEffect(() => {
                                 <button
                                   onClick={() => handleDeleteStory(story._id)}
                                   className="text-red-600 hover:text-red-900 p-2 rounded-lg hover:bg-red-50 transition inline-flex items-center"
-                                  title="Delete story"
+                                  title={t('dashboard.deleteStory')}
                                 >
                                   <Trash2 size={18} />
                                 </button>
@@ -474,12 +476,12 @@ useEffect(() => {
                     </div>
                   ) : (
                     <div className="text-center py-12 bg-gray-50 rounded-xl border border-dashed border-gray-300">
-                      <p className="text-gray-500 text-lg">No impact stories found</p>
+                      <p className="text-gray-500 text-lg">{t('dashboard.noStories')}</p>
                       <button
                         onClick={() => setShowCreateForm(true)}
                         className="mt-4 text-green-600 hover:underline font-semibold"
                       >
-                        Create the first story
+                        {t('dashboard.createFirstStory')}
                       </button>
                     </div>
                   )}
@@ -490,11 +492,11 @@ useEffect(() => {
 
           {activeTab === 'funds' && (
             <div>
-              <h2 className="text-2xl font-bold mb-6">Fund Management</h2>
+              <h2 className="text-2xl font-bold mb-6">{t('dashboard.fundManagement')}</h2>
               <Button variant="primary" className="mb-6">
-                Add Fund Collection
+                {t('dashboard.addFundCollection')}
               </Button>
-              <p className="text-gray-600">Fund management interface would go here</p>
+              <p className="text-gray-600">{t('dashboard.fundPlaceholder')}</p>
             </div>
           )}
 

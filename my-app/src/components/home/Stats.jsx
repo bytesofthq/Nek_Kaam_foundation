@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { publicAPI } from '../../services/api';
 import Loader from '../common/Loader';
+import { useLanguage } from '../../context/LanguageContext';
 
 const Stats = () => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -24,16 +26,16 @@ const Stats = () => {
   if (loading) return <Loader />;
 
   const defaultStats = [
-    { label: 'Active Projects', value: '15+' },
-    { label: 'Members', value: '500+' },
-    { label: 'Lives Impacted', value: '10K+' },
-    { label: 'Funds Distributed', value: '$100K+' },
+    { label: t('home.activeProjects'), value: '15+' },
+    { label: t('home.members'), value: '500+' },
+    { label: t('home.livesImpacted'), value: '10K+' },
+    { label: t('home.fundsDistributed'), value: '$100K+' },
   ];
 
   return (
     <section className="py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Our Impact</h2>
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">{t('home.ourImpact')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {defaultStats.map((stat, index) => (
             <div key={index} className="bg-white rounded-lg shadow-md p-8 text-center">

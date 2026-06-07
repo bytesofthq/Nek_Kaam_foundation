@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { projectAPI } from '../services/api';
 import Loader from '../components/common/Loader';
+import { useLanguage } from '../context/LanguageContext';
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -27,8 +29,8 @@ const Projects = () => {
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-green-600 to-green-800 text-white py-16">
         <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Our Projects</h1>
-          <p className="text-xl text-gray-100">Making a lasting impact</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">{t('projects.title')}</h1>
+          <p className="text-xl text-gray-100">{t('projects.subtitle')}</p>
         </div>
       </section>
 
@@ -50,7 +52,7 @@ const Projects = () => {
                         {project.status}
                       </span>
                       <span className="text-sm text-gray-500">
-                        Budget: ${project.budget || 'N/A'}
+                        {t('projects.budget')}: ${project.budget || 'N/A'}
                       </span>
                     </div>
                   </div>
@@ -59,7 +61,7 @@ const Projects = () => {
             </div>
           ) : (
             <div className="text-center py-12">
-              <p className="text-gray-600 text-lg">No projects found</p>
+              <p className="text-gray-600 text-lg">{t('common.noProjects')}</p>
             </div>
           )}
         </div>

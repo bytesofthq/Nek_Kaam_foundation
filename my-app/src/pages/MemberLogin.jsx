@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import Button from '../components/common/Button';
 import Loader from '../components/common/Loader';
 import { Shield, User } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 const MemberLogin = () => {
   const [role, setRole] = useState('member'); // 'member' or 'admin'
@@ -20,6 +21,7 @@ const MemberLogin = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { memberLogin, adminLogin } = useAuth();
+  const { t } = useLanguage();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,7 +37,7 @@ const MemberLogin = () => {
         navigate('/admin-dashboard');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
+      setError(err.response?.data?.message || t('login.loginFailed'));
     } finally {
       setLoading(false);
     }
@@ -49,8 +51,8 @@ const MemberLogin = () => {
 
       <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-8 max-w-md w-full border border-white/20 transition-all duration-300 transform hover:scale-[1.01] z-10">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-extrabold text-gray-800 tracking-tight">Nek Kaam Foundation</h1>
-          <p className="text-gray-500 mt-2">Welcome back! Please login to your account.</p>
+          <h1 className="text-3xl font-extrabold text-gray-800 tracking-tight">{t('login.title')}</h1>
+          <p className="text-gray-500 mt-2">{t('login.subtitle')}</p>
         </div>
 
         {/* Unified/Segmented Tabs */}
@@ -68,7 +70,7 @@ const MemberLogin = () => {
             }`}
           >
             <User size={16} />
-            Member Login
+            {t('login.memberLogin')}
           </button>
           <button
             type="button"
@@ -83,7 +85,7 @@ const MemberLogin = () => {
             }`}
           >
             <Shield size={16} />
-            Admin Login
+            {t('login.adminLogin')}
           </button>
         </div>
 
@@ -97,20 +99,20 @@ const MemberLogin = () => {
           {role === 'member' ? (
             <>
               <div>
-                <label className="block text-gray-700 font-semibold mb-1 text-sm">Full Name</label>
+                <label className="block text-gray-700 font-semibold mb-1 text-sm">{t('login.memberName')}</label>
                 <input
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   required
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-600 transition-all duration-200"
-                  placeholder="Enter your registered name"
+                  placeholder={t('login.memberNamePlaceholder')}
                   disabled={loading}
                 />
               </div>
 
               <div>
-                <label className="block text-gray-700 font-semibold mb-1 text-sm">Phone Number</label>
+                <label className="block text-gray-700 font-semibold mb-1 text-sm">{t('login.phoneNumber')}</label>
                 <input
                   type="tel"
                   value={phoneNumber}
@@ -119,7 +121,7 @@ const MemberLogin = () => {
                   pattern="[0-9]{10}"
                   title="Please enter a valid 10-digit phone number"
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-600 transition-all duration-200"
-                  placeholder="10 digit phone number"
+                  placeholder={t('login.phonePlaceholder')}
                   disabled={loading}
                 />
               </div>
@@ -127,27 +129,27 @@ const MemberLogin = () => {
           ) : (
             <>
               <div>
-                <label className="block text-gray-700 font-semibold mb-1 text-sm">Admin Email</label>
+                <label className="block text-gray-700 font-semibold mb-1 text-sm">{t('login.adminEmail')}</label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-600 transition-all duration-200"
-                  placeholder="admin@nekkaam.org"
+                  placeholder={t('login.adminEmailPlaceholder')}
                   disabled={loading}
                 />
               </div>
 
               <div>
-                <label className="block text-gray-700 font-semibold mb-1 text-sm">Password</label>
+                <label className="block text-gray-700 font-semibold mb-1 text-sm">{t('login.password')}</label>
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-600 transition-all duration-200"
-                  placeholder="••••••••"
+                  placeholder={t('login.passwordPlaceholder')}
                   disabled={loading}
                 />
               </div>
@@ -163,19 +165,19 @@ const MemberLogin = () => {
           >
             {loading ? (
               <span className="flex items-center gap-2">
-                <Loader size="sm" /> Logging in...
+                <Loader size="sm" /> {t('common.loading')}
               </span>
             ) : (
-              'Log In'
+              t('common.login')
             )}
           </Button>
         </form>
 
         {role === 'member' && (
           <p className="text-center text-gray-500 mt-6 text-sm">
-            Don't have an account?{' '}
+            {t('login.noAccount')}{' '}
             <a href="/member-register" className="text-green-600 hover:underline font-bold transition-all duration-200">
-              Register here
+              {t('login.registerHere')}
             </a>
           </p>
         )}

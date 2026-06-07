@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import { newsAPI } from '../../services/api';
 import Loader from '../common/Loader';
 import Button from '../common/Button';
+import { useLanguage } from '../../context/LanguageContext';
 
 const NewsPreview = () => {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -30,7 +32,7 @@ const NewsPreview = () => {
   return (
     <section className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Latest News</h2>
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">{t('home.latestNews')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {news.map((item) => (
             <div key={item._id} className="bg-gray-50 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
@@ -40,7 +42,7 @@ const NewsPreview = () => {
                 <h3 className="text-xl font-bold mb-2">{item.title}</h3>
                 <p className="text-gray-600 mb-4 line-clamp-2">{item.content}</p>
                 <Link to={`#`} className="text-green-600 hover:text-green-800">
-                  Read More →
+                  {t('home.readMore')} →
                 </Link>
               </div>
             </div>
@@ -48,7 +50,7 @@ const NewsPreview = () => {
         </div>
         <div className="text-center mt-12">
           <Button variant="primary" size="lg">
-            View All News
+            {t('home.viewAllNews')}
           </Button>
         </div>
       </div>

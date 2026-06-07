@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { fundAPI } from '../services/api';
 import Loader from '../components/common/Loader';
+import { useLanguage } from '../context/LanguageContext';
 
 const Transparency = () => {
   const [collections, setCollections] = useState([]);
   const [usage, setUsage] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,8 +33,8 @@ const Transparency = () => {
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-green-600 to-green-800 text-white py-16">
         <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Financial Transparency</h1>
-          <p className="text-xl text-gray-100">Detailed breakdown of our finances</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">{t('transparency.title')}</h1>
+          <p className="text-xl text-gray-100">{t('transparency.subtitle')}</p>
         </div>
       </section>
 
@@ -45,22 +47,22 @@ const Transparency = () => {
             <>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
                 <div className="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500 text-center">
-                  <h3 className="text-xl font-bold text-gray-700 mb-2">Total Funds Received</h3>
+                  <h3 className="text-xl font-bold text-gray-700 mb-2">{t('transparency.totalReceived')}</h3>
                   <p className="text-3xl font-bold text-green-600">${collections.reduce((a, c) => a + Number(c.amount), 0).toLocaleString()}</p>
                 </div>
                 <div className="bg-white p-6 rounded-lg shadow-md border-t-4 border-red-500 text-center">
-                  <h3 className="text-xl font-bold text-gray-700 mb-2">Total Funds Used</h3>
+                  <h3 className="text-xl font-bold text-gray-700 mb-2">{t('transparency.totalUsed')}</h3>
                   <p className="text-3xl font-bold text-red-600">${usage.reduce((a, c) => a + Number(c.amount), 0).toLocaleString()}</p>
                 </div>
                 <div className="bg-white p-6 rounded-lg shadow-md border-t-4 border-yellow-500 text-center">
-                  <h3 className="text-xl font-bold text-gray-700 mb-2">Available Balance</h3>
+                  <h3 className="text-xl font-bold text-gray-700 mb-2">{t('transparency.availableBalance')}</h3>
                   <p className="text-3xl font-bold text-yellow-600">${(collections.reduce((a, c) => a + Number(c.amount), 0) - usage.reduce((a, c) => a + Number(c.amount), 0)).toLocaleString()}</p>
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
               {/* Collections */}
               <div>
-                <h2 className="text-2xl font-bold mb-6">Fund Collections</h2>
+                <h2 className="text-2xl font-bold mb-6">{t('transparency.collections')}</h2>
                 <div className="space-y-4">
                   {collections.length > 0 ? (
                     collections.map((item) => (
@@ -76,14 +78,14 @@ const Transparency = () => {
                       </div>
                     ))
                   ) : (
-                    <p className="text-gray-600">No collection data available</p>
+                    <p className="text-gray-600">{t('common.noItems')}</p>
                   )}
                 </div>
               </div>
 
               {/* Usage */}
               <div>
-                <h2 className="text-2xl font-bold mb-6">Fund Usage</h2>
+                <h2 className="text-2xl font-bold mb-6">{t('transparency.usage')}</h2>
                 <div className="space-y-4">
                   {usage.length > 0 ? (
                     usage.map((item) => (
@@ -99,7 +101,7 @@ const Transparency = () => {
                       </div>
                     ))
                   ) : (
-                    <p className="text-gray-600">No usage data available</p>
+                    <p className="text-gray-600">{t('common.noItems')}</p>
                   )}
                 </div>
               </div>

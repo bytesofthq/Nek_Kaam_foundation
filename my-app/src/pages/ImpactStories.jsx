@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 import { impactStoryAPI } from '../services/api';
 import Loader from '../components/common/Loader';
 import { Calendar, MapPin, User } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 const ImpactStories = () => {
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const fetchStories = async () => {
@@ -28,8 +30,8 @@ const ImpactStories = () => {
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-green-600 to-green-800 text-white py-16">
         <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Impact Stories</h1>
-          <p className="text-xl text-gray-100">Real stories of transformation</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">{t('impactStories.title')}</h1>
+          <p className="text-xl text-gray-100">{t('impactStories.subtitle')}</p>
         </div>
       </section>
 
@@ -65,15 +67,15 @@ const ImpactStories = () => {
                       <div className="space-y-3 border-t border-gray-200/80 pt-4">
                         <div className="flex items-center gap-2 text-sm text-gray-600">
                           <User size={16} className="text-green-600" />
-                          <span><strong>Beneficiary:</strong> {story.personName}</span>
+                          <span><strong>{t('impactStories.beneficiary')}:</strong> {story.personName}</span>
                         </div>
                         <div className="flex items-center gap-2 text-sm text-gray-600">
                           <MapPin size={16} className="text-green-600" />
-                          <span><strong>Location:</strong> {story.location}</span>
+                          <span><strong>{t('impactStories.location')}:</strong> {story.location}</span>
                         </div>
                         <div className="flex items-center gap-2 text-sm text-gray-600">
                           <Calendar size={16} className="text-green-600" />
-                          <span><strong>Date:</strong> {new Date(story.date).toLocaleDateString()}</span>
+                          <span><strong>{t('impactStories.date')}:</strong> {new Date(story.date).toLocaleDateString()}</span>
                         </div>
                       </div>
                     </div>
@@ -83,7 +85,7 @@ const ImpactStories = () => {
             </div>
           ) : (
             <div className="text-center py-12">
-              <p className="text-gray-600 text-lg">No impact stories found</p>
+              <p className="text-gray-600 text-lg">{t('common.noStories')}</p>
             </div>
           )}
         </div>
