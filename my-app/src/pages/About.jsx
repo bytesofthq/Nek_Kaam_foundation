@@ -71,10 +71,10 @@ const About = () => {
             className="grid grid-cols-2 gap-4"
           >
             {[
-              { emoji: '📅', stat: '2020', label: 'Founded' },
+              { emoji: '📅', stat: '2025', label: 'Founded' },
               { emoji: '👥', stat: '500+', label: 'Members' },
-              { emoji: '🏡', stat: '200+', label: 'Families Helped' },
-              { emoji: '₹', stat: '5L+', label: 'Funds Managed' },
+              { emoji: '🏡', stat: '100+', label: 'Families Helped' },
+              { emoji: '₹', stat: '2L+', label: 'Funds Managed' },
             ].map((item, i) => (
               <div key={i} className="bg-gradient-to-br from-green-50 to-emerald-100 border border-green-200 rounded-2xl p-6 text-center">
                 <div className="text-4xl mb-2">{item.emoji}</div>

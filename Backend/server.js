@@ -41,7 +41,14 @@ app.use(cors({
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('✅ MongoDB Connected'))
+  .then(() => {
+    console.log('✅ MongoDB Connected');
+    if (settingRoutes && typeof settingRoutes.initSettings === 'function') {
+      settingRoutes.initSettings()
+        .then(() => console.log('✅ Default settings initialized successfully'))
+        .catch(err => console.error('❌ Failed to initialize default settings:', err));
+    }
+  })
   .catch((err) => console.error('❌ MongoDB Connection Error:', err));
 
 // Security middleware

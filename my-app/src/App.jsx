@@ -1,4 +1,3 @@
-import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import Home from './pages/Home';
@@ -11,8 +10,7 @@ import Gallery from './pages/Gallery';
 import ImpactStories from './pages/ImpactStories';
 import Contact from './pages/Contact';
 import MemberRegister from './pages/MemberRegister';
-import MemberLogin from './pages/MemberLogin';
-import MemberDashboard from './pages/MemberDashboard';
+import Login from './pages/Login';
 import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
@@ -29,8 +27,7 @@ function App() {
         <Route path="impact-stories" element={<ImpactStories />} />
         <Route path="contact" element={<Contact />} />
         <Route path="member-register" element={<MemberRegister />} />
-        <Route path="member-login" element={<MemberLogin />} />
-        <Route path="member-dashboard" element={<MemberDashboard />} />
+        <Route path="login" element={<Login />} />
         <Route path="admin-dashboard" element={<AdminDashboard />} />
       </Route>
     </Routes>

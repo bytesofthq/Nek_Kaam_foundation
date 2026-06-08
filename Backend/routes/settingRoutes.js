@@ -14,7 +14,7 @@ const initSettings = async () => {
     }
   }
 };
-initSettings();
+router.initSettings = initSettings;
 
 // @route   GET /api/settings
 // @desc    Get all settings (Public)

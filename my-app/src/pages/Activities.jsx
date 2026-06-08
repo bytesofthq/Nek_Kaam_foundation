@@ -8,7 +8,6 @@ const CATEGORIES = ['All', 'Marriage Assistance', 'Family Support', 'Medical Hel
 
 const Activities = () => {
   const [activities, setActivities] = useState([]);
-  const [filtered, setFiltered] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
@@ -19,10 +18,8 @@ const Activities = () => {
         const res = await activityAPI.getAll();
         const data = res.data?.activities || res.data || [];
         setActivities(data);
-        setFiltered(data);
       } catch {
         setActivities([]);
-        setFiltered([]);
       } finally {
         setLoading(false);
       }
@@ -30,12 +27,11 @@ const Activities = () => {
     fetch();
   }, []);
 
-  useEffect(() => {
-    let result = activities;
-    if (category !== 'All') result = result.filter(a => a.category === category);
-    if (search) result = result.filter(a => a.title?.toLowerCase().includes(search.toLowerCase()) || a.description?.toLowerCase().includes(search.toLowerCase()));
-    setFiltered(result);
-  }, [activities, category, search]);
+  const filtered = activities.filter(a => {
+    if (category !== 'All' && a.category !== category) return false;
+    if (search && !(a.title?.toLowerCase().includes(search.toLowerCase()) || a.description?.toLowerCase().includes(search.toLowerCase()))) return false;
+    return true;
+  });
 
   const demoActivities = [
     { _id: '1', title: 'Marriage Assistance for 3 Families', category: 'Marriage Assistance', location: 'Patna, Bihar', date: '2024-11-15', description: 'We provided financial and logistical support for 3 underprivileged families in organizing their daughters\' weddings with dignity.' },

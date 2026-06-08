@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, LogOut, ChevronDown, Heart } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import Button from '../common/Button';
 
 const navLinks = [
   { label: 'Home', to: '/' },
@@ -23,21 +24,11 @@ const navLinks = [
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { isAdminLoggedIn, isMemberLoggedIn, logout } = useAuth();
   const location = useLocation();
 
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
-    setIsOpen(false);
-    setDropdownOpen(false);
-  }, [location]);
+  const toggleMenu = () => setIsOpen(!isOpen);
 
   const handleLogout = async () => {
     await logout();
@@ -47,7 +38,7 @@ const Navbar = () => {
   const isActive = (to) => location.pathname === to;
 
   return (
-    <nav className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-lg' : 'bg-white/95 backdrop-blur-md shadow-sm'}`}>
+    <nav className={`sticky top-0 z-50 transition-all duration-300 ${isOpen ? 'bg-white shadow-md' : 'bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -108,8 +99,8 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Auth Buttons - Desktop */}
-          <div className="hidden lg:flex items-center gap-3">
+          {/* Auth Links */}
+          <div className="hidden md:flex items-center gap-4">
             {isAdminLoggedIn ? (
               <>
                 <Link to="/admin-dashboard" className="bg-green-600 hover:bg-green-700 text-white font-semibold text-sm px-4 py-2 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md">
@@ -121,17 +112,21 @@ const Navbar = () => {
               </>
             ) : isMemberLoggedIn ? (
               <>
-                <Link to="/member-dashboard" className="bg-green-600 hover:bg-green-700 text-white font-semibold text-sm px-4 py-2 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md">
-                  My Dashboard
+                <Link to="/member-dashboard">
+                  <Button variant="primary" size="sm">
+                    Dashboard
+                  </Button>
                 </Link>
-                <button onClick={handleLogout} className="p-2 text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all duration-200" title="Logout">
-                  <LogOut size={18} />
-                </button>
+                <Button onClick={handleLogout} variant="outline" size="sm">
+                  <LogOut size={16} />
+                </Button>
               </>
             ) : (
               <>
-                <Link to="/member-login" className="text-gray-700 hover:text-green-600 font-semibold text-sm px-4 py-2 rounded-lg border border-gray-200 hover:border-green-300 transition-all duration-200">
-                  Login
+                <Link to="/member-login">
+                  <Button variant="outline" size="sm">
+                    Login
+                  </Button>
                 </Link>
                 <Link to="/member-register" className="bg-green-600 hover:bg-green-700 text-white font-semibold text-sm px-5 py-2 rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
                   Join Us
@@ -142,7 +137,7 @@ const Navbar = () => {
 
           {/* Mobile menu button */}
           <button
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={toggleMenu}
             className="lg:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition"
           >
             {isOpen ? <X size={22} /> : <Menu size={22} />}
@@ -153,63 +148,72 @@ const Navbar = () => {
       {/* Mobile Menu */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2 }}
-            className="lg:hidden border-t border-gray-100 bg-white overflow-hidden"
-          >
-            <div className="px-4 py-4 space-y-1">
-              {navLinks.map((link) =>
-                link.children ? (
-                  <div key={link.label}>
-                    <div className="px-3 py-2 text-xs font-bold text-gray-400 uppercase tracking-widest">{link.label}</div>
-                    {link.children.map((child) => (
-                      <Link
-                        key={child.to}
-                        to={child.to}
-                        className={`block px-4 py-2 text-sm font-medium rounded-lg transition-colors ${isActive(child.to) ? 'text-green-600 bg-green-50' : 'text-gray-700 hover:text-green-600 hover:bg-green-50'}`}
-                      >
-                        {child.label}
-                      </Link>
-                    ))}
-                  </div>
-                ) : (
-                  <Link
-                    key={link.to}
-                    to={link.to}
-                    className={`block px-3 py-2 text-sm font-semibold rounded-lg transition-colors ${isActive(link.to) ? 'text-green-600 bg-green-50' : 'text-gray-700 hover:text-green-600 hover:bg-green-50'}`}
-                  >
-                    {link.label}
-                  </Link>
-                )
-              )}
+          <div className="md:hidden mt-4 space-y-3 pb-4">
+            <Link to="/" className="block text-gray-700 hover:text-green-600">
+              Home
+            </Link>
+            <Link to="/about" className="block text-gray-700 hover:text-green-600">
+              About
+            </Link>
+            <Link to="/projects" className="block text-gray-700 hover:text-green-600">
+              Projects
+            </Link>
+            <Link to="/activities" className="block text-gray-700 hover:text-green-600">
+              Activities
+            </Link>
+            <Link to="/gallery" className="block text-gray-700 hover:text-green-600">
+              Gallery
+            </Link>
+            <Link to="/impact-stories" className="block text-gray-700 hover:text-green-600">
+              Impact Stories
+            </Link>
+            <Link to="/committee" className="block text-gray-700 hover:text-green-600">
+              Committee
+            </Link>
+            <Link to="/transparency" className="block text-gray-700 hover:text-green-600">
+              Transparency
+            </Link>
+            <Link to="/contact" className="block text-gray-700 hover:text-green-600">
+              Contact
+            </Link>
 
-              <div className="pt-3 border-t border-gray-100 flex flex-col gap-2">
-                {isAdminLoggedIn ? (
-                  <>
-                    <Link to="/admin-dashboard" className="block text-center bg-green-600 text-white font-semibold text-sm px-4 py-2.5 rounded-lg">Admin Dashboard</Link>
-                    <button onClick={handleLogout} className="flex items-center justify-center gap-2 text-red-500 font-semibold text-sm py-2">
-                      <LogOut size={16} /> Logout
-                    </button>
-                  </>
-                ) : isMemberLoggedIn ? (
-                  <>
-                    <Link to="/member-dashboard" className="block text-center bg-green-600 text-white font-semibold text-sm px-4 py-2.5 rounded-lg">My Dashboard</Link>
-                    <button onClick={handleLogout} className="flex items-center justify-center gap-2 text-red-500 font-semibold text-sm py-2">
-                      <LogOut size={16} /> Logout
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <Link to="/member-login" className="block text-center border border-green-600 text-green-600 font-semibold text-sm px-4 py-2.5 rounded-lg">Login</Link>
-                    <Link to="/member-register" className="block text-center bg-green-600 text-white font-semibold text-sm px-4 py-2.5 rounded-lg">Join Us</Link>
-                  </>
-                )}
-              </div>
-            </div>
-          </motion.div>
+            {isAdminLoggedIn ? (
+              <>
+                <Link to="/admin-dashboard" className="block">
+                  <Button variant="primary" size="sm" className="w-full">
+                    Admin Dashboard
+                  </Button>
+                </Link>
+                <Button onClick={handleLogout} variant="outline" size="sm" className="w-full">
+                  Logout
+                </Button>
+              </>
+            ) : isMemberLoggedIn ? (
+              <>
+                <Link to="/member-dashboard" className="block">
+                  <Button variant="primary" size="sm" className="w-full">
+                    Dashboard
+                  </Button>
+                </Link>
+                <Button onClick={handleLogout} variant="outline" size="sm" className="w-full">
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link to="/member-login" className="block">
+                  <Button variant="outline" size="sm" className="w-full">
+                    Login
+                  </Button>
+                </Link>
+                <Link to="/member-register" className="block">
+                  <Button variant="primary" size="sm" className="w-full">
+                    Register
+                  </Button>
+                </Link>
+              </>
+            )}
+          </div>
         )}
       </AnimatePresence>
     </nav>

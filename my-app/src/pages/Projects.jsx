@@ -11,9 +11,8 @@ const STATUS_CONFIG = {
 };
 
 const demoProjects = [
-  { _id: '1', title: 'Al-Noor Mosque Renovation & AC Installation', objective: 'Complete renovation and climate control for 500+ worshippers', location: 'Patna, Bihar', status: 'Completed', budget: 150000, description: 'Full renovation of Al-Noor Mosque including structural repair, whitewash, 4 AC units, and carpet installation for 500 worshippers.' },
+  { _id: '1', title: 'Mosque Renovation & AC Installation', objective: 'Complete renovation and climate control for 500+ worshippers', location: 'UP ,Sitapur',status: 'Ongoing', budget: 150000, description: 'Full renovation of  Mosque including structural repair, whitewash, 4 AC units, and carpet installation for 500 worshippers.' },
   { _id: '2', title: 'Rural Village Water Access Project', objective: 'Provide clean drinking water to 5 remote villages', location: 'Nalanda, Bihar', status: 'Ongoing', budget: 85000, description: 'Installation of water pumps and storage tanks across 5 villages, providing clean drinking water to approximately 1000 families.' },
-  { _id: '3', title: 'Jamia Islamia Madrasa Development', objective: 'Build a fully equipped madrasa for 300 students', location: 'Gaya, Bihar', status: 'Planned', budget: 500000, description: 'Establishing a fully equipped madrasa with digital library, modern classrooms, and accommodation for 300 students.' },
   { _id: '4', title: 'Marriage Assistance Annual Program', objective: 'Support 20 underprivileged families with marriage costs', location: 'Multiple Districts, Bihar', status: 'Ongoing', budget: 200000, description: 'Annual program providing financial assistance and logistical support for 20 underprivileged families for their children\'s weddings.' },
   { _id: '5', title: 'Free Medical Camp Initiative', objective: 'Provide free healthcare to 500+ patients quarterly', location: 'Vaishali, Bihar', status: 'Completed', budget: 60000, description: 'Quarterly medical camps with specialized doctors providing free consultation, medicines, and basic health checkups.' },
   { _id: '6', title: 'Freezer Installation for Meat Distribution', objective: 'Enable proper meat storage for community programs', location: 'Muzaffarpur, Bihar', status: 'Completed', budget: 45000, description: 'Installation of commercial freezers to enable proper storage and distribution of meat during Eid and community events.' },
@@ -21,7 +20,6 @@ const demoProjects = [
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
-  const [filtered, setFiltered] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('All');
@@ -32,10 +30,8 @@ const Projects = () => {
         const res = await projectAPI.getAll();
         const data = res.data?.projects || res.data || [];
         setProjects(data);
-        setFiltered(data);
       } catch {
         setProjects([]);
-        setFiltered([]);
       } finally {
         setLoading(false);
       }
@@ -43,12 +39,11 @@ const Projects = () => {
     fetch();
   }, []);
 
-  useEffect(() => {
-    let result = projects;
-    if (status !== 'All') result = result.filter(p => p.status === status);
-    if (search) result = result.filter(p => p.title?.toLowerCase().includes(search.toLowerCase()) || p.description?.toLowerCase().includes(search.toLowerCase()));
-    setFiltered(result);
-  }, [projects, status, search]);
+  const filtered = projects.filter(p => {
+    if (status !== 'All' && p.status !== status) return false;
+    if (search && !(p.title?.toLowerCase().includes(search.toLowerCase()) || p.description?.toLowerCase().includes(search.toLowerCase()))) return false;
+    return true;
+  });
 
   const displayProjects = filtered.length > 0 || projects.length > 0 ? filtered : demoProjects;
 

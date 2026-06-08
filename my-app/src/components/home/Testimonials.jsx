@@ -46,7 +46,9 @@ const Testimonials = () => {
         const res = await testimonialAPI.getAll();
         const data = res.data?.testimonials || res.data || [];
         if (data.length > 0) setTestimonials(data);
-      } catch {}
+      } catch (error) {
+        console.error('Failed to fetch testimonials:', error);
+      }
     };
     fetch();
   }, []);

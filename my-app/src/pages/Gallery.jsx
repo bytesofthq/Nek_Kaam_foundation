@@ -39,7 +39,6 @@ const categoryEmojis = {
 
 const Gallery = () => {
   const [images, setImages] = useState([]);
-  const [filtered, setFiltered] = useState([]);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState('All');
   const [lightbox, setLightbox] = useState(null);
@@ -59,13 +58,7 @@ const Gallery = () => {
     fetchGallery();
   }, []);
 
-  useEffect(() => {
-    if (category === 'All') {
-      setFiltered(images);
-    } else {
-      setFiltered(images.filter(img => img.category === category));
-    }
-  }, [images, category]);
+  const filtered = category === 'All' ? images : images.filter(img => img.category === category);
 
   const displayImages = filtered.length > 0 || images.length > 0 ? filtered : demoGallery;
 

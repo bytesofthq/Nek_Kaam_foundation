@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Heart, Eye, Shield, ChevronDown, Users, Star } from 'lucide-react';
+import { Eye, Shield, ChevronDown, Users, Star } from 'lucide-react';
 
 const Hero = () => {
   const scrollToStats = () => {

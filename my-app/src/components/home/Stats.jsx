@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { publicAPI } from '../../services/api';
 import { motion, useInView } from 'framer-motion';
-import { Users, IndianRupee, FolderOpen, Heart, Home, BookOpen, Droplets, Building2 } from 'lucide-react';
+import { Users, IndianRupee, FolderOpen, Heart, Home, Droplets } from 'lucide-react';
 
 const useCountUp = (end, duration = 2000, inView) => {
   const [count, setCount] = useState(0);

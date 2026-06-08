@@ -21,7 +21,9 @@ const ProjectsPreview = () => {
         const res = await projectAPI.getAll();
         const data = res.data?.projects || res.data || [];
         setProjects(data.slice(0, 3));
-      } catch {}
+      } catch (error) {
+        console.error('Failed to fetch preview projects:', error);
+      }
     };
     fetch();
   }, []);

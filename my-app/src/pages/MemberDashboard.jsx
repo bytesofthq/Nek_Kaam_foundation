@@ -7,7 +7,7 @@ import { User, Phone, MapPin, Calendar, Edit3, Save, X, Hash, Bell } from 'lucid
 import { useNavigate } from 'react-router-dom';
 
 const MemberDashboard = () => {
-  const { member, isMemberLoggedIn, logout } = useAuth();
+  const { member, isMemberLoggedIn } = useAuth();
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -48,7 +48,9 @@ const MemberDashboard = () => {
         const res = await newsAPI.getAll();
         const data = res.data?.news || res.data || [];
         setNews(data.slice(0, 5));
-      } catch {}
+      } catch (error) {
+        console.error('Failed to fetch news updates:', error);
+      }
     };
     fetchNews();
   }, []);
