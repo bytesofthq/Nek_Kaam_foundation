@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { CheckCircle, Target, Eye, Star, ArrowRight } from 'lucide-react';
+import { CheckCircle, Target, Eye, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const fadeIn = {
