@@ -41,29 +41,29 @@ const Navbar = () => {
   const isActive = (to) => location.pathname === to;
 
   return (
-    <nav className={`sticky top-0 z-50 transition-all duration-300 ${isOpen ? 'bg-white shadow-md' : 'bg-transparent'}`}>
+    <nav className="sticky top-0 z-50 border-b border-green-100/80 bg-white/90 backdrop-blur-xl shadow-[0_8px_30px_rgba(16,185,129,0.08)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex items-center justify-between gap-3 min-h-20 py-3">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center shadow-md group-hover:shadow-green-300 transition-shadow">
-              <Heart size={18} className="text-white fill-white" />
+          <Link to="/" className="flex items-center gap-3 group shrink-0">
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-green-500 via-green-600 to-emerald-700 flex items-center justify-center shadow-lg shadow-green-200 group-hover:shadow-green-300 transition-shadow">
+              <Heart size={19} className="text-white fill-white" />
             </div>
             <div>
-              <div className="font-extrabold text-gray-900 text-base leading-none">Nek Kaam</div>
-              <div className="text-green-600 text-[10px] font-semibold tracking-wider uppercase">Foundation</div>
+              <div className="font-black text-gray-900 text-lg leading-none tracking-tight">Nek Kaam</div>
+              <div className="text-green-600 text-[10px] font-bold tracking-[0.3em] uppercase mt-1">Foundation</div>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-1">
+          <div className="hidden xl:flex items-center gap-1 rounded-full border border-green-100 bg-green-50/70 px-2 py-1 shadow-sm">
             {navLinks.map((link) =>
               link.children ? (
                 <div key={link.labelKey} className="relative">
                   <button
                     type="button"
                     onClick={() => setDropdownOpen(!dropdownOpen)}
-                    className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${dropdownOpen ? 'text-green-600 bg-green-50' : 'text-gray-700 hover:text-green-600 hover:bg-green-50'}`}
+                    className={`flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${dropdownOpen ? 'text-green-700 bg-white shadow-sm' : 'text-gray-700 hover:text-green-700 hover:bg-white/70'}`}
                   >
                     {t(link.labelKey)}
                     <ChevronDown size={14} className={`transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
@@ -75,14 +75,14 @@ const Navbar = () => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 8 }}
                         transition={{ duration: 0.15 }}
-                        className="absolute top-full left-0 mt-1 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50"
+                        className="absolute top-full left-0 mt-2 w-52 bg-white rounded-2xl shadow-2xl border border-gray-100 py-2 z-50 overflow-hidden"
                         onMouseLeave={() => setDropdownOpen(false)}
                       >
                         {link.children.map((child) => (
                           <Link
                             key={child.to}
                             to={child.to}
-                            className={`block px-4 py-2.5 text-sm font-medium transition-colors ${isActive(child.to) ? 'text-green-600 bg-green-50' : 'text-gray-700 hover:text-green-600 hover:bg-green-50'}`}
+                            className={`block px-4 py-3 text-sm font-medium transition-colors ${isActive(child.to) ? 'text-green-700 bg-green-50' : 'text-gray-700 hover:text-green-700 hover:bg-green-50'}`}
                           >
                             {t(child.labelKey)}
                           </Link>
@@ -95,7 +95,7 @@ const Navbar = () => {
                 <Link
                   key={link.to}
                   to={link.to}
-                  className={`px-3 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${isActive(link.to) ? 'text-green-600 bg-green-50' : 'text-gray-700 hover:text-green-600 hover:bg-green-50'}`}
+                  className={`px-3.5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${isActive(link.to) ? 'text-green-700 bg-white shadow-sm' : 'text-gray-700 hover:text-green-700 hover:bg-white/70'}`}
                 >
                   {t(link.labelKey)}
                 </Link>
@@ -104,7 +104,7 @@ const Navbar = () => {
           </div>
 
           {/* Auth Links + Language Switcher */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden lg:flex items-center gap-3 shrink-0">
             <LanguageSwitcher variant="simple" />
 
             {isAdminLoggedIn ? (
@@ -144,7 +144,7 @@ const Navbar = () => {
           {/* Mobile menu button */}
           <button
             onClick={toggleMenu}
-            className="lg:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition"
+            className="xl:hidden p-2.5 rounded-xl text-gray-700 hover:bg-green-50 transition border border-transparent hover:border-green-100"
           >
             {isOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
@@ -154,9 +154,9 @@ const Navbar = () => {
       {/* Mobile Menu */}
       <AnimatePresence>
         {isOpen && (
-          <div className="lg:hidden bg-white border-t border-gray-100 shadow-lg px-4 py-4 space-y-2">
+          <div className="xl:hidden bg-white border-t border-gray-100 shadow-lg px-4 py-4 space-y-2">
             {/* Language switcher mobile */}
-            <div className="flex items-center gap-2 pb-3 border-b border-gray-100">
+            <div className="flex items-center gap-2 pb-3 border-b border-gray-100 overflow-x-auto">
               <LanguageSwitcher variant="simple" />
             </div>
 
