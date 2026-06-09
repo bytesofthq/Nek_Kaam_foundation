@@ -2,25 +2,27 @@ import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-
-const categories = [
-  { emoji: '💒', title: 'Marriage Assistance', desc: 'Supporting poor families in arranging marriages with dignity', color: 'from-pink-50 to-rose-100 border-pink-200 hover:border-pink-400' },
-  { emoji: '🏠', title: 'Poor Family Support', desc: 'Essential aid for underprivileged families in need', color: 'from-green-50 to-emerald-100 border-green-200 hover:border-green-400' },
-  { emoji: '🏥', title: 'Medical Help', desc: 'Healthcare assistance for those who cannot afford treatment', color: 'from-blue-50 to-sky-100 border-blue-200 hover:border-blue-400' },
-  { emoji: '📚', title: 'Educational Support', desc: 'Enabling education for deserving underprivileged students', color: 'from-purple-50 to-violet-100 border-purple-200 hover:border-purple-400' },
-  { emoji: '🕌', title: 'Madrasa Support', desc: 'Strengthening Islamic education institutions', color: 'from-yellow-50 to-amber-100 border-yellow-200 hover:border-yellow-400' },
-  { emoji: '🏛️', title: 'Mosque Support', desc: 'Renovation, AC installation and maintenance of mosques', color: 'from-teal-50 to-cyan-100 border-teal-200 hover:border-teal-400' },
-  { emoji: '🚰', title: 'Water Pump Installation', desc: 'Providing clean water access to villages', color: 'from-cyan-50 to-sky-100 border-cyan-200 hover:border-cyan-400' },
-  { emoji: '❄️', title: 'Freezer Installation', desc: 'Cold storage facilities for communities', color: 'from-indigo-50 to-blue-100 border-indigo-200 hover:border-indigo-400' },
-  { emoji: '🌬️', title: 'AC Installation', desc: 'Air conditioning for religious and community spaces', color: 'from-emerald-50 to-teal-100 border-emerald-200 hover:border-emerald-400' },
-  { emoji: '🧹', title: 'Community Cleaning', desc: 'Keeping our neighborhoods clean and healthy', color: 'from-lime-50 to-green-100 border-lime-200 hover:border-lime-400' },
-  { emoji: '🌊', title: 'Disaster Relief', desc: 'Emergency support during floods and natural calamities', color: 'from-orange-50 to-amber-100 border-orange-200 hover:border-orange-400' },
-  { emoji: '🚨', title: 'Emergency Help', desc: 'Immediate response to urgent community needs', color: 'from-red-50 to-rose-100 border-red-200 hover:border-red-400' },
-];
+import { useTranslation } from '../../i18n/useTranslation';
 
 const WhatWeDo = () => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-50px' });
+  const { t } = useTranslation();
+
+  const categories = [
+    { emoji: '💒', title: t('whatWeDo.categories.marriage.title'), desc: t('whatWeDo.categories.marriage.desc'), color: 'from-pink-50 to-rose-100 border-pink-200 hover:border-pink-400' },
+    { emoji: '🏠', title: t('whatWeDo.categories.poorFamily.title'), desc: t('whatWeDo.categories.poorFamily.desc'), color: 'from-green-50 to-emerald-100 border-green-200 hover:border-green-400' },
+    { emoji: '🏥', title: t('whatWeDo.categories.medical.title'), desc: t('whatWeDo.categories.medical.desc'), color: 'from-blue-50 to-sky-100 border-blue-200 hover:border-blue-400' },
+    { emoji: '📚', title: t('whatWeDo.categories.education.title'), desc: t('whatWeDo.categories.education.desc'), color: 'from-purple-50 to-violet-100 border-purple-200 hover:border-purple-400' },
+    { emoji: '🕌', title: t('whatWeDo.categories.madrasa.title'), desc: t('whatWeDo.categories.madrasa.desc'), color: 'from-yellow-50 to-amber-100 border-yellow-200 hover:border-yellow-400' },
+    { emoji: '🏛️', title: t('whatWeDo.categories.mosque.title'), desc: t('whatWeDo.categories.mosque.desc'), color: 'from-teal-50 to-cyan-100 border-teal-200 hover:border-teal-400' },
+    { emoji: '🚰', title: t('whatWeDo.categories.water.title'), desc: t('whatWeDo.categories.water.desc'), color: 'from-cyan-50 to-sky-100 border-cyan-200 hover:border-cyan-400' },
+    { emoji: '❄️', title: t('whatWeDo.categories.freezer.title'), desc: t('whatWeDo.categories.freezer.desc'), color: 'from-indigo-50 to-blue-100 border-indigo-200 hover:border-indigo-400' },
+    { emoji: '🌬️', title: t('whatWeDo.categories.ac.title'), desc: t('whatWeDo.categories.ac.desc'), color: 'from-emerald-50 to-teal-100 border-emerald-200 hover:border-emerald-400' },
+    { emoji: '🧹', title: t('whatWeDo.categories.cleaning.title'), desc: t('whatWeDo.categories.cleaning.desc'), color: 'from-lime-50 to-green-100 border-lime-200 hover:border-lime-400' },
+    { emoji: '🌊', title: t('whatWeDo.categories.disaster.title'), desc: t('whatWeDo.categories.disaster.desc'), color: 'from-orange-50 to-amber-100 border-orange-200 hover:border-orange-400' },
+    { emoji: '🚨', title: t('whatWeDo.categories.emergency.title'), desc: t('whatWeDo.categories.emergency.desc'), color: 'from-red-50 to-rose-100 border-red-200 hover:border-red-400' },
+  ];
 
   return (
     <section ref={ref} className="py-20 bg-gray-50">
@@ -32,13 +34,13 @@ const WhatWeDo = () => {
           className="text-center mb-14"
         >
           <span className="inline-block bg-green-100 text-green-700 font-semibold text-sm px-4 py-1.5 rounded-full mb-4">
-            Our Work
+            {t('whatWeDo.tag')}
           </span>
           <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
-            What We <span className="text-green-600">Do</span>
+            {t('whatWeDo.headingStart')} <span className="text-green-600">{t('whatWeDo.headingHighlight')}</span>
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto text-lg">
-            From marriage assistance to mosque renovation — we cover a wide spectrum of community needs with compassion and accountability.
+            {t('whatWeDo.subtitle')}
           </p>
         </motion.div>
 
@@ -70,7 +72,7 @@ const WhatWeDo = () => {
               whileTap={{ scale: 0.97 }}
               className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold px-8 py-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
             >
-              See All Activities
+              {t('whatWeDo.cta')}
               <ArrowRight size={18} />
             </motion.button>
           </Link>

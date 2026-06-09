@@ -2,17 +2,19 @@ import { motion, useInView } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle } from 'lucide-react';
 import { useRef } from 'react';
+import { useTranslation } from '../../i18n/useTranslation';
 
 const AboutPreview = () => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-50px' });
+  const { t } = useTranslation();
 
   const values = [
-    'Complete financial transparency',
-    'Community-driven initiatives',
-    'Support for underprivileged families',
-    'Emergency relief & disaster response',
-    'Empowering youth through education',
+    t('aboutPreview.values.transparency'),
+    t('aboutPreview.values.community'),
+    t('aboutPreview.values.families'),
+    t('aboutPreview.values.relief'),
+    t('aboutPreview.values.youth'),
   ];
 
   return (
@@ -26,21 +28,17 @@ const AboutPreview = () => {
             transition={{ duration: 0.7 }}
           >
             <span className="inline-block bg-green-100 text-green-700 font-semibold text-sm px-4 py-1.5 rounded-full mb-4">
-              Who We Are
+              {t('aboutPreview.tag')}
             </span>
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-6 leading-tight">
-              A Foundation Built on{' '}
-              <span className="text-green-600">Trust & Transparency</span>
+              {t('aboutPreview.headingStart')}{' '}
+              <span className="text-green-600">{t('aboutPreview.headingHighlight')}</span>
             </h2>
             <p className="text-gray-600 text-lg leading-relaxed mb-6">
-              Nek Kaam Foundation was established with one mission: to serve our community with honesty, 
-              compassion and transparency. We believe every rupee donated should reach those who need it most — 
-              and we show exactly how every amount is used.
+              {t('aboutPreview.paragraphOne')}
             </p>
             <p className="text-gray-600 leading-relaxed mb-8">
-              From supporting poor families with marriage assistance, to building water pumps in villages, 
-              installing ACs in mosques, and strengthening madrasas — we are committed to comprehensive 
-              community development with full accountability.
+              {t('aboutPreview.paragraphTwo')}
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
@@ -64,7 +62,7 @@ const AboutPreview = () => {
                 whileTap={{ scale: 0.98 }}
                 className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold px-7 py-3 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg"
               >
-                Learn More About Us
+                {t('aboutPreview.cta')}
                 <ArrowRight size={18} />
               </motion.button>
             </Link>
@@ -80,10 +78,10 @@ const AboutPreview = () => {
             <div className="grid grid-cols-2 gap-4">
               {[
                
-                { emoji: '💒', title: 'Marriage Assistance', desc: 'Helping underprivileged families', bg: 'from-emerald-50 to-teal-100 border-emerald-200' },
-                { emoji: '🚰', title: 'Water Projects', desc: 'Clean water for villages', bg: 'from-teal-50 to-cyan-100 border-teal-200' },
-                { emoji: '🏥', title: 'Medical Help', desc: 'Healthcare for the needy', bg: 'from-green-50 to-green-100 border-green-200' },
-                { emoji: '🏡', title: 'Family Support', desc: '200+ families helped annually', bg: 'from-amber-50 to-yellow-100 border-amber-200' },
+                { emoji: '💒', title: t('aboutPreview.cards.marriage.title'), desc: t('aboutPreview.cards.marriage.desc'), bg: 'from-emerald-50 to-teal-100 border-emerald-200' },
+                { emoji: '🚰', title: t('aboutPreview.cards.water.title'), desc: t('aboutPreview.cards.water.desc'), bg: 'from-teal-50 to-cyan-100 border-teal-200' },
+                { emoji: '🏥', title: t('aboutPreview.cards.medical.title'), desc: t('aboutPreview.cards.medical.desc'), bg: 'from-green-50 to-green-100 border-green-200' },
+                { emoji: '🏡', title: t('aboutPreview.cards.family.title'), desc: t('aboutPreview.cards.family.desc'), bg: 'from-amber-50 to-yellow-100 border-amber-200' },
               ].map((item, i) => (
                 <motion.div
                   key={i}

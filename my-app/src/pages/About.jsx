@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { CheckCircle, Target, Eye, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from '../i18n/useTranslation';
 
 const fadeIn = {
   initial: { opacity: 0, y: 30 },
@@ -11,6 +12,8 @@ const fadeIn = {
 };
 
 const About = () => {
+  const { t } = useTranslation();
+
   const coreValues = [
     { title: 'Integrity', desc: 'We act with honesty and uphold the highest ethical standards in all our work.', emoji: '🤝' },
     { title: 'Transparency', desc: 'Every rupee is accounted for. We publish detailed reports of all fund usage.', emoji: '📊' },
@@ -23,8 +26,8 @@ const About = () => {
   return (
     <div>
       <Helmet>
-        <title>About Us - Nek Kaam Foundation</title>
-        <meta name="description" content="Learn about Nek Kaam Foundation, our mission, vision, core values and our commitment to community development with transparency." />
+        <title>{t('about.title')}</title>
+        <meta name="description" content={t('about.heroSubtitle')} />
       </Helmet>
 
       {/* Hero */}
@@ -33,13 +36,13 @@ const About = () => {
         <div className="max-w-7xl mx-auto px-4 relative">
           <motion.div {...fadeIn} className="max-w-3xl">
             <span className="inline-block bg-white/15 text-white/90 font-semibold text-sm px-4 py-1.5 rounded-full mb-4">
-              About Us
+              {t('about.heroTag')}
             </span>
             <h1 className="text-4xl md:text-5xl font-extrabold mb-5 leading-tight">
-              About Nek Kaam Foundation
+              {t('about.heroHeading')}
             </h1>
             <p className="text-xl text-green-100 leading-relaxed">
-              A community-driven organization dedicated to uplifting lives through compassionate action, transparent governance, and collective strength.
+              {t('about.heroSubtitle')}
             </p>
           </motion.div>
         </div>
@@ -49,20 +52,14 @@ const About = () => {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
           <motion.div {...fadeIn}>
-            <span className="inline-block bg-green-100 text-green-700 font-semibold text-sm px-4 py-1.5 rounded-full mb-4">Who We Are</span>
+            <span className="inline-block bg-green-100 text-green-700 font-semibold text-sm px-4 py-1.5 rounded-full mb-4">{t('about.whoTag')}</span>
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-6">
-              Built on <span className="text-green-600">Trust</span>, Powered by Community
+              {t('about.whoHeading')}
             </h2>
             <div className="space-y-4 text-gray-600 leading-relaxed">
-              <p>
-                Nek Kaam Foundation is a charitable organization established to serve the underprivileged communities of India — with a strong focus on UP. We were founded by a group of concerned community members who believed that real change starts at the grassroots level.
-              </p>
-              <p>
-                Our work spans across marriage assistance, medical help, madrasa support, mosque renovation, water projects, and emergency relief. Every initiative is driven by the needs of the community and executed with full transparency.
-              </p>
-              <p>
-                What sets us apart is our unwavering commitment to financial transparency. We maintain detailed records of every rupee received and spent, making it all publicly available through our Transparency Center.
-              </p>
+              <p>{t('about.whoP1')}</p>
+              <p>{t('about.whoP2')}</p>
+              <p>{t('about.whoP3')}</p>
             </div>
           </motion.div>
           <motion.div
@@ -71,10 +68,10 @@ const About = () => {
             className="grid grid-cols-2 gap-4"
           >
             {[
-              { emoji: '📅', stat: '2025', label: 'Founded' },
-              { emoji: '👥', stat: '500+', label: 'Members' },
-              { emoji: '🏡', stat: '100+', label: 'Families Helped' },
-              { emoji: '₹', stat: '2L+', label: 'Funds Managed' },
+              { emoji: '📅', stat: '2025', label: t('about.founded') },
+              { emoji: '👥', stat: '500+', label: t('about.members') },
+              { emoji: '🏡', stat: '100+', label: t('about.familiesHelped') },
+              { emoji: '₹', stat: '2L+', label: t('about.fundsManaged') },
             ].map((item, i) => (
               <div key={i} className="bg-gradient-to-br from-green-50 to-emerald-100 border border-green-200 rounded-2xl p-6 text-center">
                 <div className="text-4xl mb-2">{item.emoji}</div>
@@ -90,17 +87,13 @@ const About = () => {
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4">
           <motion.div {...fadeIn} className="text-center mb-12">
-            <span className="inline-block bg-green-100 text-green-700 font-semibold text-sm px-4 py-1.5 rounded-full mb-4">Our Story</span>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Why We <span className="text-green-600">Started</span></h2>
+            <span className="inline-block bg-green-100 text-green-700 font-semibold text-sm px-4 py-1.5 rounded-full mb-4">{t('about.storyTag')}</span>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">{t('about.storyHeading')}</h2>
           </motion.div>
           <motion.div {...fadeIn} className="max-w-4xl mx-auto bg-white rounded-3xl shadow-lg p-10 border border-gray-100">
             <div className="text-5xl mb-6 text-center">🌱</div>
-            <p className="text-gray-700 text-lg leading-relaxed text-center mb-6">
-              We saw families unable to marry off their daughters due to financial constraints. We saw villages without clean water. We saw mosques in disrepair. We saw students dropping out because their madrasas lacked resources.
-            </p>
-            <p className="text-gray-700 leading-relaxed text-center">
-              We started Nek Kaam Foundation because we believed that together — through transparency, trust, and collective action — we could solve these problems. And we have. But there is still much more to be done, and we continue to grow stronger every day.
-            </p>
+            <p className="text-gray-700 text-lg leading-relaxed text-center mb-6">{t('about.storyP1')}</p>
+            <p className="text-gray-700 leading-relaxed text-center">{t('about.storyP2')}</p>
           </motion.div>
         </div>
       </section>
@@ -114,10 +107,10 @@ const About = () => {
                 <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
                   <Target size={24} className="text-white" />
                 </div>
-                <h2 className="text-2xl font-extrabold">Our Mission</h2>
+                <h2 className="text-2xl font-extrabold">{t('about.missionTitle')}</h2>
               </div>
               <p className="text-green-100 leading-relaxed text-lg">
-                To empower underprivileged communities across India through compassionate service, comprehensive support programs, and absolute financial transparency — ensuring that every contribution creates measurable, lasting impact.
+                {t('about.missionDescription')}
               </p>
               <ul className="mt-6 space-y-3">
                 {['Support poor families with marriage assistance', 'Provide medical help to those in need', 'Strengthen madrasas & mosques', 'Deliver clean water to villages'].map((item, i) => (
@@ -134,10 +127,10 @@ const About = () => {
                 <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
                   <Eye size={24} className="text-white" />
                 </div>
-                <h2 className="text-2xl font-extrabold">Our Vision</h2>
+                <h2 className="text-2xl font-extrabold">{t('about.visionTitle')}</h2>
               </div>
               <p className="text-gray-300 leading-relaxed text-lg">
-                A society where no family struggles alone — where communities are supported, mosques flourish, madrasas educate, and every person has access to clean water, healthcare, and dignity.
+                {t('about.visionDescription')}
               </p>
               <div className="mt-6 grid grid-cols-2 gap-3">
                 {[
@@ -161,8 +154,8 @@ const About = () => {
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4">
           <motion.div {...fadeIn} className="text-center mb-12">
-            <span className="inline-block bg-green-100 text-green-700 font-semibold text-sm px-4 py-1.5 rounded-full mb-4">What We Believe</span>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Our Core <span className="text-green-600">Values</span></h2>
+            <span className="inline-block bg-green-100 text-green-700 font-semibold text-sm px-4 py-1.5 rounded-full mb-4">{t('about.valuesTag')}</span>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">{t('about.valuesHeading')}</h2>
           </motion.div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {coreValues.map((val, i) => (
@@ -188,19 +181,17 @@ const About = () => {
         <div className="max-w-4xl mx-auto px-4 text-center">
           <motion.div {...fadeIn}>
             <div className="text-5xl mb-6">🤲</div>
-            <span className="inline-block bg-white/10 text-white font-semibold text-sm px-4 py-1.5 rounded-full mb-4">Our Promise</span>
-            <h2 className="text-3xl md:text-4xl font-extrabold mb-6">The Transparency <span className="text-yellow-400">Pledge</span></h2>
+            <span className="inline-block bg-white/10 text-white font-semibold text-sm px-4 py-1.5 rounded-full mb-4">{t('about.promiseTag')}</span>
+            <h2 className="text-3xl md:text-4xl font-extrabold mb-6">{t('about.promiseHeading')}</h2>
             <p className="text-green-100 text-lg leading-relaxed mb-8">
-              We solemnly promise to our members, donors, and the communities we serve: <strong className="text-white">every single rupee will be accounted for</strong>. 
-              We will always publish detailed records of all fund collections and how they were spent. 
-              Your trust is our greatest asset — and we will never compromise it.
+              {t('about.promiseBody')}
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link to="/transparency" className="inline-flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold px-8 py-3 rounded-xl transition-all duration-300 shadow-lg">
-                View Transparency Report <ArrowRight size={18} />
+                {t('about.viewTransparency')} <ArrowRight size={18} />
               </Link>
               <Link to="/member-register" className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 border border-white/30 text-white font-bold px-8 py-3 rounded-xl transition-all duration-300">
-                Join the Foundation
+                {t('about.joinFoundation')}
               </Link>
             </div>
           </motion.div>

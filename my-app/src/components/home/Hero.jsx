@@ -1,8 +1,11 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Eye, Shield, ChevronDown, Users, Star } from 'lucide-react';
+import { useTranslation } from '../../i18n/useTranslation';
 
 const Hero = () => {
+  const { t } = useTranslation();
+
   const scrollToStats = () => {
     const el = document.getElementById('stats-section');
     if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -29,7 +32,7 @@ const Hero = () => {
           className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-5 py-2 mb-8"
         >
           <Star size={14} className="text-yellow-400 fill-yellow-400" />
-          <span className="text-white/90 text-sm font-medium">Trusted by 500+ Families Across India</span>
+          <span className="text-white/90 text-sm font-medium">{t('hero.badge')}</span>
           <Star size={14} className="text-yellow-400 fill-yellow-400" />
         </motion.div>
 
@@ -53,8 +56,7 @@ const Hero = () => {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="text-lg sm:text-xl md:text-2xl text-green-100/90 max-w-4xl mx-auto mb-12 leading-relaxed font-light"
         >
-          Together We Help Communities, Support Families, Strengthen Madrasas,{' '}
-          Improve Mosques and Bring Positive Change Through Collective Efforts.
+          {t('hero.subtitle')}
         </motion.p>
 
         {/* CTA Buttons */}
@@ -71,7 +73,7 @@ const Hero = () => {
               className="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-yellow-400/30 transition-all duration-300 text-lg"
             >
               <Users size={20} />
-              Become a Member
+              {t('hero.ctaMember')}
             </motion.button>
           </Link>
           <Link to="/activities">
@@ -81,7 +83,7 @@ const Hero = () => {
               className="flex items-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white font-bold px-8 py-4 rounded-xl transition-all duration-300 text-lg"
             >
               <Eye size={20} />
-              View Activities
+              {t('hero.ctaActivities')}
             </motion.button>
           </Link>
           <Link to="/transparency">
@@ -91,7 +93,7 @@ const Hero = () => {
               className="flex items-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white font-bold px-8 py-4 rounded-xl transition-all duration-300 text-lg"
             >
               <Shield size={20} />
-              Transparency Center
+              {t('hero.ctaTransparency')}
             </motion.button>
           </Link>
         </motion.div>
@@ -104,10 +106,9 @@ const Hero = () => {
           className="flex flex-wrap justify-center gap-8 text-white/80 text-sm"
         >
           {[
-            { icon: '✅', text: '100% Transparent' },
-            { icon: '🏡', text: 'Community Driven' },
-
-            { icon: '💝', text: 'Family Welfare' },
+            { icon: '✅', text: t('hero.trustTransparent') },
+            { icon: '🏡', text: t('hero.trustCommunity') },
+            { icon: '💝', text: t('hero.trustFamily') },
           ].map((item, i) => (
             <div key={i} className="flex items-center gap-2">
               <span className="text-lg">{item.icon}</span>

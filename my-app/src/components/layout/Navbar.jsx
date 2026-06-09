@@ -1,33 +1,34 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, LogOut, ChevronDown, Heart, Globe } from 'lucide-react';
+import { Menu, X, LogOut, ChevronDown, Heart } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { useLanguage } from '../../context/LanguageContext';
+import { useTranslation } from '../../i18n/useTranslation';
+import LanguageSwitcher from '../../i18n/LanguageSwitcher';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../common/Button';
 
 const navLinks = [
-  { label: 'Home', to: '/' },
-  { label: 'About', to: '/about' },
+  { labelKey: 'navigation.home', to: '/' },
+  { labelKey: 'navigation.about', to: '/about' },
   // { label: 'Activities', to: '/activities' },
-  { label: 'Projects', to: '/projects' },
+  { labelKey: 'navigation.projects', to: '/projects' },
   {
-    label: 'Explore',
+    labelKey: 'navigation.explore',
     children: [
       // { label: 'Gallery', to: '/gallery' },
-      { label: 'Impact Stories', to: '/impact-stories' },
-      { label: 'Committee', to: '/committee' },
-      { label: 'Transparency', to: '/transparency' },
+      { labelKey: 'navigation.impactStories', to: '/impact-stories' },
+      { labelKey: 'navigation.committee', to: '/committee' },
+      { labelKey: 'navigation.transparency', to: '/transparency' },
     ],
   },
-  { label: 'Contact', to: '/contact' },
+  { labelKey: 'navigation.contact', to: '/contact' },
 ];
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { isAdminLoggedIn, isMemberLoggedIn, logout } = useAuth();
-  const { language, setLanguage } = useLanguage();
+  const { t } = useTranslation();
   const location = useLocation();
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -58,12 +59,13 @@ const Navbar = () => {
           <div className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) =>
               link.children ? (
-                <div key={link.label} className="relative">
+                <div key={link.labelKey} className="relative">
                   <button
+                    type="button"
                     onClick={() => setDropdownOpen(!dropdownOpen)}
                     className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${dropdownOpen ? 'text-green-600 bg-green-50' : 'text-gray-700 hover:text-green-600 hover:bg-green-50'}`}
                   >
-                    {link.label}
+                    {t(link.labelKey)}
                     <ChevronDown size={14} className={`transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
                   </button>
                   <AnimatePresence>
@@ -82,7 +84,7 @@ const Navbar = () => {
                             to={child.to}
                             className={`block px-4 py-2.5 text-sm font-medium transition-colors ${isActive(child.to) ? 'text-green-600 bg-green-50' : 'text-gray-700 hover:text-green-600 hover:bg-green-50'}`}
                           >
-                            {child.label}
+                            {t(child.labelKey)}
                           </Link>
                         ))}
                       </motion.div>
@@ -95,7 +97,7 @@ const Navbar = () => {
                   to={link.to}
                   className={`px-3 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${isActive(link.to) ? 'text-green-600 bg-green-50' : 'text-gray-700 hover:text-green-600 hover:bg-green-50'}`}
                 >
-                  {link.label}
+                  {t(link.labelKey)}
                 </Link>
               )
             )}
@@ -103,31 +105,12 @@ const Navbar = () => {
 
           {/* Auth Links + Language Switcher */}
           <div className="hidden md:flex items-center gap-3">
-            {/* Language Toggle */}
-            <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
-              <Globe size={14} className="text-gray-400 ml-1" />
-              <button
-                onClick={() => setLanguage('en')}
-                className={`px-2.5 py-1 rounded-md text-xs font-bold transition-all duration-200 ${
-                  language === 'en' ? 'bg-green-600 text-white shadow-sm' : 'text-gray-500 hover:text-green-600'
-                }`}
-              >
-                EN
-              </button>
-              <button
-                onClick={() => setLanguage('hi')}
-                className={`px-2.5 py-1 rounded-md text-xs font-bold transition-all duration-200 ${
-                  language === 'hi' ? 'bg-green-600 text-white shadow-sm' : 'text-gray-500 hover:text-green-600'
-                }`}
-              >
-                HI
-              </button>
-            </div>
+            <LanguageSwitcher variant="simple" />
 
             {isAdminLoggedIn ? (
               <>
                 <Link to="/admin-dashboard" className="bg-green-600 hover:bg-green-700 text-white font-semibold text-sm px-4 py-2 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md">
-                  Admin Dashboard
+                  {t('common.adminDashboard')}
                 </Link>
                 <button onClick={handleLogout} className="p-2 text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all duration-200" title="Logout">
                   <LogOut size={18} />
@@ -137,7 +120,7 @@ const Navbar = () => {
               <>
                 <Link to="/member-dashboard">
                   <Button variant="primary" size="sm">
-                    Dashboard
+                    {t('common.dashboard')}
                   </Button>
                 </Link>
                 <Button onClick={handleLogout} variant="outline" size="sm">
@@ -148,11 +131,11 @@ const Navbar = () => {
               <>
                 <Link to="/member-login">
                   <Button variant="outline" size="sm">
-                    Login
+                    {t('common.login')}
                   </Button>
                 </Link>
                 <Link to="/member-register" className="bg-green-600 hover:bg-green-700 text-white font-semibold text-sm px-5 py-2 rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
-                  Join Us
+                  {t('common.joinUs')}
                 </Link>
               </>
             )}
@@ -174,88 +157,69 @@ const Navbar = () => {
           <div className="lg:hidden bg-white border-t border-gray-100 shadow-lg px-4 py-4 space-y-2">
             {/* Language switcher mobile */}
             <div className="flex items-center gap-2 pb-3 border-b border-gray-100">
-              <Globe size={14} className="text-gray-400" />
-              <span className="text-xs text-gray-500 font-semibold">Language:</span>
-              <div className="flex gap-1 bg-gray-100 rounded-lg p-1">
-                <button
-                  onClick={() => setLanguage('en')}
-                  className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${
-                    language === 'en' ? 'bg-green-600 text-white' : 'text-gray-500'
-                  }`}
-                >
-                  English
-                </button>
-                <button
-                  onClick={() => setLanguage('hi')}
-                  className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${
-                    language === 'hi' ? 'bg-green-600 text-white' : 'text-gray-500'
-                  }`}
-                >
-                  हिंदी
-                </button>
-              </div>
+              <LanguageSwitcher variant="simple" />
             </div>
 
             <Link to="/" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 rounded-lg text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium transition">
-              Home
+              {t('navigation.home')}
             </Link>
             <Link to="/about" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 rounded-lg text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium transition">
-              About
+              {t('navigation.about')}
             </Link>
             <Link to="/projects" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 rounded-lg text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium transition">
-              Projects
+              {t('navigation.projects')}
             </Link>
             <Link to="/activities" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 rounded-lg text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium transition">
-              Activities
+              {t('navigation.activities')}
             </Link>
             <Link to="/gallery" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 rounded-lg text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium transition">
-              Gallery
+              {t('navigation.gallery')}
             </Link>
             <Link to="/impact-stories" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 rounded-lg text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium transition">
-              Impact Stories
+              {t('navigation.impactStories')}
             </Link>
             <Link to="/committee" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 rounded-lg text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium transition">
-              Committee
+              {t('navigation.committee')}
             </Link>
             <Link to="/transparency" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 rounded-lg text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium transition">
-              Transparency
+              {t('navigation.transparency')}
             </Link>
             <Link to="/contact" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 rounded-lg text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium transition">
-              Contact
+              {t('navigation.contact')}
             </Link>
 
             {isAdminLoggedIn ? (
               <>
                 <Link to="/admin-dashboard" className="block">
                   <Button variant="primary" size="sm" className="w-full">
-                    Admin Dashboard
+                    {t('common.adminDashboard')}
                   </Button>
                 </Link>
                 <Button onClick={handleLogout} variant="outline" size="sm" className="w-full">
-                  Logout
+                  {t('common.logout')}
                 </Button>
               </>
             ) : isMemberLoggedIn ? (
               <>
                 <Link to="/member-dashboard" className="block">
                   <Button variant="primary" size="sm" className="w-full">
-                    Dashboard
+                    {t('common.dashboard')}
                   </Button>
                 </Link>
                 <Button onClick={handleLogout} variant="outline" size="sm" className="w-full">
-                  Logout
+                  {t('common.logout')}
                 </Button>
               </>
             ) : (
               <>
                 <Link to="/member-login" className="block">
                   <Button variant="outline" size="sm" className="w-full">
-                    Login
+                    {t('common.login')}
                   </Button>
                 </Link>
                 <Link to="/member-register" className="block">
                   <Button variant="primary" size="sm" className="w-full">
-                    Register
+                    {t('common.register')}
                   </Button>
                 </Link>
               </>

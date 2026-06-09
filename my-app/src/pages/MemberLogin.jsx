@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import Button from '../components/common/Button';
 import Loader from '../components/common/Loader';
 import { Shield, User } from 'lucide-react';
-import { useLanguage } from '../context/LanguageContext';
+import { useTranslation } from '../i18n/useTranslation';
 
 const MemberLogin = () => {
   const [role, setRole] = useState('member'); // 'member' or 'admin'
@@ -21,7 +21,7 @@ const MemberLogin = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { memberLogin, adminLogin } = useAuth();
-  const { t } = useLanguage();
+  const { t } = useTranslation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { publicAPI } from '../../services/api';
 import { motion, useInView } from 'framer-motion';
 import { Users, IndianRupee, FolderOpen, Heart, Home, Droplets } from 'lucide-react';
+import { useTranslation } from '../../i18n/useTranslation';
 
 const useCountUp = (end, duration = 2000, inView) => {
   const [count, setCount] = useState(0);
@@ -49,6 +50,7 @@ const Stats = () => {
   const [apiStats, setApiStats] = useState(null);
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-50px' });
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -65,6 +67,7 @@ const Stats = () => {
   const stats = [
     {
       label: 'Registered Members',
+      label: t('stats.members'),
       value: apiStats?.totalMembers || 500,
       icon: Users,
       color: 'from-green-500 to-green-700',
@@ -73,6 +76,7 @@ const Stats = () => {
     },
     {
       label: 'Total Funds Received',
+      label: t('stats.fundsReceived'),
       value: apiStats?.totalFundsReceived || 500000,
       icon: IndianRupee,
       color: 'from-emerald-500 to-emerald-700',
@@ -81,6 +85,7 @@ const Stats = () => {
     },
     {
       label: 'Total Funds Utilized',
+      label: t('stats.fundsUsed'),
       value: apiStats?.totalFundsUsed || 420000,
       icon: Heart,
       color: 'from-yellow-500 to-yellow-700',
@@ -89,6 +94,7 @@ const Stats = () => {
     },
     {
       label: 'Projects Completed',
+      label: t('stats.projects'),
       value: apiStats?.totalProjects || 48,
       icon: FolderOpen,
       color: 'from-teal-500 to-teal-700',
@@ -97,6 +103,7 @@ const Stats = () => {
     },
     {
       label: 'Families Supported',
+      label: t('stats.families'),
       value: apiStats?.familiesSupported || 200,
       icon: Home,
       color: 'from-green-600 to-emerald-600',
@@ -105,6 +112,7 @@ const Stats = () => {
     },
     {
       label: 'Villages Helped',
+      label: t('stats.villages'),
       value: apiStats?.villagesHelped || 25,
       icon: Droplets,
       color: 'from-emerald-600 to-teal-700',
@@ -123,13 +131,13 @@ const Stats = () => {
           className="text-center mb-14"
         >
           <span className="inline-block bg-green-100 text-green-700 font-semibold text-sm px-4 py-1.5 rounded-full mb-4">
-            Our Impact in Numbers
+            {t('stats.tag')}
           </span>
           <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
-            Together, We're Making a <span className="text-green-600">Real Difference</span>
+            {t('stats.headingStart')} <span className="text-green-600">{t('stats.headingHighlight')}</span>
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto text-lg">
-            Every number represents a life touched, a family helped, and a community strengthened through your generosity.
+            {t('stats.subtitle')}
           </p>
         </motion.div>
 

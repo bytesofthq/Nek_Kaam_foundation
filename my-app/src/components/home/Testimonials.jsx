@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { testimonialAPI } from '../../services/api';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { Quote, ChevronLeft, ChevronRight, Star } from 'lucide-react';
+import { useTranslation } from '../../i18n/useTranslation';
 
 const defaultTestimonials = [
   {
@@ -39,6 +40,7 @@ const Testimonials = () => {
   const [current, setCurrent] = useState(0);
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetch = async () => {
@@ -73,13 +75,13 @@ const Testimonials = () => {
           className="text-center mb-14"
         >
           <span className="inline-block bg-white/10 text-white font-semibold text-sm px-4 py-1.5 rounded-full mb-4">
-            Testimonials
+            {t('testimonials.tag')}
           </span>
           <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
-            What People <span className="text-yellow-400">Say About Us</span>
+            {t('testimonials.headingStart')} <span className="text-yellow-400">{t('testimonials.headingHighlight')}</span>
           </h2>
           <p className="text-green-200 max-w-xl mx-auto">
-            Real words from the families and communities we've had the honor of serving.
+            {t('testimonials.subtitle')}
           </p>
         </motion.div>
 
@@ -104,7 +106,7 @@ const Testimonials = () => {
               </div>
               <div>
                 <p className="text-white font-bold text-lg">{testimonials[current].name}</p>
-                <p className="text-green-300 text-sm">{testimonials[current].designation || 'Foundation Member'}</p>
+                <p className="text-green-300 text-sm">{testimonials[current].designation || t('testimonials.defaultDesignation')}</p>
               </div>
             </motion.div>
           </AnimatePresence>

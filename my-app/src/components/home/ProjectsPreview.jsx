@@ -3,6 +3,7 @@ import { projectAPI } from '../../services/api';
 import { motion, useInView } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight, MapPin, IndianRupee } from 'lucide-react';
+import { useTranslation } from '../../i18n/useTranslation';
 
 const statusConfig = {
   Completed: { color: 'bg-green-100 text-green-700', dot: 'bg-green-500' },
@@ -14,6 +15,7 @@ const ProjectsPreview = () => {
   const [projects, setProjects] = useState([]);
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-50px' });
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetch = async () => {
@@ -47,14 +49,14 @@ const ProjectsPreview = () => {
         >
           <div>
             <span className="inline-block bg-green-100 text-green-700 font-semibold text-sm px-4 py-1.5 rounded-full mb-3">
-              Featured Projects
+              {t('projectsPreview.tag')}
             </span>
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900">
-              Our <span className="text-green-600">Active Projects</span>
+              {t('projectsPreview.headingStart')} <span className="text-green-600">{t('projectsPreview.headingHighlight')}</span>
             </h2>
           </div>
           <Link to="/projects" className="inline-flex items-center gap-2 text-green-600 hover:text-green-700 font-semibold transition-colors">
-            View All Projects <ArrowRight size={16} />
+            {t('projectsPreview.cta')} <ArrowRight size={16} />
           </Link>
         </motion.div>
 

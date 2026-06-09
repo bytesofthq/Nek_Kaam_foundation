@@ -3,11 +3,13 @@ import { newsAPI } from '../../services/api';
 import { motion, useInView } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Calendar, Tag } from 'lucide-react';
+import { useTranslation } from '../../i18n/useTranslation';
 
 const NewsPreview = () => {
   const [news, setNews] = useState([]);
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-50px' });
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -40,14 +42,14 @@ const NewsPreview = () => {
         >
           <div>
             <span className="inline-block bg-green-100 text-green-700 font-semibold text-sm px-4 py-1.5 rounded-full mb-3">
-              Latest Updates
+              {t('newsPreview.tag')}
             </span>
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900">
-              News & <span className="text-green-600">Announcements</span>
+              {t('newsPreview.headingStart')} <span className="text-green-600">{t('newsPreview.headingHighlight')}</span>
             </h2>
           </div>
           <Link to="/activities" className="inline-flex items-center gap-2 text-green-600 hover:text-green-700 font-semibold transition-colors">
-            View All <ArrowRight size={16} />
+            {t('newsPreview.cta')} <ArrowRight size={16} />
           </Link>
         </motion.div>
 
@@ -63,7 +65,7 @@ const NewsPreview = () => {
               >
                 <div className="flex items-center justify-between mb-4">
                   <span className={`text-xs font-semibold px-3 py-1 rounded-full ${tagColors[item.type] || 'bg-gray-100 text-gray-600'}`}>
-                    <Tag size={10} className="inline mr-1" />{item.type || 'Update'}
+                    <Tag size={10} className="inline mr-1" />{item.type || t('newsPreview.fallbackType')}
                   </span>
                   <span className="text-xs text-gray-400 flex items-center gap-1">
                     <Calendar size={12} />
@@ -91,7 +93,7 @@ const NewsPreview = () => {
               >
                 <div className="flex items-center justify-between mb-4">
                   <span className={`text-xs font-semibold px-3 py-1 rounded-full ${tagColors[item.type] || 'bg-gray-100 text-gray-600'}`}>
-                    <Tag size={10} className="inline mr-1" />{item.type}
+                    <Tag size={10} className="inline mr-1" />{item.type || t('newsPreview.fallbackType')}
                   </span>
                   <span className="text-xs text-gray-400 flex items-center gap-1">
                     <Calendar size={12} />
