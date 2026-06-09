@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import Button from '../components/common/Button';
 import Loader from '../components/common/Loader';
 import { impactStoryAPI, dashboardAPI, memberAPI, projectAPI, activityAPI, fundAPI } from '../services/api';
-import { Plus, Trash2, Calendar, MapPin, User, FileText, Image as ImageIcon, Upload, X, Search, DollarSign, Award, Check } from 'lucide-react';
+import { Plus, Trash2, Calendar, MapPin, User, FileText, Image as ImageIcon, Upload, X, Search, DollarSign, Award, Check, Loader2 } from 'lucide-react';
 
 const AdminDashboard = () => {
   const { admin, isAdminLoggedIn } = useAuth();
@@ -42,9 +42,11 @@ const AdminDashboard = () => {
   const [memberPage, setMemberPage] = useState(1);
   const [totalMemberPages, setTotalMemberPages] = useState(1);
   const [showMemberForm, setShowMemberForm] = useState(false);
+  const [memberLocationLoading, setMemberLocationLoading] = useState(false);
   const [memberForm, setMemberForm] = useState({
     fullName: '',
     phoneNumber: '',
+    country: 'India',
     address: '',
     city: '',
     state: '',
@@ -389,6 +391,7 @@ const AdminDashboard = () => {
         setMemberForm({
           fullName: '',
           phoneNumber: '',
+          country: 'India',
           address: '',
           city: '',
           state: '',
@@ -403,6 +406,61 @@ const AdminDashboard = () => {
     } finally {
       setSubmittingMember(false);
     }
+  };
+
+  const handleUseLiveLocationForMember = () => {
+    if (!navigator.geolocation) {
+      setFormError('Your browser does not support live location.');
+      return;
+    }
+
+    setFormError(null);
+    setMemberLocationLoading(true);
+
+    navigator.geolocation.getCurrentPosition(
+      async ({ coords }) => {
+        try {
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${coords.latitude}&lon=${coords.longitude}`,
+            {
+              headers: { Accept: 'application/json' },
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error('Unable to resolve your live location right now.');
+          }
+
+          const data = await response.json();
+          const address = data.address || {};
+          const city = address.city || address.town || address.village || address.county || '';
+          const state = address.state || address.region || '';
+          const country = address.country || memberForm.country || 'India';
+          const addressLine = data.display_name || `${city}, ${state}, ${country}`.replace(/^[,\s]+|[,\s]+$/g, '');
+
+          setMemberForm((prev) => ({
+            ...prev,
+            country,
+            state: state || prev.state,
+            city: city || prev.city,
+            address: addressLine || prev.address,
+          }));
+        } catch (locationError) {
+          setFormError(locationError.message || 'Unable to use live location.');
+        } finally {
+          setMemberLocationLoading(false);
+        }
+      },
+      () => {
+        setFormError('Location permission was denied.');
+        setMemberLocationLoading(false);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0,
+      }
+    );
   };
 
   const handleCreateCollection = async (e) => {
@@ -918,6 +976,16 @@ const AdminDashboard = () => {
               {showMemberForm ? (
                 <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 max-w-md mx-auto shadow-sm">
                   <h3 className="text-xl font-semibold mb-6 text-gray-800">Register New Member</h3>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full mb-4 flex items-center justify-center gap-2"
+                    onClick={handleUseLiveLocationForMember}
+                    disabled={submittingMember || memberLocationLoading}
+                  >
+                    {memberLocationLoading ? <Loader2 size={16} className="animate-spin" /> : <MapPin size={16} />}
+                    {memberLocationLoading ? 'Fetching live location...' : 'Use Live Location'}
+                  </Button>
                   {formError && (
                     <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-r-lg mb-4 text-sm">
                       {formError}
@@ -948,6 +1016,18 @@ const AdminDashboard = () => {
                         title="Please enter a valid 10-digit phone number"
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-600 transition"
                         placeholder="10 digit phone number"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-gray-700 font-semibold mb-1 text-sm">Country</label>
+                      <input
+                        type="text"
+                        value={memberForm.country}
+                        onChange={(e) => setMemberForm({ ...memberForm, country: e.target.value })}
+                        required
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-600 transition"
+                        placeholder="Country"
                       />
                     </div>
 

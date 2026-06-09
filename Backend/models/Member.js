@@ -19,6 +19,11 @@ const memberSchema = new mongoose.Schema({
     unique: true,
     match: [/^[0-9]{10}$/, 'Please provide a valid 10-digit phone number']
   },
+  country: {
+    type: String,
+    required: [true, 'Country is required'],
+    trim: true
+  },
   address: {
     type: String,
     required: [true, 'Address is required'],

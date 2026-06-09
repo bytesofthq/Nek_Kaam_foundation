@@ -4,10 +4,10 @@ const Member = require('../models/Member');
 
 const registerMember = async (req, res) => {
   try {
-    const { fullName, phoneNumber, address, city, state, pinCode } = req.body;
+    const { fullName, phoneNumber, country, address, city, state, pinCode } = req.body;
     
     // Check required fields
-    if (!fullName || !phoneNumber || !address || !city || !state || !pinCode) {
+    if (!fullName || !phoneNumber || !country || !address || !city || !state || !pinCode) {
       return res.status(400).json({ 
         success: false, 
         message: 'All fields are required' 
@@ -27,6 +27,7 @@ const registerMember = async (req, res) => {
     const member = await Member.create({
       fullName,
       phoneNumber,
+      country,
       address,
       city,
       state,
@@ -41,6 +42,7 @@ const registerMember = async (req, res) => {
         memberId: member.memberId,
         fullName: member.fullName,
         phoneNumber: member.phoneNumber,
+        country: member.country,
         joinDate: member.joinDate
       }
     });

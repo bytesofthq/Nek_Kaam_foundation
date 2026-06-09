@@ -2,18 +2,20 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { memberAPI } from '../services/api';
 import Button from '../components/common/Button';
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle, MapPin, Loader2 } from 'lucide-react';
 
 const MemberRegister = () => {
   const [formData, setFormData] = useState({
     fullName: '',
     phoneNumber: '',
+    country: 'India',
     address: '',
     city: '',
     state: '',
     pinCode: '',
   });
   const [loading, setLoading] = useState(false);
+  const [locationLoading, setLocationLoading] = useState(false);
   const [error, setError] = useState(null);
   const [successData, setSuccessData] = useState(null);
 
@@ -23,6 +25,63 @@ const MemberRegister = () => {
       ...prev,
       [name]: value,
     }));
+  };
+
+  const handleUseLiveLocation = async () => {
+    if (!navigator.geolocation) {
+      setError('Your browser does not support live location.');
+      return;
+    }
+
+    setError(null);
+    setLocationLoading(true);
+
+    navigator.geolocation.getCurrentPosition(
+      async ({ coords }) => {
+        try {
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${coords.latitude}&lon=${coords.longitude}`,
+            {
+              headers: {
+                Accept: 'application/json',
+              },
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error('Unable to resolve your live location right now.');
+          }
+
+          const data = await response.json();
+          const address = data.address || {};
+          const city = address.city || address.town || address.village || address.county || '';
+          const state = address.state || address.region || '';
+          const country = address.country || formData.country || 'India';
+          const addressLine = data.display_name || `${city}, ${state}, ${country}`.replace(/^[,\s]+|[,\s]+$/g, '');
+
+          setFormData((prev) => ({
+            ...prev,
+            country,
+            state: state || prev.state,
+            city: city || prev.city,
+            address: addressLine || prev.address,
+          }));
+        } catch (locationError) {
+          setError(locationError.message || 'Unable to use live location.');
+        } finally {
+          setLocationLoading(false);
+        }
+      },
+      () => {
+        setError('Location permission was denied.');
+        setLocationLoading(false);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0,
+      }
+    );
   };
 
   const handleSubmit = async (e) => {
@@ -99,6 +158,10 @@ const MemberRegister = () => {
               <p className="text-sm font-semibold text-gray-800">{successData.phoneNumber}</p>
             </div>
             <div className="border-t border-green-100/50 pt-2">
+              <p className="text-xs text-green-700 font-semibold uppercase tracking-wider">Country</p>
+              <p className="text-sm font-semibold text-gray-800">{successData.country || 'India'}</p>
+            </div>
+            <div className="border-t border-green-100/50 pt-2">
               <p className="text-xs text-green-700 font-semibold uppercase tracking-wider">Registration Date</p>
               <p className="text-sm font-semibold text-gray-800">{new Date(successData.joinDate).toLocaleDateString()}</p>
             </div>
@@ -118,6 +181,18 @@ const MemberRegister = () => {
     <div className="min-h-screen bg-gradient-to-r from-green-600 to-green-800 flex items-center justify-center py-12 px-4">
       <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full mt-10">
         <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">Member Registration</h1>
+
+        <Button
+          type="button"
+          variant="outline"
+          size="lg"
+          onClick={handleUseLiveLocation}
+          disabled={loading || locationLoading}
+          className="w-full mb-4 flex items-center justify-center gap-2"
+        >
+          {locationLoading ? <Loader2 size={16} className="animate-spin" /> : <MapPin size={16} />}
+          {locationLoading ? 'Fetching live location...' : 'Use Live Location'}
+        </Button>
 
         {error && (
           <div className="bg-red-100 text-red-600 p-4 rounded-lg mb-4">
@@ -152,6 +227,20 @@ const MemberRegister = () => {
               title="Please enter a valid 10-digit phone number"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
               placeholder="10 digit phone number"
+              disabled={loading}
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-700 font-semibold mb-2">Country</label>
+            <input
+              type="text"
+              name="country"
+              value={formData.country}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
+              placeholder="Your country"
               disabled={loading}
             />
           </div>
