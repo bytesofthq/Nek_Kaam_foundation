@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, LogOut, ChevronDown, Heart } from 'lucide-react';
+import { Menu, X, LogOut, ChevronDown, Heart, Globe } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../common/Button';
 
@@ -26,6 +27,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { isAdminLoggedIn, isMemberLoggedIn, logout } = useAuth();
+  const { language, setLanguage } = useLanguage();
   const location = useLocation();
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -99,8 +101,29 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Auth Links */}
-          <div className="hidden md:flex items-center gap-4">
+          {/* Auth Links + Language Switcher */}
+          <div className="hidden md:flex items-center gap-3">
+            {/* Language Toggle */}
+            <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
+              <Globe size={14} className="text-gray-400 ml-1" />
+              <button
+                onClick={() => setLanguage('en')}
+                className={`px-2.5 py-1 rounded-md text-xs font-bold transition-all duration-200 ${
+                  language === 'en' ? 'bg-green-600 text-white shadow-sm' : 'text-gray-500 hover:text-green-600'
+                }`}
+              >
+                EN
+              </button>
+              <button
+                onClick={() => setLanguage('hi')}
+                className={`px-2.5 py-1 rounded-md text-xs font-bold transition-all duration-200 ${
+                  language === 'hi' ? 'bg-green-600 text-white shadow-sm' : 'text-gray-500 hover:text-green-600'
+                }`}
+              >
+                HI
+              </button>
+            </div>
+
             {isAdminLoggedIn ? (
               <>
                 <Link to="/admin-dashboard" className="bg-green-600 hover:bg-green-700 text-white font-semibold text-sm px-4 py-2 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md">
@@ -148,32 +171,56 @@ const Navbar = () => {
       {/* Mobile Menu */}
       <AnimatePresence>
         {isOpen && (
-          <div className="md:hidden mt-4 space-y-3 pb-4">
-            <Link to="/" className="block text-gray-700 hover:text-green-600">
+          <div className="lg:hidden bg-white border-t border-gray-100 shadow-lg px-4 py-4 space-y-2">
+            {/* Language switcher mobile */}
+            <div className="flex items-center gap-2 pb-3 border-b border-gray-100">
+              <Globe size={14} className="text-gray-400" />
+              <span className="text-xs text-gray-500 font-semibold">Language:</span>
+              <div className="flex gap-1 bg-gray-100 rounded-lg p-1">
+                <button
+                  onClick={() => setLanguage('en')}
+                  className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${
+                    language === 'en' ? 'bg-green-600 text-white' : 'text-gray-500'
+                  }`}
+                >
+                  English
+                </button>
+                <button
+                  onClick={() => setLanguage('hi')}
+                  className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${
+                    language === 'hi' ? 'bg-green-600 text-white' : 'text-gray-500'
+                  }`}
+                >
+                  हिंदी
+                </button>
+              </div>
+            </div>
+
+            <Link to="/" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 rounded-lg text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium transition">
               Home
             </Link>
-            <Link to="/about" className="block text-gray-700 hover:text-green-600">
+            <Link to="/about" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 rounded-lg text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium transition">
               About
             </Link>
-            <Link to="/projects" className="block text-gray-700 hover:text-green-600">
+            <Link to="/projects" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 rounded-lg text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium transition">
               Projects
             </Link>
-            <Link to="/activities" className="block text-gray-700 hover:text-green-600">
+            <Link to="/activities" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 rounded-lg text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium transition">
               Activities
             </Link>
-            <Link to="/gallery" className="block text-gray-700 hover:text-green-600">
+            <Link to="/gallery" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 rounded-lg text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium transition">
               Gallery
             </Link>
-            <Link to="/impact-stories" className="block text-gray-700 hover:text-green-600">
+            <Link to="/impact-stories" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 rounded-lg text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium transition">
               Impact Stories
             </Link>
-            <Link to="/committee" className="block text-gray-700 hover:text-green-600">
+            <Link to="/committee" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 rounded-lg text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium transition">
               Committee
             </Link>
-            <Link to="/transparency" className="block text-gray-700 hover:text-green-600">
+            <Link to="/transparency" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 rounded-lg text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium transition">
               Transparency
             </Link>
-            <Link to="/contact" className="block text-gray-700 hover:text-green-600">
+            <Link to="/contact" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 rounded-lg text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium transition">
               Contact
             </Link>
 
