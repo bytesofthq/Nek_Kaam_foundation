@@ -3,14 +3,33 @@ import { activityAPI } from '../services/api';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { Calendar, MapPin, Tag, Search, Filter } from 'lucide-react';
-
-const CATEGORIES = ['All', 'Marriage Assistance', 'Family Support', 'Medical Help', 'Educational Support', 'Madrasa Support', 'Mosque Support', 'Water Project', 'Community Cleaning', 'Disaster Relief', 'Emergency Help', 'Other'];
+import { useTranslation } from '../i18n/useTranslation';
 
 const Activities = () => {
+  const { t, language } = useTranslation();
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
+
+  const CATEGORIES = [
+    { key: 'All', label: t('activities.categories.all') },
+    { key: 'Marriage Assistance', label: t('activities.categories.marriage') },
+    { key: 'Family Support', label: t('activities.categories.family') },
+    { key: 'Medical Help', label: t('activities.categories.medical') },
+    { key: 'Educational Support', label: t('activities.categories.education') },
+    { key: 'Schools Support', label: t('activities.categories.schools') },
+    { key: 'Water Project', label: t('activities.categories.water') },
+    { key: 'Community Cleaning', label: t('activities.categories.cleaning') },
+    { key: 'Disaster Relief', label: t('activities.categories.disaster') },
+    { key: 'Emergency Help', label: t('activities.categories.emergency') },
+    { key: 'Other', label: t('activities.categories.other') },
+  ];
+
+  const categoryLabels = CATEGORIES.reduce((acc, cat) => {
+    acc[cat.key] = cat.label;
+    return acc;
+  }, {});
 
   useEffect(() => {
     const fetch = async () => {
@@ -32,22 +51,12 @@ const Activities = () => {
     if (search && !(a.title?.toLowerCase().includes(search.toLowerCase()) || a.description?.toLowerCase().includes(search.toLowerCase()))) return false;
     return true;
   });
-
-  const demoActivities = [
-    { _id: '1', title: 'Marriage Assistance for 3 Families', category: 'Marriage Assistance', location: 'Patna, Bihar', date: '2024-11-15', description: 'We provided financial and logistical support for 3 underprivileged families in organizing their daughters\' weddings with dignity.' },
-    { _id: '2', title: 'Al-Noor Mosque AC Installation', category: 'Mosque Support', location: 'Gaya, Bihar', date: '2024-10-20', description: 'Successfully installed 4 AC units in Al-Noor Mosque to provide comfortable environment for worshippers, especially during summer Ramadan.' },
-    { _id: '3', title: 'Jamia Madrasa Renovation', category: 'Madrasa Support', location: 'Nalanda, Bihar', date: '2024-09-10', description: 'Complete renovation of Jamia Madrasa including roof repair, whitewash, and new furniture benefiting 150 students.' },
-    { _id: '4', title: 'Village Water Pump Installation', category: 'Water Project', location: 'Muzaffarpur, Bihar', date: '2024-08-05', description: 'Installed 2 water pumps providing clean drinking water to approximately 300 families in remote villages.' },
-    { _id: '5', title: 'Medical Camp & Medicine Distribution', category: 'Medical Help', location: 'Vaishali, Bihar', date: '2024-07-20', description: 'Organized a free medical camp with 3 doctors. 200+ patients received free consultation and medicines.' },
-    { _id: '6', title: 'Flood Relief Distribution', category: 'Disaster Relief', location: 'Darbhanga, Bihar', date: '2024-08-25', description: 'Distributed food packets, blankets and essential supplies to 100+ flood-affected families during the monsoon disaster.' },
-  ];
-
-  const displayActivities = filtered.length > 0 || activities.length > 0 ? filtered : demoActivities;
+  const displayActivities = filtered;
 
   return (
     <div>
       <Helmet>
-        <title>Activities - Nek Kaam Foundation</title>
+        <title>{t('activities.tag')} - Nek Kaam Foundation</title>
         <meta name="description" content="Explore the activities and initiatives of Nek Kaam Foundation — from marriage assistance to mosque support and disaster relief." />
       </Helmet>
 
@@ -56,9 +65,9 @@ const Activities = () => {
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_30%_50%,_white_0%,_transparent_60%)]" />
         <div className="max-w-7xl mx-auto px-4 relative">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <span className="inline-block bg-white/15 text-white font-semibold text-sm px-4 py-1.5 rounded-full mb-4">Our Activities</span>
-            <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Foundation Activities</h1>
-            <p className="text-green-100 text-xl max-w-2xl">Every activity represents a life changed, a family supported, and a community strengthened.</p>
+            <span className="inline-block bg-white/15 text-white font-semibold text-sm px-4 py-1.5 rounded-full mb-4">{t('activities.tag')}</span>
+            <h1 className="text-4xl md:text-5xl font-extrabold mb-4">{t('activities.title')}</h1>
+            <p className="text-green-100 text-xl max-w-2xl">{t('activities.subtitle')}</p>
           </motion.div>
         </div>
       </section>
@@ -71,7 +80,7 @@ const Activities = () => {
               <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search activities..."
+                placeholder={t('activities.searchPlaceholder')}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
@@ -81,11 +90,11 @@ const Activities = () => {
               <Filter size={16} className="text-gray-400 flex-shrink-0" />
               {CATEGORIES.slice(0, 6).map((cat) => (
                 <button
-                  key={cat}
-                  onClick={() => setCategory(cat)}
-                  className={`px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all duration-200 flex-shrink-0 ${category === cat ? 'bg-green-600 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-green-50 hover:text-green-600'}`}
+                  key={cat.key}
+                  onClick={() => setCategory(cat.key)}
+                  className={`px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all duration-200 flex-shrink-0 cursor-pointer ${category === cat.key ? 'bg-green-600 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-green-50 hover:text-green-600'}`}
                 >
-                  {cat}
+                  {cat.label}
                 </button>
               ))}
             </div>
@@ -125,18 +134,18 @@ const Activities = () => {
                           <img src={activity.images[0].url} alt={activity.title} className="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-500" />
                         ) : (
                           <div className="w-full h-44 bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center text-white text-4xl">
-                            {activity.category === 'Mosque Support' ? '🕌' : activity.category === 'Madrasa Support' ? '📚' : activity.category === 'Medical Help' ? '🏥' : activity.category === 'Marriage Assistance' ? '💒' : activity.category === 'Water Project' ? '🚰' : activity.category === 'Disaster Relief' ? '🌊' : '🤝'}
+                            {activity.category === 'Schools Support' ? '🏫' : activity.category === 'Medical Help' ? '🏥' : activity.category === 'Marriage Assistance' ? '💒' : activity.category === 'Water Project' ? '🚰' : activity.category === 'Disaster Relief' ? '🌊' : '🤝'}
                           </div>
                         )}
                         <div className="p-6">
                           <div className="flex items-center justify-between mb-3">
                             <span className="inline-flex items-center gap-1 bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">
                               <Tag size={10} />
-                              {activity.category}
+                              {categoryLabels[activity.category] || activity.category}
                             </span>
                             <span className="text-xs text-gray-400 flex items-center gap-1">
                               <Calendar size={12} />
-                              {new Date(activity.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                              {new Date(activity.date).toLocaleDateString(language === 'hi' ? 'hi-IN' : 'en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                             </span>
                           </div>
                           <h3 className="text-lg font-bold text-gray-800 mb-2 group-hover:text-green-700 transition-colors">{activity.title}</h3>
@@ -159,9 +168,9 @@ const Activities = () => {
           ) : (
             <div className="text-center py-20">
               <div className="text-5xl mb-4">📋</div>
-              <p className="text-gray-500 text-lg">No activities match your search.</p>
-              <button onClick={() => { setSearch(''); setCategory('All'); }} className="mt-4 text-green-600 hover:underline font-semibold">
-                Clear filters
+              <p className="text-gray-500 text-lg">{t('activities.noActivities')}</p>
+              <button onClick={() => { setSearch(''); setCategory('All'); }} className="mt-4 text-green-600 hover:underline font-semibold cursor-pointer">
+                {t('activities.clearFilters')}
               </button>
             </div>
           )}

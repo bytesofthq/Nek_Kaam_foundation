@@ -12,7 +12,9 @@ const api = axios.create({
 
 // Add token to requests
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('adminToken');
+  const adminToken = localStorage.getItem('adminToken');
+  const memberToken = localStorage.getItem('memberToken');
+  const token = adminToken || memberToken;
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -24,8 +26,15 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('adminToken');
-      window.location.href = '/login';
+      if (localStorage.getItem('adminToken')) {
+        localStorage.removeItem('adminToken');
+        window.location.href = '/admin/login';
+      } else if (localStorage.getItem('memberToken')) {
+        localStorage.removeItem('memberToken');
+        window.location.href = '/member-login';
+      } else {
+        window.location.href = '/member-login';
+      }
     }
     return Promise.reject(error);
   }
@@ -41,15 +50,25 @@ export const authAPI = {
 // Member endpoints
 export const memberAPI = {
   register: (data) => api.post('/api/members/register', data),
+  login: (data) => api.post('/api/members/login', data),
+  getProfile: () => api.get('/api/members/profile'),
+  updateProfile: (data) => api.put('/api/members/profile', data),
   getAllMembers: (params) => api.get('/api/members', { params }),
   getMemberById: (id) => api.get(`/api/members/${id}`),
   deleteMember: (id) => api.delete(`/api/members/${id}`),
   getMemberCount: () => api.get('/api/members/stats/count'),
+  updateAvatar: (formData) => {
+    return api.post('/api/members/avatar', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  },
 };
 
 // Project endpoints
 export const projectAPI = {
-  getAll: () => api.get('/api/projects'),
+  getAll: (params) => api.get('/api/projects', { params }),
   getById: (id) => api.get(`/api/projects/${id}`),
   create: (data) => api.post('/api/projects', data),
   update: (id, data) => api.put(`/api/projects/${id}`, data),
@@ -59,7 +78,7 @@ export const projectAPI = {
 
 // Activity endpoints
 export const activityAPI = {
-  getAll: () => api.get('/api/activities'),
+  getAll: (params) => api.get('/api/activities', { params }),
   getById: (id) => api.get(`/api/activities/${id}`),
   create: (data) => api.post('/api/activities', data),
   update: (id, data) => api.put(`/api/activities/${id}`, data),
@@ -80,7 +99,7 @@ export const fundAPI = {
 
 // Impact Story endpoints
 export const impactStoryAPI = {
-  getAll: () => api.get('/api/impact-stories'),
+  getAll: (params) => api.get('/api/impact-stories', { params }),
   getById: (id) => api.get(`/api/impact-stories/${id}`),
   create: (data) => api.post('/api/impact-stories', data, {
     headers: {
@@ -141,6 +160,16 @@ export const messageAPI = {
 // Dashboard endpoints
 export const dashboardAPI = {
   getStats: () => api.get('/api/dashboard/stats'),
+  getMonthlyFunds: () => api.get('/api/dashboard/charts/monthly-funds'),
+  getMemberGrowth: () => api.get('/api/dashboard/charts/member-growth'),
+  getCategoryUsage: () => api.get('/api/dashboard/charts/category-usage'),
+  getRecentActivities: () => api.get('/api/dashboard/recent-activities'),
+};
+
+// Setting endpoints
+export const settingAPI = {
+  getSettings: () => api.get('/api/settings'),
+  updateSettings: (data) => api.put('/api/settings', data),
 };
 
 // Public endpoints (no auth required)

@@ -68,7 +68,7 @@ const Stats = () => {
     {
       label: 'Registered Members',
       label: t('stats.members'),
-      value: apiStats?.totalMembers || 500,
+      value: apiStats?.totalMembers ||500,
       icon: Users,
       color: 'from-green-500 to-green-700',
       prefix: '',
@@ -77,7 +77,7 @@ const Stats = () => {
     {
       label: 'Total Funds Received',
       label: t('stats.fundsReceived'),
-      value: apiStats?.totalFundsReceived || 500000,
+      value: apiStats?.totalFundsReceived ||0,
       icon: IndianRupee,
       color: 'from-emerald-500 to-emerald-700',
       prefix: '₹',
@@ -86,7 +86,7 @@ const Stats = () => {
     {
       label: 'Total Funds Utilized',
       label: t('stats.fundsUsed'),
-      value: apiStats?.totalFundsUsed || 420000,
+      value: apiStats?.totalFundsUsed || 0,
       icon: Heart,
       color: 'from-yellow-500 to-yellow-700',
       prefix: '₹',
@@ -95,7 +95,7 @@ const Stats = () => {
     {
       label: 'Projects Completed',
       label: t('stats.projects'),
-      value: apiStats?.totalProjects || 48,
+      value: apiStats?.totalProjects || 0,
       icon: FolderOpen,
       color: 'from-teal-500 to-teal-700',
       prefix: '',
@@ -104,7 +104,7 @@ const Stats = () => {
     {
       label: 'Families Supported',
       label: t('stats.families'),
-      value: apiStats?.familiesSupported || 200,
+      value: apiStats?.familiesSupported || 10,
       icon: Home,
       color: 'from-green-600 to-emerald-600',
       prefix: '',
@@ -113,7 +113,7 @@ const Stats = () => {
     {
       label: 'Villages Helped',
       label: t('stats.villages'),
-      value: apiStats?.villagesHelped || 25,
+      value: apiStats?.villagesHelped || 10,
       icon: Droplets,
       color: 'from-emerald-600 to-teal-700',
       prefix: '',

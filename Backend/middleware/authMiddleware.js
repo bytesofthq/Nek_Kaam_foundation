@@ -1,6 +1,8 @@
 // middleware/authMiddleware.js
 const jwt = require('jsonwebtoken');
 const Admin = require('../models/Admin');
+const Member = require('../models/Member');
+
 
 // Protect admin routes - reads token from cookie
 const protect = async (req, res, next) => {
@@ -124,4 +126,52 @@ const refreshAdminToken = async (req, res) => {
   }
 };
 
-module.exports = { protect, adminOnly, refreshAdminToken };
+// Protect member routes - reads token from cookie or authorization header
+const protectMember = async (req, res, next) => {
+  try {
+    let token = req.cookies.memberToken;
+
+    // Check Authorization header as well
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+      token = req.headers.authorization.split(' ')[1];
+    }
+
+    if (!token) {
+      return res.status(401).json({ success: false, message: 'Not authorized, no token' });
+    }
+
+    // Verify token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    // Check if it's member token
+    if (decoded.type !== 'member') {
+      return res.status(401).json({ success: false, message: 'Not authorized as member' });
+    }
+
+    // Get member from database
+    const member = await Member.findById(decoded.id);
+
+    if (!member) {
+      return res.status(401).json({ success: false, message: 'Member not found' });
+    }
+
+    if (!member.isActive) {
+      return res.status(401).json({ success: false, message: 'Member account is inactive' });
+    }
+
+    req.member = member;
+    req.memberToken = token;
+    next();
+  } catch (error) {
+    console.error(error);
+    if (error.name === 'JsonWebTokenError') {
+      return res.status(401).json({ success: false, message: 'Invalid token' });
+    }
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ success: false, message: 'Token expired', code: 'TOKEN_EXPIRED' });
+    }
+    res.status(401).json({ success: false, message: 'Not authorized' });
+  }
+};
+
+module.exports = { protect, adminOnly, refreshAdminToken, protectMember };

@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, LogOut, ChevronDown, Heart } from 'lucide-react';
+import { Menu, X, LogOut, ChevronDown } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTranslation } from '../../i18n/useTranslation';
 import LanguageSwitcher from '../../i18n/LanguageSwitcher';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../common/Button';
+import logoImg from './nek_kaam.png'; 
 
 const navLinks = [
   { labelKey: 'navigation.home', to: '/' },
@@ -44,10 +45,16 @@ const Navbar = () => {
     <nav className="sticky top-0 z-50 border-b border-green-100/80 bg-white/90 backdrop-blur-xl shadow-[0_8px_30px_rgba(16,185,129,0.08)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between gap-3 min-h-20 py-3">
-          {/* Logo */}
+          {/* Logo with Image */}
           <Link to="/" className="flex items-center gap-3 group shrink-0">
-            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-green-500 via-green-600 to-emerald-700 flex items-center justify-center shadow-lg shadow-green-200 group-hover:shadow-green-300 transition-shadow">
-              <Heart size={19} className="text-white fill-white" />
+            <div className="w-22 h-20 rounded-full justify-center shadow-lg shadow-green-200 group-hover:shadow-green-300 transition-shadow overflow-hidden">
+              {logoImg ? (
+                <img src={logoImg} alt="Nek Kaam Foundation" className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <span className="text-white font-bold text-lg">NK</span>
+                </div>
+              )}
             </div>
             <div>
               <div className="font-black text-gray-900 text-lg leading-none tracking-tight">Nek Kaam</div>

@@ -11,8 +11,7 @@ const gallerySchema = new mongoose.Schema({
     type: String,
     required: true,
     enum: [
-      'Mosque Projects',
-      'Madarsa Projects',
+      'Schools Projects',
       'Marriage Assistance',
       'Water Projects',
       'Medical Help',

@@ -15,6 +15,8 @@ const NewsUpdate = require('../models/NewsUpdate');
 
 // @desc    Get all statistics for homepage
 // @access  Public
+// @desc    Get all statistics for homepage
+// @access  Public
 router.get('/homepage-stats', async (req, res) => {
   try {
     const [
@@ -33,8 +35,7 @@ router.get('/homepage-stats', async (req, res) => {
     
     // Additional stats for counters
     const familiesSupported = await FundUsage.countDocuments({ category: 'Poor Family Support' });
-    const madrasasSupported = await FundUsage.countDocuments({ category: 'Madarsa Support' });
-    const mosquesSupported = await FundUsage.countDocuments({ category: 'Mosque Support' });
+    const schoolsSupported = await FundUsage.countDocuments({ category: 'Schools Support' });
     const villagesHelped = await FundUsage.distinct('location').then(locations => locations.length);
     
     const received = totalFunds[0]?.total || 0;
@@ -49,11 +50,49 @@ router.get('/homepage-stats', async (req, res) => {
         currentBalance: received - used,
         totalProjectsCompleted: totalProjects,
         familiesSupported,
-        madrasasSupported,
-        mosquesSupported,
+        schoolsSupported,
         villagesHelped,
         totalActivities
       }
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+// @desc    Get stats at root for frontend Compatibility
+// @access  Public
+router.get('/stats', async (req, res) => {
+  try {
+    const [
+      totalMembers,
+      totalFunds,
+      totalUsed,
+      totalProjects
+    ] = await Promise.all([
+      Member.countDocuments(),
+      FundCollection.aggregate([{ $group: { _id: null, total: { $sum: '$amount' } } }]),
+      FundUsage.aggregate([{ $group: { _id: null, total: { $sum: '$amountUsed' } } }]),
+      Project.countDocuments({ status: 'Completed' })
+    ]);
+    
+    const familiesSupported = await FundUsage.countDocuments({ category: 'Poor Family Support' });
+    const schoolsSupported = await FundUsage.countDocuments({ category: 'Schools Support' });
+    const villagesHelped = await FundUsage.distinct('location').then(locations => locations.length);
+    
+    const received = totalFunds[0]?.total || 0;
+    const used = totalUsed[0]?.total || 0;
+    
+    res.json({
+      success: true,
+      totalMembers,
+      totalFundsReceived: received,
+      totalFundsUsed: used,
+      currentBalance: received - used,
+      totalProjects,
+      familiesSupported,
+      schoolsSupported,
+      villagesHelped
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

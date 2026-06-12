@@ -2,39 +2,255 @@ import { useEffect, useState } from 'react';
 import { committeeAPI } from '../services/api';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { Phone, Mail, MapPin, User } from 'lucide-react';
+import { Mail, MapPin, User, Phone } from 'lucide-react';
+import { useTranslation } from '../i18n/useTranslation';
 
-const demoMembers = [
-  { _id: '1', name: 'Mohammed Rafiq Ahmed', position: 'President', phone: '+91 98765 43210', bio: 'Founder and President of Nek Kaam Foundation. Has been serving the community for over 15 years.', address: 'Patna, Bihar' },
-  { _id: '2', name: 'Abdul Wahid Khan', position: 'Vice President', phone: '+91 98765 43211', bio: 'Co-founder and Vice President. Expert in community development and charity management.', address: 'Gaya, Bihar' },
-  { _id: '3', name: 'Mohammed Iqbal Ansari', position: 'Secretary', phone: '+91 98765 43212', bio: 'Handles all official communications, records, and member registrations.', address: 'Nalanda, Bihar' },
-  { _id: '4', name: 'Khalid Hussain Siddiqui', position: 'Treasurer', phone: '+91 98765 43213', bio: 'Manages the foundation\'s finances and ensures complete transparency in fund management.', address: 'Muzaffarpur, Bihar' },
-  { _id: '5', name: 'Dr. Zubair Ahmed', position: 'Medical Committee Head', phone: '+91 98765 43214', bio: 'MBBS, MD. Leads all medical assistance programs and free medical camps.', address: 'Vaishali, Bihar' },
-  { _id: '6', name: 'Hafiz Abdul Rahim', position: 'Religious Advisor', phone: '+91 98765 43215', bio: 'Provides Islamic guidance for all foundation activities and ensures Shariah compliance.', address: 'Patna, Bihar' },
-  { _id: '7', name: 'Mohammed Salim Qureshi', position: 'Project Coordinator', phone: '+91 98765 43216', bio: 'Oversees all ongoing projects and ensures timely completion and quality standards.', address: 'Bihar Sharif, Bihar' },
-  { _id: '8', name: 'Arshad Ali Mirza', position: 'Committee Member', phone: '+91 98765 43217', bio: 'Active volunteer and committee member focused on youth engagement and education.', address: 'Darbhanga, Bihar' },
-];
-
-const positionColors = {
-  'President': 'from-yellow-400 to-amber-600',
-  'Vice President': 'from-green-500 to-emerald-700',
-  'Secretary': 'from-blue-500 to-blue-700',
-  'Treasurer': 'from-purple-500 to-purple-700',
-  default: 'from-green-400 to-green-700',
-};
+// Import images from assets/founders folder
+import RahmanImg from '../assets/founders/rahman.jpeg';
+import NihalImg from '../assets/founders/Nihal.jpeg';
+import SaleemImg from '../assets/founders/saleem.jpeg';
+import KamilImg from '../assets/founders/kamil.jpeg';
+import ArmanImg from '../assets/Founders/Arman.jpeg';
+import KamalImg from '../assets/founders/kamal.jpeg';
+import NaushadImg from '../assets/founders/noushad.jpeg';
+import ShuaibImg from '../assets/founders/Wshuaib.jpeg';
+import AzmatImg from '../assets/founders/azmat.jpeg';
+import NafeesImg from '../assets/founders/Nafees.png';
+import SheebuImg from '../assets/founders/Sheebu.jpeg';
+import ShuaibbImg from '../assets/founders/Shuaib.jpeg';
+import NishanrImg from '../assets/Founders/Nishar.png';
+import AsadImg from '../assets/founders/Asad.png';
 
 const Committee = () => {
+  const { t } = useTranslation();
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const positionColors = {
+    'Founder & President': 'from-yellow-400 to-amber-600',
+    'Co-Founder': 'from-orange-400 to-amber-600',
+    'President': 'from-yellow-400 to-amber-600',
+    'Vice President': 'from-green-500 to-emerald-700',
+    'Genral Secretary': 'from-blue-500 to-blue-700',
+    'Joint Secretary': 'from-cyan-500 to-blue-600',  
+    'Secretary': 'from-indigo-500 to-purple-600',    
+    'Treasurer': 'from-purple-500 to-purple-700',
+    'Assistant Treasurer': 'from-indigo-500 to-purple-600',
+    'Media & Public Relation Incharge': 'from-pink-500 to-rose-600',
+    'Environment Incharge': 'from-teal-500 to-green-600',
+    'Disaster Relief & Service': 'from-red-500 to-orange-600',
+    'Health & Medical Incharge': 'from-red-500 to-pink-600',  
+    'Executive Member': 'from-gray-500 to-gray-700',  
+    default: 'from-green-400 to-green-700',
+  };
+
+  const roleLabels = {
+    'Founder & President': 'Founder & President',
+    'Co-Founder': 'Co-Founder',
+    'President': t('committee.roles.president'),
+    'Vice President': t('committee.roles.vicePresident'),
+    'Genral Secretary': t('committee.roles.secretary'),
+    'Joint Secretary': 'Joint Secretary',  
+    'Secretary': 'Secretary',              
+    'Treasurer': t('committee.roles.treasurer'),
+    'Assistant Treasurer': 'Assistant Treasurer',
+    'Media & Public Relation Incharge': 'Media & PR Incharge',
+    'Environment Incharge': 'Environment Incharge',
+    'Disaster Relief & Service': 'Disaster Relief Incharge',
+    'Health & Medical Incharge': 'Health & Medical Incharge',  
+    'Executive Member': 'Executive Member', 
+  };
+
+  
+  const positionOrder = [
+    'Founder & President',
+    'Co-Founder',
+    'Vice President',      
+    'Secretary',
+    'Genral Secretary',
+    'Joint Secretary',
+    'Health & Medical Incharge',
+    'Treasurer',
+    'Assistant Treasurer',
+    'Media & Public Relation Incharge',
+    'Environment Incharge',
+    'Executive Member'
+  ];
+
+  const demoMembers = [
+    { 
+      _id: '1', 
+      name: 'Abdur Rahman', 
+      position: 'Founder & President', 
+      bio: 'Founder and President of Nek Kaam Foundation. Has been serving the community for over 15 years with dedication and compassion.', 
+      address: 'India, UP',
+      email: 'abdurrahman.mohdusman@gmail.com',
+      phone: '+91 9794820273',
+      photo: RahmanImg 
+    },
+    { 
+      _id: '2', 
+      name: 'Mohd Nehal', 
+      position: 'Co-Founder', 
+      bio: 'Co-Founder of Nek Kaam Foundation. Expert in community development and charity management, leading various initiatives.', 
+      address: 'India, UP',
+      email: 'Nihalkhan31561@gmail.com',
+      phone: '+91 97948 20273',
+      photo: NihalImg 
+    },
+    { 
+      _id: '3', 
+      name: 'Salim Subhan', 
+      position: 'Vice President', 
+      bio: 'Dedicated Vice President focused on strategic planning and organizational growth.', 
+      address: 'India, UP',
+      email: 'salim@nekkaamfoundation.org',
+      phone: '+91 70077 65521',
+      photo: SaleemImg 
+    },
+    { 
+      _id: '4', 
+      name: 'Kamil Khan', 
+      position: 'Vice President', 
+      bio: 'Vice President handling strategic initiatives and community outreach programs efficiently.', 
+      address: 'India, Mumbai',
+      email: 'kamilkhan8424@gmail.com',
+      phone: '+91 91522 56053',
+      photo: KamilImg 
+    },
+    { 
+      _id: '5', 
+      name: 'Kamal Khan', 
+      position: 'Genral Secretary', 
+      bio: 'Managing secretarial duties and ensuring smooth coordination between all departments.', 
+      address: 'India, UP',
+      email: 'kamalkhan902678@gmail.com',
+      phone: '+91 98216 80440',
+      photo: KamalImg 
+    },
+    { 
+      _id: '6', 
+      name: 'Naushad Khan', 
+      position: 'Secretary', 
+      bio: 'Manages administrative tasks and supports the general secretary in daily operations.', 
+      address: 'India, UP',
+      email: 'naushad@nekkaamfoundation.org',
+      phone: '+91 95590 57411',
+      photo: NaushadImg 
+    },
+    { 
+      _id: '7', 
+      name: 'Mohd Arman', 
+      position: 'Health & Medical Incharge', 
+      bio: 'Oversees health camps, medical assistance programs, and healthcare initiatives for the community.', 
+      address: 'India, UP',
+      email: 'armanbvn261201@gmail.com',
+      phone: '+91 94503 62140',
+      photo: ArmanImg 
+    },
+    { 
+      _id: '8', 
+      name: 'Shuaib Khan', 
+      position: 'Joint Secretary', 
+      bio: 'Assists the general secretary in administrative tasks and helps coordinate community outreach programs.', 
+      address: 'India, Mumbai',
+      email: 'shuaib@nekkaamfoundation.org',
+      phone: '+91 98765 43217',
+      photo: ShuaibImg 
+    },
+    { 
+      _id: '9', 
+      name: 'Azmat Ali', 
+      position: 'Treasurer', 
+      bio: 'Manages the foundation\'s finances and ensures complete transparency in fund management.', 
+      address: 'India, UP',
+      email: 'azmat@nekkaamfoundation.org',
+      phone: '+91 98765 43218',
+      photo: AzmatImg 
+    },
+    { 
+      _id: '10', 
+      name: 'Nafees Ahmad Khan', 
+      position: 'Assistant Treasurer', 
+      bio: 'Assists in financial management and maintains accurate records of all transactions.', 
+      address: 'Kuwait',
+      email: 'nafees@nekkaamfoundation.org',
+      phone: '+965 1234 5678',
+      photo: NafeesImg 
+    },
+    { 
+      _id: '11', 
+      name: 'Mohd Arif', 
+      position: 'Media & Public Relation Incharge', 
+      bio: 'Manages media relations, social media presence, and public communications for the foundation.', 
+      address: 'India, UP',
+      email: 'arifkhan000779@gmail.com',
+      phone: '+91 98765 43219',
+      photo: SheebuImg 
+    },
+    { 
+      _id: '12', 
+      name: 'Mohd Shuaib', 
+      position: 'Environment Incharge', 
+      bio: 'Leads environmental initiatives, tree plantation drives, and sustainability programs.', 
+      address: 'India, Delhi',
+      email: 'shuaib.env@nekkaamfoundation.org',
+      phone: '+91 98765 43220',
+      photo: ShuaibbImg 
+    },
+    { 
+      _id: '13', 
+      name: 'Nishar Khan', 
+      position: 'Executive Member', 
+      bio: 'Active volunteer supporting various foundation activities and community events.', 
+      address: 'India, UP',
+      email: 'Rk8745675@gmail.com',
+      phone: '+91 9265866064',
+      photo: NishanrImg 
+    },
+    { 
+      _id: '14', 
+      name: 'Asad Usman', 
+      position: 'Executive Member', 
+      bio: 'Supports disaster response coordination and helps in emergency relief operations.', 
+      address: 'India, UP',
+      email: 'asad@nekkaamfoundation.org',
+      phone: '+91 78974 71731',
+      photo: AsadImg 
+    },
+  ];
+
+  // Sort members by position order
+  const sortedMembers = [...demoMembers].sort((a, b) => {
+    const indexA = positionOrder.indexOf(a.position);
+    const indexB = positionOrder.indexOf(b.position);
+    if (indexA === -1 && indexB === -1) return 0;
+    if (indexA === -1) return 1;
+    if (indexB === -1) return -1;
+    return indexA - indexB;
+  });
 
   useEffect(() => {
     const fetchMembers = async () => {
       try {
         const response = await committeeAPI.getAll();
         const data = response.data?.members || response.data || [];
-        setMembers(Array.isArray(data) ? data : []);
+        if (Array.isArray(data) && data.length > 0) {
+          const sortedApiData = [...data].sort((a, b) => {
+            const indexA = positionOrder.indexOf(a.position);
+            const indexB = positionOrder.indexOf(b.position);
+            if (indexA === -1 && indexB === -1) return 0;
+            if (indexA === -1) return 1;
+            if (indexB === -1) return -1;
+            return indexA - indexB;
+          });
+          setMembers(sortedApiData);
+        } else {
+          setMembers(sortedMembers);
+        }
       } catch (error) {
         console.error('Failed to fetch committee members:', error);
+        setMembers(sortedMembers);
       } finally {
         setLoading(false);
       }
@@ -42,12 +258,12 @@ const Committee = () => {
     fetchMembers();
   }, []);
 
-  const displayMembers = members.length > 0 ? members : demoMembers;
+  const displayMembers = members.length > 0 ? members : sortedMembers;
 
   return (
     <div>
       <Helmet>
-        <title>Committee Members - Nek Kaam Foundation</title>
+        <title>{t('committee.tag')} - Nek Kaam Foundation</title>
         <meta name="description" content="Meet the dedicated committee members of Nek Kaam Foundation — the people guiding our mission with integrity and compassion." />
       </Helmet>
 
@@ -56,9 +272,9 @@ const Committee = () => {
         <div className="absolute top-0 left-0 w-80 h-80 bg-green-400/10 rounded-full blur-3xl" />
         <div className="max-w-7xl mx-auto px-4 relative">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <span className="inline-block bg-white/15 font-semibold text-sm px-4 py-1.5 rounded-full mb-4">Our Team</span>
-            <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Committee Members</h1>
-            <p className="text-green-100 text-xl max-w-2xl">Meet the dedicated individuals who guide our foundation with integrity, compassion, and unwavering commitment to community service.</p>
+            <span className="inline-block bg-white/15 font-semibold text-sm px-4 py-1.5 rounded-full mb-4">{t('committee.tag')}</span>
+            <h1 className="text-4xl md:text-5xl font-extrabold mb-4">{t('committee.title')}</h1>
+            <p className="text-green-100 text-xl max-w-2xl">{t('committee.subtitle')}</p>
           </motion.div>
         </div>
       </section>
@@ -83,42 +299,55 @@ const Committee = () => {
                     transition={{ duration: 0.5, delay: (index % 4) * 0.1 }}
                     className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-green-200 group"
                   >
-                    {/* Avatar area */}
                     <div className={`h-32 bg-gradient-to-br ${gradientClass} relative flex items-center justify-center`}>
                       {member.photo ? (
-                        <img src={member.photo.url || member.photo} alt={member.name} className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-lg" />
+                        <img 
+                          src={member.photo} 
+                          alt={member.name} 
+                          className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg"
+                        />
                       ) : (
-                        <div className="w-20 h-20 rounded-full bg-white/20 border-4 border-white shadow-lg flex items-center justify-center">
-                          <User size={36} className="text-white" />
+                        <div className="w-24 h-24 rounded-full bg-white/20 border-4 border-white shadow-lg flex items-center justify-center">
+                          <User size={40} className="text-white" />
                         </div>
                       )}
                     </div>
 
                     <div className="p-5 text-center">
-                      <h3 className="font-extrabold text-gray-800 text-base mb-1 group-hover:text-green-700 transition-colors">{member.name}</h3>
+                      <h3 className="font-extrabold text-gray-800 text-base mb-1 group-hover:text-green-700 transition-colors">
+                        {member.name}
+                      </h3>
                       <span className={`inline-block text-xs font-bold px-3 py-1 rounded-full mb-3 bg-gradient-to-r ${gradientClass} text-white`}>
-                        {member.position || member.designation}
+                        {roleLabels[member.position] || member.position}
                       </span>
                       {member.bio && (
-                        <p className="text-gray-600 text-xs leading-relaxed mb-4 line-clamp-3">{member.bio}</p>
+                        <p className="text-gray-600 text-xs leading-relaxed mb-4 line-clamp-3">
+                          {member.bio}
+                        </p>
                       )}
                       <div className="space-y-2 border-t border-gray-100 pt-3">
-                        {(member.phoneNumber || member.phone) && (
-                          <a href={`tel:${member.phoneNumber || member.phone}`} className="flex items-center justify-center gap-2 text-xs text-gray-500 hover:text-green-600 transition-colors">
-                            <Phone size={12} className="text-green-500" />
-                            {member.phoneNumber || member.phone}
+                        {member.email && member.email !== '-' && (
+                          <a 
+                            href={`mailto:${member.email}`} 
+                            className="flex items-center justify-center gap-2 text-xs text-gray-500 hover:text-green-600 transition-colors group"
+                          >
+                            <Mail size={12} className="text-green-500 group-hover:text-green-600 flex-shrink-0" />
+                            <span className="truncate">{member.email}</span>
                           </a>
                         )}
-                        {member.email && (
-                          <a href={`mailto:${member.email}`} className="flex items-center justify-center gap-2 text-xs text-gray-500 hover:text-green-600 transition-colors">
-                            <Mail size={12} className="text-green-500" />
-                            {member.email}
+                        {member.phone && member.phone !== '-' && member.phone !== '+91-' && member.phone !== '+-' && (
+                          <a 
+                            href={`tel:${member.phone.replace(/[\s\-\(\)]/g, '')}`} 
+                            className="flex items-center justify-center gap-2 text-xs text-gray-500 hover:text-green-600 transition-colors group"
+                          >
+                            <Phone size={12} className="text-green-500 group-hover:text-green-600 flex-shrink-0" />
+                            <span>{member.phone}</span>
                           </a>
                         )}
                         {member.address && (
                           <div className="flex items-center justify-center gap-2 text-xs text-gray-400">
-                            <MapPin size={12} className="text-green-500" />
-                            {member.address}
+                            <MapPin size={12} className="text-green-500 flex-shrink-0" />
+                            <span>{member.address}</span>
                           </div>
                         )}
                       </div>

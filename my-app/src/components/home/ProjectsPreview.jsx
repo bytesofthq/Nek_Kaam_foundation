@@ -30,13 +30,7 @@ const ProjectsPreview = () => {
     fetch();
   }, []);
 
-  const defaultProjects = [
-    { _id: '1', title: 'Al-Noor Mosque Renovation', location: 'Patna, Bihar', status: 'Completed', budget: 85000, description: 'Complete renovation including AC installation and prayer area expansion for 500 worshippers.' },
-    { _id: '2', title: 'Village Water Pump Initiative', location: 'Nalanda, Bihar', status: 'Ongoing', budget: 45000, description: 'Installation of water pumps across 3 villages providing clean water to 500+ families.' },
-    { _id: '3', title: 'Madrasa Educational Support', location: 'Gaya, Bihar', status: 'Planned', budget: 120000, description: 'Establishing a fully equipped madrasa with digital library and modern facilities.' },
-  ];
-
-  const displayProjects = projects.length > 0 ? projects : defaultProjects;
+  const displayProjects = projects;
 
   return (
     <section ref={ref} className="py-20 bg-gray-50">
@@ -60,44 +54,50 @@ const ProjectsPreview = () => {
           </Link>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {displayProjects.map((project, index) => {
-            const sc = statusConfig[project.status] || statusConfig.Planned;
-            return (
-              <motion.div
-                key={project._id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.5, delay: index * 0.15 }}
-                className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-green-200 group"
-              >
-                <div className="h-3 bg-gradient-to-r from-green-500 to-emerald-600" />
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full ${sc.color}`}>
-                      <span className={`w-1.5 h-1.5 rounded-full ${sc.dot}`} />
-                      {project.status}
-                    </span>
-                    {project.budget && (
-                      <span className="flex items-center gap-1 text-sm font-bold text-green-700">
-                        <IndianRupee size={14} />
-                        {Number(project.budget).toLocaleString()}
+        {displayProjects.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {displayProjects.map((project, index) => {
+              const sc = statusConfig[project.status] || statusConfig.Planned;
+              return (
+                <motion.div
+                  key={project._id}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={inView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.5, delay: index * 0.15 }}
+                  className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-green-200 group"
+                >
+                  <div className="h-3 bg-gradient-to-r from-green-500 to-emerald-600" />
+                  <div className="p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full ${sc.color}`}>
+                        <span className={`w-1.5 h-1.5 rounded-full ${sc.dot}`} />
+                        {project.status}
                       </span>
+                      {project.budget && (
+                        <span className="flex items-center gap-1 text-sm font-bold text-green-700">
+                          <IndianRupee size={14} />
+                          {Number(project.budget).toLocaleString()}
+                        </span>
+                      )}
+                    </div>
+                    <h3 className="font-bold text-gray-800 text-lg mb-2 group-hover:text-green-700 transition-colors">{project.title}</h3>
+                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">{project.description || project.objective}</p>
+                    {project.location && (
+                      <div className="flex items-center gap-1 text-gray-500 text-xs">
+                        <MapPin size={12} className="text-green-500" />
+                        {project.location}
+                      </div>
                     )}
                   </div>
-                  <h3 className="font-bold text-gray-800 text-lg mb-2 group-hover:text-green-700 transition-colors">{project.title}</h3>
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">{project.description || project.objective}</p>
-                  {project.location && (
-                    <div className="flex items-center gap-1 text-gray-500 text-xs">
-                      <MapPin size={12} className="text-green-500" />
-                      {project.location}
-                    </div>
-                  )}
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="text-center py-12 bg-white rounded-2xl border border-gray-100 shadow-sm max-w-lg mx-auto">
+            <p className="text-gray-500 text-sm font-medium">No active projects to display at this time.</p>
+          </div>
+        )}
       </div>
     </section>
   );

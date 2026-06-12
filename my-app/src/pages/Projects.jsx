@@ -3,27 +3,20 @@ import { projectAPI } from '../services/api';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { MapPin, IndianRupee, Search, CheckCircle, Clock, Calendar } from 'lucide-react';
-
-const STATUS_CONFIG = {
-  Completed: { label: 'Completed', color: 'bg-green-100 text-green-700 border-green-200', dot: 'bg-green-500', icon: CheckCircle },
-  Ongoing: { label: 'Ongoing', color: 'bg-yellow-100 text-yellow-700 border-yellow-200', dot: 'bg-yellow-500', icon: Clock },
-  Planned: { label: 'Planned', color: 'bg-blue-100 text-blue-700 border-blue-200', dot: 'bg-blue-400', icon: Calendar },
-};
-
-const demoProjects = [
-  { _id: '1', title: 'Mosque Renovation & AC Installation', objective: 'Complete renovation and climate control for 500+ worshippers', location: 'UP ,Sitapur',status: 'Ongoing', budget: 150000, description: 'Full renovation of  Mosque including structural repair, whitewash, 4 AC units, and carpet installation for 500 worshippers.' },
-  { _id: '2', title: 'Rural Village Water Access Project', objective: 'Provide clean drinking water to 5 remote villages', location: 'Nalanda, Bihar', status: 'Ongoing', budget: 85000, description: 'Installation of water pumps and storage tanks across 5 villages, providing clean drinking water to approximately 1000 families.' },
-  { _id: '4', title: 'Marriage Assistance Annual Program', objective: 'Support 20 underprivileged families with marriage costs', location: 'Multiple Districts, Bihar', status: 'Ongoing', budget: 200000, description: 'Annual program providing financial assistance and logistical support for 20 underprivileged families for their children\'s weddings.' },
-  { _id: '5', title: 'Free Medical Camp Initiative', objective: 'Provide free healthcare to 500+ patients quarterly', location: 'Vaishali, Bihar', status: 'Completed', budget: 60000, description: 'Quarterly medical camps with specialized doctors providing free consultation, medicines, and basic health checkups.' },
-  { _id: '6', title: 'Freezer Installation for Meat Distribution', objective: 'Enable proper meat storage for community programs', location: 'Muzaffarpur, Bihar', status: 'Completed', budget: 45000, description: 'Installation of commercial freezers to enable proper storage and distribution of meat during Eid and community events.' },
-];
+import { useTranslation } from '../i18n/useTranslation';
 
 const Projects = () => {
+  const { t, language } = useTranslation();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('All');
 
+  const STATUS_CONFIG = {
+    Completed: { label: t('projects.completed'), color: 'bg-green-100 text-green-700 border-green-200', dot: 'bg-green-500', icon: CheckCircle },
+    Ongoing: { label: t('projects.ongoing'), color: 'bg-yellow-100 text-yellow-700 border-yellow-200', dot: 'bg-yellow-500', icon: Clock },
+    Planned: { label: t('projects.planned'), color: 'bg-blue-100 text-blue-700 border-blue-200', dot: 'bg-blue-400', icon: Calendar },
+  };
   useEffect(() => {
     const fetch = async () => {
       try {
@@ -45,19 +38,19 @@ const Projects = () => {
     return true;
   });
 
-  const displayProjects = filtered.length > 0 || projects.length > 0 ? filtered : demoProjects;
+  const displayProjects = filtered;
 
   const counts = {
-    All: (projects.length || demoProjects.length),
-    Completed: (projects.length > 0 ? projects : demoProjects).filter(p => p.status === 'Completed').length,
-    Ongoing: (projects.length > 0 ? projects : demoProjects).filter(p => p.status === 'Ongoing').length,
-    Planned: (projects.length > 0 ? projects : demoProjects).filter(p => p.status === 'Planned').length,
+    All: projects.length,
+    Completed: projects.filter(p => p.status === 'Completed').length,
+    Ongoing: projects.filter(p => p.status === 'Ongoing').length,
+    Planned: projects.filter(p => p.status === 'Planned').length,
   };
 
   return (
     <div>
       <Helmet>
-        <title>Projects - Nek Kaam Foundation</title>
+        <title>{t('projects.tag')} - Nek Kaam Foundation</title>
         <meta name="description" content="Explore all the projects undertaken by Nek Kaam Foundation — from mosque renovation to village water access and madrasa development." />
       </Helmet>
 
@@ -66,9 +59,9 @@ const Projects = () => {
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_70%_50%,_white_0%,_transparent_60%)]" />
         <div className="max-w-7xl mx-auto px-4 relative">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <span className="inline-block bg-white/15 font-semibold text-sm px-4 py-1.5 rounded-full mb-4">Our Projects</span>
-            <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Foundation Projects</h1>
-            <p className="text-green-100 text-xl max-w-2xl">Each project is a testament to our commitment — planned with purpose, executed with accountability.</p>
+            <span className="inline-block bg-white/15 font-semibold text-sm px-4 py-1.5 rounded-full mb-4">{t('projects.tag')}</span>
+            <h1 className="text-4xl md:text-5xl font-extrabold mb-4">{t('projects.title')}</h1>
+            <p className="text-green-100 text-xl max-w-2xl">{t('projects.subtitle')}</p>
           </motion.div>
         </div>
       </section>
@@ -81,23 +74,24 @@ const Projects = () => {
               <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search projects..."
+                placeholder={t('projects.searchPlaceholder')}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
               />
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               {['All', 'Completed', 'Ongoing', 'Planned'].map((s) => {
-                const sc = STATUS_CONFIG[s];
+                const sc = STATUS_CONFIG[s] || { label: t('projects.all'), color: 'bg-green-600 text-white', dot: 'bg-green-500' };
+                const isSelected = status === s;
                 return (
                   <button
                     key={s}
                     onClick={() => setStatus(s)}
-                    className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center gap-2 ${status === s ? (s === 'All' ? 'bg-green-600 text-white' : `${sc?.color} border font-bold`) : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                    className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center gap-2 cursor-pointer ${isSelected ? (s === 'All' ? 'bg-green-600 text-white shadow-sm' : `${sc.color} border border-transparent font-bold`) : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
                   >
-                    {sc && <span className={`w-2 h-2 rounded-full ${sc.dot}`} />}
-                    {s} ({counts[s]})
+                    {s !== 'All' && <span className={`w-2 h-2 rounded-full ${sc.dot}`} />}
+                    {s === 'All' ? t('projects.all') : sc.label} ({counts[s]})
                   </button>
                 );
               })}
@@ -124,7 +118,7 @@ const Projects = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: '-40px' }}
                     transition={{ duration: 0.5, delay: (index % 3) * 0.1 }}
-                    className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-green-200 group flex flex-col"
+                    className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-green-200 group flex flex-col overflow-hidden"
                   >
                     {/* Status bar */}
                     <div className={`h-1.5 ${sc.dot === 'bg-green-500' ? 'bg-gradient-to-r from-green-400 to-green-600' : sc.dot === 'bg-yellow-500' ? 'bg-gradient-to-r from-yellow-400 to-amber-500' : 'bg-gradient-to-r from-blue-400 to-blue-600'}`} />
@@ -135,9 +129,9 @@ const Projects = () => {
                           {sc.label}
                         </span>
                         {project.budget && (
-                          <span className="flex items-center gap-1 text-sm font-bold text-green-700">
-                            <IndianRupee size={13} />
-                            {Number(project.budget).toLocaleString()}
+                          <span className="flex items-center gap-1 text-sm font-bold text-green-700 bg-green-50 px-3 py-1 rounded-xl">
+                            <IndianRupee size={12} />
+                            {Number(project.budget).toLocaleString(language === 'hi' ? 'hi-IN' : 'en-IN')}
                           </span>
                         )}
                       </div>
@@ -160,8 +154,10 @@ const Projects = () => {
           ) : (
             <div className="text-center py-20">
               <div className="text-5xl mb-4">🔍</div>
-              <p className="text-gray-500 text-lg">No projects match your search.</p>
-              <button onClick={() => { setSearch(''); setStatus('All'); }} className="mt-4 text-green-600 hover:underline font-semibold">Clear filters</button>
+              <p className="text-gray-500 text-lg">{t('projects.noProjects')}</p>
+              <button onClick={() => { setSearch(''); setStatus('All'); }} className="mt-4 text-green-600 hover:underline font-semibold cursor-pointer">
+                {t('projects.clearFilters')}
+              </button>
             </div>
           )}
         </div>

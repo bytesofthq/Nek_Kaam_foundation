@@ -1,4 +1,4 @@
-// server.js
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -7,11 +7,11 @@ const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
-const cookieParser = require('cookie-parser'); // ✅ Add this
+const cookieParser = require('cookie-parser');
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
-// Import routes
+
 const authRoutes = require('./routes/authRoutes');
 const memberRoutes = require('./routes/memberRoutes');
 const fundRoutes = require('./routes/fundRoutes');
@@ -27,37 +27,33 @@ const settingRoutes = require('./routes/settingRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const publicRoutes = require('./routes/publicRoutes');
 
-// Import middleware
 const { errorHandler } = require('./middleware/errorMiddleware');
 
 const app = express();
 
-// Enable CORS (must be before any other middleware or routes to intercept preflight OPTIONS requests)
+
 app.use(cors({
   origin: ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174', 'http://127.0.0.1:5173', process.env.FRONTEND_URL],
-  credentials: true, // ✅ Important for cookies
+  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS']
 }));
 
-// Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
-    console.log('✅ MongoDB Connected');
     if (settingRoutes && typeof settingRoutes.initSettings === 'function') {
       settingRoutes.initSettings()
-        .then(() => console.log('✅ Default settings initialized successfully'))
-        .catch(err => console.error('❌ Failed to initialize default settings:', err));
+        .catch(err => console.error('Failed to initialize settings:', err));
     }
   })
-  .catch((err) => console.error('❌ MongoDB Connection Error:', err));
+  .catch((err) => console.error('MongoDB Connection Error:', err));
 
-// Security middleware
+
 app.use(helmet({
   contentSecurityPolicy: false,
   crossOriginEmbedderPolicy: false,
 }));
 
-// Rate limiting
+
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
@@ -65,15 +61,13 @@ const limiter = rateLimit({
 });
 app.use('/api/', limiter);
 
-// Body parsing middleware
+
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// ✅ Cookie parser middleware
 app.use(cookieParser());
 
-// Data sanitization
-// Fix for Express 5 where req.query is read-only (needed for xss-clean compatibility)
+
 app.use((req, res, next) => {
   if (req.query) {
     Object.defineProperty(req, 'query', {
@@ -89,20 +83,20 @@ app.use((req, res, next) => {
 app.use(xss());
 
 
-// Logging
+
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-// Static files
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Health check
+
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'OK', message: 'Server is running' });
 });
 
-// API Routes
+
 app.use('/api/auth', authRoutes);
 app.use('/api/members', memberRoutes);
 app.use('/api/funds', fundRoutes);
@@ -118,26 +112,19 @@ app.use('/api/settings', settingRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/public', publicRoutes);
 
-// 404 handler
+
 app.use((req, res) => {
   res.status(404).json({ success: false, message: 'Route not found' });
 });
 
-// Global error handler
+
 app.use(errorHandler);
 
-// Start server
 const PORT = process.env.PORT || 5000;
-const server = app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📝 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`🍪 Cookie-based authentication enabled`);
-});
+const server = app.listen(PORT);
 
-// Handle unhandled promise rejections
 process.on('unhandledRejection', (err) => {
-  console.log('❌ UNHANDLED REJECTION! Shutting down...');
-  console.log(err.name, err.message);
+  console.error(err.name, err.message);
   server.close(() => {
     process.exit(1);
   });

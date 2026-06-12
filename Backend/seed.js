@@ -200,7 +200,7 @@ const seed = async () => {
       },
       {
         title: 'Eid Gah Cleaning & Renovation',
-        category: 'Mosque Support',
+        category: 'Schools Support',
         amountUsed: 25000,
         purpose: 'Renovation of Mihrab and ground leveling',
         location: 'Bihar Sharif, Bihar',
@@ -294,7 +294,7 @@ const seed = async () => {
         location: 'Bihar Sharif, Bihar',
         date: new Date('2024-06-12'),
         addedBy: admin._id,
-        category: 'Mosque Support',
+        category: 'Schools Support',
         isFeatured: true
       }
     ]);
@@ -317,7 +317,7 @@ const seed = async () => {
       },
       {
         title: 'Eid Gah Renovation Complete',
-        category: 'Mosque Projects',
+        category: 'Schools Projects',
         image: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&q=80&w=600',
         addedBy: admin._id
       }

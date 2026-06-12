@@ -14,10 +14,10 @@ const Home = () => {
     <>
       <Helmet>
         <title>Nek Kaam Foundation - Building Trust Through Transparency</title>
-        <meta name="description" content="Nek Kaam Foundation helps communities, supports families, strengthens madrasas, and improves mosques through collective efforts. 100% transparent NGO." />
-        <meta name="keywords" content="Nek Kaam Foundation, NGO, charity, mosque support, madrasa, community help, Bihar" />
+        <meta name="description" content="Nek Kaam Foundation helps communities, supports families, strengthens madrasas, and improves schools through collective efforts. 100% transparent NGO." />
+        <meta name="keywords" content="Nek Kaam Foundation, NGO, charity,Schools support,community help" />
         <meta property="og:title" content="Nek Kaam Foundation" />
-        <meta property="og:description" content="Together We Help Communities, Support Families, Strengthen Madrasas, Improve Mosques and Bring Positive Change." />
+        <meta property="og:description" content="Together We Help Communities, Support Families, Strengthen Madrasas, Improve schools and Bring Positive Change." />
         <meta property="og:type" content="website" />
       </Helmet>
 

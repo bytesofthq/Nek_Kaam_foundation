@@ -78,32 +78,8 @@ const NewsPreview = () => {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              { type: 'Announcement', title: 'New Water Pump Project Launched in Rural Bihar', date: 'Dec 10, 2024', desc: 'We are thrilled to announce the launch of a new water pump installation project serving 5 villages.' },
-              { type: 'Event', title: 'Annual Foundation Meeting - All Members Invited', date: 'Dec 15, 2024', desc: 'Join us for our annual gathering to review our progress and plan for the upcoming year.' },
-              { type: 'Update', title: 'Madrasa Renovation Project Completed Successfully', date: 'Nov 28, 2024', desc: 'We successfully completed the renovation of Al-Hidaya Madrasa benefiting 200 students.' },
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.5, delay: index * 0.15 }}
-                className="bg-gray-50 rounded-2xl p-6 border border-gray-100 hover:shadow-lg hover:border-green-200 transition-all duration-300"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <span className={`text-xs font-semibold px-3 py-1 rounded-full ${tagColors[item.type] || 'bg-gray-100 text-gray-600'}`}>
-                    <Tag size={10} className="inline mr-1" />{item.type || t('newsPreview.fallbackType')}
-                  </span>
-                  <span className="text-xs text-gray-400 flex items-center gap-1">
-                    <Calendar size={12} />
-                    {item.date}
-                  </span>
-                </div>
-                <h3 className="font-bold text-gray-800 text-lg mb-2 line-clamp-2">{item.title}</h3>
-                <p className="text-gray-600 text-sm line-clamp-3">{item.desc}</p>
-              </motion.div>
-            ))}
+          <div className="text-center py-12 bg-gray-50 rounded-2xl border border-gray-100 shadow-sm max-w-lg mx-auto">
+            <p className="text-gray-500 text-sm font-medium">No recent news or updates available at this time.</p>
           </div>
         )}
       </div>

@@ -1,26 +1,32 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { authAPI } from '../services/api';
+import { authAPI, memberAPI } from '../services/api';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [admin, setAdmin] = useState(null);
+  const [member, setMember] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Check if admin is already logged in on mount
+  // Check auth state on mount
   useEffect(() => {
     const checkAuth = async () => {
       try {
         const adminToken = localStorage.getItem('adminToken');
+        const memberToken = localStorage.getItem('memberToken');
 
         if (adminToken) {
           const response = await authAPI.verifyAdmin();
           setAdmin(response.data.admin);
+        } else if (memberToken) {
+          const response = await memberAPI.getProfile();
+          setMember(response.data.member);
         }
       } catch (err) {
         console.error('Auth verification failed:', err);
         localStorage.removeItem('adminToken');
+        localStorage.removeItem('memberToken');
       } finally {
         setLoading(false);
       }
@@ -43,6 +49,20 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const memberLogin = async (fullName, phoneNumber) => {
+    try {
+      setError(null);
+      const response = await memberAPI.login({ fullName, phoneNumber });
+      localStorage.setItem('memberToken', response.data.token);
+      setMember(response.data.member);
+      return response.data;
+    } catch (err) {
+      const message = err.response?.data?.message || 'Login failed';
+      setError(message);
+      throw err;
+    }
+  };
+
   const logout = async () => {
     try {
       await authAPI.logout();
@@ -50,16 +70,21 @@ export const AuthProvider = ({ children }) => {
       console.error('Logout failed:', err);
     } finally {
       localStorage.removeItem('adminToken');
+      localStorage.removeItem('memberToken');
       setAdmin(null);
+      setMember(null);
     }
   };
 
   const value = {
     admin,
+    member,
     loading,
     error,
     isAdminLoggedIn: !!admin,
+    isMemberLoggedIn: !!member,
     adminLogin,
+    memberLogin,
     logout,
   };
 

@@ -3,13 +3,210 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Button from '../components/common/Button';
 import Loader from '../components/common/Loader';
-import { impactStoryAPI, dashboardAPI, memberAPI, projectAPI, activityAPI, fundAPI } from '../services/api';
-import { Plus, Trash2, Calendar, MapPin, User, FileText, Image as ImageIcon, Upload, X, Search, DollarSign, Award, Check, Loader2 } from 'lucide-react';
+import { impactStoryAPI, dashboardAPI, memberAPI, projectAPI, activityAPI, fundAPI, settingAPI } from '../services/api';
+import {
+  Plus, Trash2, Calendar, MapPin, User, FileText, Image as ImageIcon,
+  Upload, X, Search, DollarSign, Award, Check, Loader2,
+  BarChart3, FolderGit2, Users, Activity, HeartHandshake,
+  CircleDollarSign, Settings2, Bell, TrendingUp, Wallet,
+  ShieldAlert, Sparkles, LogOut, CheckCircle2, AlertCircle, RefreshCw
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+// A custom SVG line chart for Member Growth
+const MemberGrowthChart = ({ data }) => {
+  const months = data.months || [];
+  const cumulative = data.cumulative || [];
+  
+  if (months.length === 0) {
+    return <div className="text-gray-400 text-sm text-center py-12">No member growth data available</div>;
+  }
+  
+  const maxVal = Math.max(...cumulative, 10);
+  const chartHeight = 180;
+  const chartWidth = 500;
+  const padding = 35;
+  
+  const points = cumulative.map((val, idx) => {
+    const x = padding + (idx * (chartWidth - padding * 2)) / (cumulative.length - 1);
+    const y = chartHeight - padding - (val * (chartHeight - padding * 2)) / maxVal;
+    return { x, y, val, label: months[idx] };
+  });
+  
+  const pathD = points.reduce((acc, p, idx) => {
+    return acc + `${idx === 0 ? 'M' : 'L'} ${p.x} ${p.y}`;
+  }, '');
+  
+  const areaD = points.length > 0 
+    ? `${pathD} L ${points[points.length - 1].x} ${chartHeight - padding} L ${points[0].x} ${chartHeight - padding} Z` 
+    : '';
+
+  return (
+    <div className="w-full bg-white p-5 rounded-2xl border border-gray-150 shadow-sm transition hover:shadow-md">
+      <div className="flex justify-between items-center mb-5">
+        <h4 className="text-sm font-bold text-gray-700 flex items-center gap-1.5">
+          <TrendingUp size={16} className="text-emerald-500" /> Member Growth Trend
+        </h4>
+        <span className="text-[10px] font-bold tracking-wide uppercase px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded-full">Cumulative</span>
+      </div>
+      <div className="relative w-full overflow-hidden">
+        <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} className="w-full h-auto overflow-visible">
+          <defs>
+            <linearGradient id="growthGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#10b981" stopOpacity="0.2" />
+              <stop offset="100%" stopColor="#10b981" stopOpacity="0.0" />
+            </linearGradient>
+          </defs>
+          
+          {[0, 0.25, 0.5, 0.75, 1].map((ratio, i) => {
+            const y = padding + ratio * (chartHeight - padding * 2);
+            const val = Math.round(maxVal * (1 - ratio));
+            return (
+              <g key={i}>
+                <line x1={padding} y1={y} x2={chartWidth - padding} y2={y} stroke="#f1f5f9" strokeWidth="1" strokeDasharray="4" />
+                <text x={padding - 8} y={y + 4} textAnchor="end" fontSize="10" className="fill-gray-400 font-semibold">{val}</text>
+              </g>
+            );
+          })}
+          
+          {areaD && <path d={areaD} fill="url(#growthGrad)" />}
+          {pathD && <path d={pathD} fill="none" stroke="#10b981" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />}
+          
+          {points.map((p, i) => (
+            <g key={i} className="group cursor-pointer">
+              <circle cx={p.x} cy={p.y} r="4.5" className="fill-white stroke-emerald-500 stroke-2 transition duration-200 group-hover:r-6 group-hover:fill-emerald-500" />
+              <text x={p.x} y={p.y - 12} textAnchor="middle" fontSize="9" className="fill-gray-700 font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-200">{p.val}</text>
+              <text x={p.x} y={chartHeight - 8} textAnchor="middle" fontSize="9" className="fill-gray-400 font-bold">{p.label}</text>
+            </g>
+          ))}
+        </svg>
+      </div>
+    </div>
+  );
+};
+
+// A custom SVG bar chart for Monthly Inflow vs Outflow
+const MonthlyFundsChart = ({ data }) => {
+  const months = data.months || [];
+  const collections = data.collections || [];
+  const usages = data.usages || [];
+  
+  if (months.length === 0) {
+    return <div className="text-gray-400 text-sm text-center py-12">No financial data available</div>;
+  }
+  
+  const maxVal = Math.max(...collections, ...usages, 1000);
+  const chartHeight = 180;
+  const chartWidth = 500;
+  const padding = 35;
+  const barWidth = 10;
+  const barGap = 4;
+  
+  const points = months.map((month, idx) => {
+    const x = padding + (idx * (chartWidth - padding * 2)) / (months.length - 1);
+    const colVal = collections[idx] || 0;
+    const useVal = usages[idx] || 0;
+    const colHeight = (colVal * (chartHeight - padding * 2)) / maxVal;
+    const useHeight = (useVal * (chartHeight - padding * 2)) / maxVal;
+    
+    return { month, x, colHeight, useHeight, colVal, useVal };
+  });
+  
+  return (
+    <div className="w-full bg-white p-5 rounded-2xl border border-gray-150 shadow-sm transition hover:shadow-md">
+      <div className="flex justify-between items-center mb-5">
+        <h4 className="text-sm font-bold text-gray-700 flex items-center gap-1.5">
+          <CircleDollarSign size={16} className="text-green-600" /> Monthly Collections vs Expenses
+        </h4>
+        <div className="flex items-center gap-3">
+          <span className="flex items-center gap-1 text-[10px] font-bold text-gray-500 uppercase">
+            <span className="w-2.5 h-2.5 bg-emerald-500 rounded-sm"></span> Inflow
+          </span>
+          <span className="flex items-center gap-1 text-[10px] font-bold text-gray-500 uppercase">
+            <span className="w-2.5 h-2.5 bg-rose-500 rounded-sm"></span> Outflow
+          </span>
+        </div>
+      </div>
+      <div className="relative w-full overflow-hidden">
+        <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} className="w-full h-auto overflow-visible">
+          {[0, 0.25, 0.5, 0.75, 1].map((ratio, i) => {
+            const y = padding + ratio * (chartHeight - padding * 2);
+            const val = Math.round(maxVal * (1 - ratio));
+            return (
+              <g key={i}>
+                <line x1={padding} y1={y} x2={chartWidth - padding} y2={y} stroke="#f1f5f9" strokeWidth="1" strokeDasharray="4" />
+                <text x={padding - 8} y={y + 4} textAnchor="end" fontSize="9" className="fill-gray-400 font-semibold">₹{val >= 1000 ? `${(val / 1000).toFixed(0)}k` : val}</text>
+              </g>
+            );
+          })}
+          
+          {points.map((p, i) => {
+            const colX = p.x - barWidth - barGap / 2;
+            const useX = p.x + barGap / 2;
+            const colY = chartHeight - padding - p.colHeight;
+            const useY = chartHeight - padding - p.useHeight;
+            
+            return (
+              <g key={i} className="group cursor-pointer">
+                <rect x={colX} y={colY} width={barWidth} height={p.colHeight} rx="2.5" className="fill-emerald-500 hover:fill-emerald-600 transition-colors duration-200" />
+                <g className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <rect x={colX - 20} y={colY - 22} width="50" height="15" rx="3" className="fill-gray-800" />
+                  <text x={colX + 5} y={colY - 12} textAnchor="middle" fontSize="8" className="fill-white font-bold">₹{p.colVal}</text>
+                </g>
+                
+                <rect x={useX} y={useY} width={barWidth} height={p.useHeight} rx="2.5" className="fill-rose-500 hover:fill-rose-600 transition-colors duration-200" />
+                <g className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <rect x={useX - 20} y={useY - 22} width="50" height="15" rx="3" className="fill-gray-800" />
+                  <text x={useX + 5} y={useY - 12} textAnchor="middle" fontSize="8" className="fill-white font-bold">₹{p.useVal}</text>
+                </g>
+                
+                <text x={p.x} y={chartHeight - 8} textAnchor="middle" fontSize="9" className="fill-gray-400 font-bold">{p.month}</text>
+              </g>
+            );
+          })}
+        </svg>
+      </div>
+    </div>
+  );
+};
 
 const AdminDashboard = () => {
-  const { admin, isAdminLoggedIn } = useAuth();
+  const { admin, isAdminLoggedIn, logout } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
+
+  // Overview stats & graph state
+  const [stats, setStats] = useState({
+    totalProjects: 0,
+    totalMembers: 0,
+    totalActivities: 0,
+    totalFundsReceived: 0,
+    totalFundsUsed: 0,
+    currentBalance: 0,
+    unreadMessages: 0,
+    projectStats: { Planned: 0, Ongoing: 0, Completed: 0 }
+  });
+  const [monthlyFunds, setMonthlyFunds] = useState({ months: [], collections: [], usages: [] });
+  const [memberGrowth, setMemberGrowth] = useState({ months: [], monthly: [], cumulative: [] });
+  const [categoryUsage, setCategoryUsage] = useState([]);
+  const [recentData, setRecentData] = useState({ activities: [], recentMembers: [], recentMessages: [] });
+  const [loadingOverviewData, setLoadingOverviewData] = useState(false);
+
+  // Settings state
+  const [settingsForm, setSettingsForm] = useState({
+    siteName: '',
+    siteTagline: '',
+    siteEmail: '',
+    sitePhone: '',
+    siteAddress: '',
+    metaDescription: '',
+    metaKeywords: '',
+    footerText: '',
+    darkModeEnabled: false,
+    maintenanceMode: false
+  });
+  const [loadingSettings, setLoadingSettings] = useState(false);
+  const [submittingSettings, setSubmittingSettings] = useState(false);
 
   // Impact Stories state
   const [stories, setStories] = useState([]);
@@ -28,12 +225,6 @@ const AdminDashboard = () => {
   const [formError, setFormError] = useState(null);
   const [formSuccess, setFormSuccess] = useState(null);
   const [submittingStory, setSubmittingStory] = useState(false);
-  const [stats, setStats] = useState({
-    totalProjects: 0,
-    totalMembers: 0,
-    totalActivities: 0,
-    totalFundsReceived: 0
-  });
 
   // Members state
   const [members, setMembers] = useState([]);
@@ -115,6 +306,7 @@ const AdminDashboard = () => {
     date: new Date().toISOString().split('T')[0]
   });
   const [submittingExpense, setSubmittingExpense] = useState(false);
+
   const fetchDashboardStats = async () => {
     try {
       const res = await dashboardAPI.getStats();
@@ -123,6 +315,70 @@ const AdminDashboard = () => {
       }
     } catch (error) {
       console.log("Error loading dashboard stats:", error);
+    }
+  };
+
+  const fetchOverviewData = async () => {
+    setLoadingOverviewData(true);
+    try {
+      const [fundsRes, growthRes, categoryRes, recentRes] = await Promise.all([
+        dashboardAPI.getMonthlyFunds(),
+        dashboardAPI.getMemberGrowth(),
+        dashboardAPI.getCategoryUsage(),
+        dashboardAPI.getRecentActivities()
+      ]);
+      
+      if (fundsRes.data.success) setMonthlyFunds(fundsRes.data.data);
+      if (growthRes.data.success) setMemberGrowth(growthRes.data.data);
+      if (categoryRes.data.success) setCategoryUsage(categoryRes.data.data);
+      if (recentRes.data.success) setRecentData(recentRes.data.data);
+    } catch (error) {
+      console.error("Error loading overview details:", error);
+    } finally {
+      setLoadingOverviewData(false);
+    }
+  };
+
+  const fetchSettings = async () => {
+    setLoadingSettings(true);
+    try {
+      const response = await settingAPI.getSettings();
+      if (response.data && response.data.success) {
+        setSettingsForm({
+          siteName: response.data.settings.siteName || '',
+          siteTagline: response.data.settings.siteTagline || '',
+          siteEmail: response.data.settings.siteEmail || '',
+          sitePhone: response.data.settings.sitePhone || '',
+          siteAddress: response.data.settings.siteAddress || '',
+          metaDescription: response.data.settings.metaDescription || '',
+          metaKeywords: response.data.settings.metaKeywords || '',
+          footerText: response.data.settings.footerText || '',
+          darkModeEnabled: response.data.settings.darkModeEnabled || false,
+          maintenanceMode: response.data.settings.maintenanceMode || false
+        });
+      }
+    } catch (error) {
+      console.error('Failed to fetch settings:', error);
+    } finally {
+      setLoadingSettings(false);
+    }
+  };
+
+  const handleUpdateSettings = async (e) => {
+    e.preventDefault();
+    setSubmittingSettings(true);
+    setFormError(null);
+    setFormSuccess(null);
+    try {
+      const res = await settingAPI.updateSettings(settingsForm);
+      if (res.data.success) {
+        setFormSuccess('Settings updated successfully!');
+        fetchSettings();
+      }
+    } catch (error) {
+      setFormError(error.response?.data?.message || 'Failed to update settings');
+    } finally {
+      setSubmittingSettings(false);
     }
   };
 
@@ -526,7 +782,10 @@ const AdminDashboard = () => {
   };
 
   useEffect(() => {
-    if (activeTab === 'members') {
+    if (activeTab === 'overview') {
+      fetchDashboardStats();
+      fetchOverviewData();
+    } else if (activeTab === 'members') {
       fetchMembers();
     } else if (activeTab === 'projects') {
       fetchProjects();
@@ -535,6 +794,8 @@ const AdminDashboard = () => {
     } else if (activeTab === 'funds') {
       fetchCollections();
       fetchExpenses();
+    } else if (activeTab === 'settings') {
+      fetchSettings();
     }
   }, [activeTab, memberPage, searchQuery, projectPage, activityPage]);
 
@@ -595,13 +856,13 @@ const AdminDashboard = () => {
   };
 
   const adminTabs = [
-    { id: 'overview', label: 'Overview' },
-    { id: 'projects', label: 'Projects' },
-    { id: 'members', label: 'Members' },
-    { id: 'activities', label: 'Activities' },
-    { id: 'impactStories', label: 'Impact Stories' },
-    { id: 'funds', label: 'Funds' },
-    { id: 'settings', label: 'Settings' },
+    { id: 'overview', label: 'Overview', icon: <BarChart3 size={18} /> },
+    { id: 'projects', label: 'Projects', icon: <FolderGit2 size={18} /> },
+    { id: 'members', label: 'Members', icon: <Users size={18} /> },
+    { id: 'activities', label: 'Activities', icon: <Activity size={18} /> },
+    { id: 'impactStories', label: 'Impact Stories', icon: <HeartHandshake size={18} /> },
+    { id: 'funds', label: 'Funds', icon: <CircleDollarSign size={18} /> },
+    { id: 'settings', label: 'Settings', icon: <Settings2 size={18} /> },
   ];
 
   useEffect(() => {
@@ -610,34 +871,54 @@ const AdminDashboard = () => {
     }
   }, [isAdminLoggedIn]);
 
+  useEffect(() => {
+    setFormSuccess(null);
+    setFormError(null);
+  }, [activeTab]);
+
   if (!isAdminLoggedIn) {
     return null;
   }
   return (
     <div className="bg-gray-50 min-h-screen">
       {/* Header */}
-      <div className="bg-gradient-to-r from-green-600 to-green-800 text-white py-8 shadow-md">
-        <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
+      <div className="bg-gradient-to-r from-green-600 via-emerald-700 to-teal-800 text-white py-8 shadow-md relative overflow-hidden">
+        <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:16px_16px] pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative z-10">
           <div>
-            <h1 className="text-4xl font-bold mb-2">Admin Dashboard</h1>
-            <p className="text-green-100">Welcome back, {admin?.name || admin?.email}</p>
+            <h1 className="text-3xl md:text-4xl font-extrabold mb-2 tracking-tight flex items-center gap-2">
+              <Sparkles className="text-yellow-300 animate-pulse" size={28} /> Admin Console
+            </h1>
+            <p className="text-green-100/90 text-sm font-medium">Welcome back, {admin?.name || admin?.email}</p>
+          </div>
+          <div className="flex items-center gap-3 w-full md:w-auto">
+            <span className="bg-white/10 backdrop-blur-md border border-white/20 px-3 py-1.5 rounded-xl text-xs font-semibold text-white flex items-center gap-1.5 shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-green-400 animate-ping" /> Live Connected
+            </span>
+            <button
+              onClick={logout}
+              className="bg-rose-600 hover:bg-rose-700 active:scale-95 text-white text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-1.5 transition-all shadow-md hover:shadow-lg border border-rose-500/30 cursor-pointer ml-auto md:ml-0"
+            >
+              <LogOut size={14} /> Sign Out
+            </button>
           </div>
         </div>
       </div>
 
       {/* Navigation Tabs */}
       <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-xl shadow-sm border border-gray-100">
+        <div className="flex flex-wrap gap-2 mb-8 bg-white/70 backdrop-blur-md p-2 rounded-2xl shadow-sm border border-gray-200/80">
           {adminTabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-5 py-2.5 rounded-lg font-semibold transition duration-200 ${
+              className={`px-4 py-2.5 rounded-xl font-bold text-xs tracking-wide uppercase transition duration-200 flex items-center gap-2 cursor-pointer ${
                 activeTab === tab.id
-                  ? 'bg-green-600 text-white shadow-sm'
-                  : 'text-gray-600 hover:text-green-600 hover:bg-green-50'
+                  ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/10 translate-y-[-1px]'
+                  : 'text-gray-600 hover:text-emerald-600 hover:bg-emerald-50/70'
               }`}
             >
+              {tab.icon}
               {tab.label}
             </button>
           ))}
@@ -646,24 +927,251 @@ const AdminDashboard = () => {
         {/* Content */}
         <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
           {activeTab === 'overview' && (
-            <div>
-              <h2 className="text-2xl font-bold mb-6 text-gray-800">Dashboard Overview</h2>
+            <div className="space-y-8">
+              {/* Financial Balance Summary Card */}
+              <div className="bg-gradient-to-br from-emerald-600 to-teal-800 rounded-3xl p-6 md:p-8 text-white shadow-xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-2xl transform translate-x-1/3 -translate-y-1/3" />
+                <div className="max-w-4xl relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                  <div>
+                    <span className="text-xs font-bold tracking-widest text-emerald-200/90 uppercase flex items-center gap-1.5 mb-1.5">
+                      <Wallet size={14} /> Available Balance
+                    </span>
+                    <h3 className="text-4xl md:text-5xl font-black tracking-tight">
+                      ₹{((stats.totalFundsReceived || 0) - (stats.totalFundsUsed || 0)).toLocaleString()}
+                    </h3>
+                    <p className="text-emerald-100/70 text-xs font-semibold mt-2">Global Trust Net Reserves</p>
+                  </div>
+                  
+                  <div className="w-full md:w-3/5 bg-white/10 backdrop-blur-md border border-white/10 p-5 rounded-2xl">
+                    <div className="flex justify-between items-center text-xs font-bold mb-2 text-emerald-100/90">
+                      <span>Inflow (Received)</span>
+                      <span>Outflow (Spent)</span>
+                    </div>
+                    <div className="flex justify-between items-baseline mb-4">
+                      <span className="text-lg font-black text-white">₹{(stats.totalFundsReceived || 0).toLocaleString()}</span>
+                      <span className="text-lg font-black text-rose-300">₹{(stats.totalFundsUsed || 0).toLocaleString()}</span>
+                    </div>
+                    <div className="w-full bg-white/15 h-3 rounded-full overflow-hidden flex">
+                      <div 
+                        className="bg-emerald-400 h-full transition-all duration-500" 
+                        style={{ width: `${stats.totalFundsReceived ? Math.max(10, Math.min(90, (1 - (stats.totalFundsUsed || 0) / stats.totalFundsReceived) * 100)) : 100}%` }} 
+                      />
+                      <div className="bg-rose-400 h-full flex-grow transition-all duration-500" />
+                    </div>
+                    <div className="flex justify-between items-center text-[10px] font-bold text-emerald-200/80 mt-2">
+                      <span>{(stats.totalFundsReceived && stats.totalFundsUsed) ? `${Math.round((1 - (stats.totalFundsUsed / stats.totalFundsReceived)) * 100)}% Reserves` : '100% Reserves'}</span>
+                      <span>{(stats.totalFundsReceived && stats.totalFundsUsed) ? `${Math.round((stats.totalFundsUsed / stats.totalFundsReceived) * 100)}% Used` : '0% Used'}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Stats Grid */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div className="bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-xl p-6 transition hover:shadow-md">
-                  <p className="text-gray-600 text-sm font-semibold">Total Projects</p>
-                  <p className="text-3xl font-extrabold text-green-700 mt-2">{stats.totalProjects}</p>
+                <div className="bg-white border border-gray-150 rounded-2xl p-6 shadow-sm transition hover:shadow-md flex items-center gap-4">
+                  <div className="p-3.5 bg-green-50 text-green-600 rounded-xl">
+                    <FolderGit2 size={24} />
+                  </div>
+                  <div>
+                    <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">Total Projects</p>
+                    <p className="text-2xl font-black text-gray-800 mt-1">{stats.totalProjects || 0}</p>
+                  </div>
                 </div>
-                <div className="bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-xl p-6 transition hover:shadow-md">
-                  <p className="text-gray-600 text-sm font-semibold">Total Members</p>
-                  <p className="text-3xl font-extrabold text-green-700 mt-2">{stats.totalMembers}</p>
+
+                <div className="bg-white border border-gray-150 rounded-2xl p-6 shadow-sm transition hover:shadow-md flex items-center gap-4">
+                  <div className="p-3.5 bg-blue-50 text-blue-600 rounded-xl">
+                    <Users size={24} />
+                  </div>
+                  <div>
+                    <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">Total Members</p>
+                    <p className="text-2xl font-black text-gray-800 mt-1">{stats.totalMembers || 0}</p>
+                  </div>
                 </div>
-                <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 border border-yellow-200 rounded-xl p-6 transition hover:shadow-md">
-                  <p className="text-gray-600 text-sm font-semibold">Active Activities</p>
-                  <p className="text-3xl font-extrabold text-yellow-700 mt-2">{stats.totalActivities}</p>
+
+                <div className="bg-white border border-gray-150 rounded-2xl p-6 shadow-sm transition hover:shadow-md flex items-center gap-4">
+                  <div className="p-3.5 bg-yellow-50 text-yellow-600 rounded-xl">
+                    <Activity size={24} />
+                  </div>
+                  <div>
+                    <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">Activities</p>
+                    <p className="text-2xl font-black text-gray-800 mt-1">{stats.totalActivities || 0}</p>
+                  </div>
                 </div>
-                <div className="bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 rounded-xl p-6 transition hover:shadow-md">
-                  <p className="text-gray-600 text-sm font-semibold">Funds Collected</p>
-                  <p className="text-3xl font-extrabold text-purple-700 mt-2">₹{stats.totalFundsReceived?.toLocaleString() || "0"}</p>
+
+                <div className="bg-white border border-gray-150 rounded-2xl p-6 shadow-sm transition hover:shadow-md flex items-center gap-4 relative">
+                  <div className="p-3.5 bg-purple-50 text-purple-600 rounded-xl">
+                    <Bell size={24} />
+                  </div>
+                  <div>
+                    <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">Unread Mail</p>
+                    <p className="text-2xl font-black text-gray-800 mt-1">{stats.unreadMessages || 0}</p>
+                  </div>
+                  {stats.unreadMessages > 0 && (
+                    <span className="absolute top-4 right-4 bg-rose-500 text-white font-bold text-[10px] w-5 h-5 rounded-full flex items-center justify-center animate-bounce">
+                      {stats.unreadMessages}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Charts Panel */}
+              {loadingOverviewData ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-white border border-gray-150 p-6 rounded-2xl shadow-sm h-64 flex items-center justify-center"><Loader /></div>
+                  <div className="bg-white border border-gray-150 p-6 rounded-2xl shadow-sm h-64 flex items-center justify-center"><Loader /></div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <MonthlyFundsChart data={monthlyFunds} />
+                  <MemberGrowthChart data={memberGrowth} />
+                </div>
+              )}
+
+              {/* Status and Usage breakdown lists */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Project Status */}
+                <div className="bg-white border border-gray-150 p-6 rounded-2xl shadow-sm md:col-span-1">
+                  <h4 className="text-sm font-bold text-gray-700 mb-5 flex items-center gap-1.5 border-b border-gray-100 pb-3">
+                    <Sparkles size={16} className="text-indigo-500" /> Project Allocations
+                  </h4>
+                  <div className="space-y-4">
+                    {['Planned', 'Ongoing', 'Completed'].map((status) => {
+                      const count = stats.projectStats?.[status] || 0;
+                      const total = stats.totalProjects || 1;
+                      const pct = Math.round((count / total) * 100);
+                      const barColors = {
+                        Planned: 'bg-yellow-400',
+                        Ongoing: 'bg-blue-500',
+                        Completed: 'bg-emerald-500'
+                      };
+                      const textColors = {
+                        Planned: 'text-yellow-600 bg-yellow-50 border-yellow-200',
+                        Ongoing: 'text-blue-600 bg-blue-50 border-blue-200',
+                        Completed: 'text-emerald-600 bg-emerald-50 border-emerald-200'
+                      };
+
+                      return (
+                        <div key={status} className="p-3.5 bg-gray-50/50 border border-gray-100 rounded-xl">
+                          <div className="flex justify-between items-center mb-1.5">
+                            <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full border ${textColors[status]}`}>{status}</span>
+                            <span className="text-xs font-bold text-gray-600">{count} ({pct}%)</span>
+                          </div>
+                          <div className="w-full bg-gray-200 h-2 rounded-full overflow-hidden">
+                            <div className={`h-full ${barColors[status]}`} style={{ width: `${pct}%` }} />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Expense Breakdown */}
+                <div className="bg-white border border-gray-150 p-6 rounded-2xl shadow-sm md:col-span-2">
+                  <h4 className="text-sm font-bold text-gray-700 mb-5 flex items-center gap-1.5 border-b border-gray-100 pb-3">
+                    <CircleDollarSign size={16} className="text-rose-500" /> Category-Wise Expense Distribution
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-56 overflow-y-auto pr-1">
+                    {categoryUsage.length > 0 ? (
+                      categoryUsage.map((usage) => {
+                        const totalExpense = stats.totalFundsUsed || 1;
+                        const pct = Math.round(((usage.total || 0) / totalExpense) * 100);
+                        return (
+                          <div key={usage._id} className="p-3 bg-gray-50/50 border border-gray-100 rounded-xl">
+                            <div className="flex justify-between items-center mb-1 text-[11px] font-bold text-gray-600">
+                              <span className="truncate max-w-[120px]">{usage._id || 'Other'}</span>
+                              <span>₹{(usage.total || 0).toLocaleString()} ({pct}%)</span>
+                            </div>
+                            <div className="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden">
+                              <div className="h-full bg-rose-500" style={{ width: `${pct}%` }} />
+                            </div>
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <p className="text-gray-400 text-xs text-center col-span-2 py-10">No categories distribution data logged.</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Audit logs Hub */}
+              <div className="border-t border-gray-150 pt-8">
+                <h3 className="text-lg font-black text-gray-800 mb-6 flex items-center gap-2">
+                  <ShieldAlert className="text-emerald-600" /> Audit Log & Recent Platform Activities
+                </h3>
+                
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  {/* Recent Activities */}
+                  <div className="bg-white border border-gray-150 p-5 rounded-2xl shadow-sm">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-4 flex items-center gap-1">
+                      <Activity size={14} className="text-yellow-600" /> Activities Posted
+                    </h4>
+                    <div className="space-y-3.5">
+                      {recentData.activities?.length > 0 ? (
+                        recentData.activities.map((act) => (
+                          <div key={act._id} className="flex gap-3 text-xs border-b border-gray-50 pb-3 last:border-0 last:pb-0">
+                            <Calendar size={14} className="text-gray-400 shrink-0 mt-0.5" />
+                            <div className="min-w-0 flex-grow">
+                              <p className="font-bold text-gray-800 truncate">{act.title}</p>
+                              <p className="text-gray-400 mt-0.5">{act.location} • {new Date(act.date).toLocaleDateString()}</p>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <p className="text-gray-400 text-xs text-center py-6">No recent activities found.</p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* New Members */}
+                  <div className="bg-white border border-gray-150 p-5 rounded-2xl shadow-sm">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-4 flex items-center gap-1">
+                      <Users size={14} className="text-blue-600" /> Newly Registered
+                    </h4>
+                    <div className="space-y-3.5">
+                      {recentData.recentMembers?.length > 0 ? (
+                        recentData.recentMembers.map((memb) => (
+                          <div key={memb._id} className="flex gap-3 text-xs border-b border-gray-50 pb-3 last:border-0 last:pb-0">
+                            <User size={14} className="text-gray-400 shrink-0 mt-0.5" />
+                            <div className="min-w-0 flex-grow">
+                              <p className="font-bold text-gray-800 truncate">{memb.fullName}</p>
+                              <p className="text-gray-400 mt-0.5">{memb.city}, {memb.state} • {memb.phoneNumber}</p>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <p className="text-gray-400 text-xs text-center py-6">No new members registered.</p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Messages */}
+                  <div className="bg-white border border-gray-150 p-5 rounded-2xl shadow-sm">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-4 flex items-center gap-1">
+                      <Bell size={14} className="text-purple-600" /> Recent Messages
+                    </h4>
+                    <div className="space-y-3.5">
+                      {recentData.recentMessages?.length > 0 ? (
+                        recentData.recentMessages.map((msg) => (
+                          <div key={msg._id} className="flex gap-3 text-xs border-b border-gray-50 pb-3 last:border-0 last:pb-0 relative">
+                            <FileText size={14} className="text-gray-400 shrink-0 mt-0.5" />
+                            <div className="min-w-0 flex-grow">
+                              <div className="flex justify-between items-baseline">
+                                <p className="font-bold text-gray-800 truncate">{msg.name}</p>
+                                {!msg.isRead && (
+                                  <span className="shrink-0 w-2 h-2 rounded-full bg-rose-500 ml-1.5" />
+                                )}
+                              </div>
+                              <p className="text-gray-500 mt-0.5 truncate">{msg.message}</p>
+                              <p className="text-[10px] text-gray-400 mt-0.5">{msg.email}</p>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <p className="text-gray-400 text-xs text-center py-6">No incoming messages.</p>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -2117,9 +2625,200 @@ const AdminDashboard = () => {
           )}
 
           {activeTab === 'settings' && (
-            <div>
-              <h2 className="text-2xl font-bold mb-6">Settings</h2>
-              <p className="text-gray-600">Admin settings would go here</p>
+            <div className="max-w-4xl mx-auto">
+              <div className="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+                    <Settings2 className="text-green-600" /> Platform Settings
+                  </h2>
+                  <p className="text-sm text-gray-500 mt-1">Manage global platform configs, branding, contact details, and SEO metadata.</p>
+                </div>
+                {formSuccess && activeTab === 'settings' && (
+                  <div className="bg-emerald-50 text-emerald-700 text-xs font-semibold px-3 py-1.5 rounded-lg border border-emerald-200 flex items-center gap-1.5 animate-fade-in">
+                    <CheckCircle2 size={14} /> {formSuccess}
+                  </div>
+                )}
+              </div>
+
+              {loadingSettings ? (
+                <div className="flex justify-center py-12">
+                  <Loader />
+                </div>
+              ) : (
+                <form onSubmit={handleUpdateSettings} className="space-y-8">
+                  {formError && (
+                    <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-r-lg text-sm flex items-center gap-2">
+                      <AlertCircle size={18} /> {formError}
+                    </div>
+                  )}
+
+                  {/* General Configuration */}
+                  <div className="bg-gray-50 border border-gray-200/80 rounded-2xl p-6 shadow-sm">
+                    <h3 className="text-md font-bold text-gray-800 mb-4 flex items-center gap-2 border-b border-gray-200/50 pb-2">
+                      <Sparkles size={18} className="text-emerald-500" /> General Configuration
+                    </h3>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <label className="block text-gray-700 font-bold mb-1 text-xs uppercase tracking-wider">Site Name</label>
+                        <input
+                          type="text"
+                          value={settingsForm.siteName}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, siteName: e.target.value })}
+                          required
+                          className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-600 transition text-sm font-semibold text-gray-800"
+                          placeholder="e.g. Nek Kaam Foundation"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-gray-700 font-bold mb-1 text-xs uppercase tracking-wider">Site Tagline</label>
+                        <input
+                          type="text"
+                          value={settingsForm.siteTagline}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, siteTagline: e.target.value })}
+                          required
+                          className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-600 transition text-sm font-semibold text-gray-800"
+                          placeholder="e.g. Together We Help Communities"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                      <div>
+                        <label className="block text-gray-700 font-bold mb-1 text-xs uppercase tracking-wider">Primary Email Address</label>
+                        <input
+                          type="email"
+                          value={settingsForm.siteEmail}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, siteEmail: e.target.value })}
+                          required
+                          className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-600 transition text-sm font-semibold text-gray-800"
+                          placeholder="e.g. info@nekkaamfoundation.org"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-gray-700 font-bold mb-1 text-xs uppercase tracking-wider">Contact Phone Number</label>
+                        <input
+                          type="text"
+                          value={settingsForm.sitePhone}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, sitePhone: e.target.value })}
+                          required
+                          className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-600 transition text-sm font-semibold text-gray-800"
+                          placeholder="e.g. +91XXXXXXXXXX"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mt-4">
+                      <label className="block text-gray-700 font-bold mb-1 text-xs uppercase tracking-wider">Physical Office Address</label>
+                      <input
+                        type="text"
+                        value={settingsForm.siteAddress}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, siteAddress: e.target.value })}
+                        required
+                        className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-600 transition text-sm font-semibold text-gray-800"
+                        placeholder="Office Address"
+                      />
+                    </div>
+
+                    {/* Toggles */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 pt-4 border-t border-gray-200/50">
+                      <div className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-2xl shadow-sm">
+                        <div>
+                          <p className="text-sm font-bold text-gray-800">Maintenance Mode</p>
+                          <p className="text-xs text-gray-500">Temporarily freeze platform public access</p>
+                        </div>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={settingsForm.maintenanceMode}
+                            onChange={(e) => setSettingsForm({ ...settingsForm, maintenanceMode: e.target.checked })}
+                            className="sr-only peer"
+                          />
+                          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                        </label>
+                      </div>
+
+                      <div className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-2xl shadow-sm">
+                        <div>
+                          <p className="text-sm font-bold text-gray-800">Dark Theme Enablement</p>
+                          <p className="text-xs text-gray-500">Enable site-wide dark mode for users</p>
+                        </div>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={settingsForm.darkModeEnabled}
+                            onChange={(e) => setSettingsForm({ ...settingsForm, darkModeEnabled: e.target.checked })}
+                            className="sr-only peer"
+                          />
+                          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* SEO Configuration */}
+                  <div className="bg-gray-50 border border-gray-200/80 rounded-2xl p-6 shadow-sm">
+                    <h3 className="text-md font-bold text-gray-800 mb-4 flex items-center gap-2 border-b border-gray-200/50 pb-2">
+                      <Award size={18} className="text-blue-500" /> SEO & Meta Configuration
+                    </h3>
+
+                    <div>
+                      <label className="block text-gray-700 font-bold mb-1 text-xs uppercase tracking-wider">Meta Description</label>
+                      <textarea
+                        value={settingsForm.metaDescription}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, metaDescription: e.target.value })}
+                        rows={2}
+                        className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-600 transition text-sm font-semibold text-gray-800"
+                        placeholder="Site SEO description..."
+                      />
+                    </div>
+
+                    <div className="mt-4">
+                      <label className="block text-gray-700 font-bold mb-1 text-xs uppercase tracking-wider">Meta Keywords (Comma separated)</label>
+                      <input
+                        type="text"
+                        value={settingsForm.metaKeywords}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, metaKeywords: e.target.value })}
+                        className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-600 transition text-sm font-semibold text-gray-800"
+                        placeholder="NGO, trust, transparent charity"
+                      />
+                    </div>
+
+                    <div className="mt-4">
+                      <label className="block text-gray-700 font-bold mb-1 text-xs uppercase tracking-wider">Footer Copyright Statement</label>
+                      <input
+                        type="text"
+                        value={settingsForm.footerText}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, footerText: e.target.value })}
+                        required
+                        className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-600 transition text-sm font-semibold text-gray-800"
+                        placeholder="Footer copyright text"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4 justify-end">
+                    <Button
+                      type="submit"
+                      disabled={submittingSettings}
+                      variant="primary"
+                      className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 flex items-center gap-2 text-white font-bold text-xs uppercase tracking-wide cursor-pointer rounded-xl transition shadow-md"
+                    >
+                      {submittingSettings ? (
+                        <>
+                          <Loader2 size={16} className="animate-spin" /> Saving Settings...
+                        </>
+                      ) : (
+                        <>
+                          <Check size={16} /> Save Changes
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </form>
+              )}
             </div>
           )}
         </div>

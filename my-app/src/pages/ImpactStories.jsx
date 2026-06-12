@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { impactStoryAPI } from '../services/api';
 import Loader from '../components/common/Loader';
-import { Calendar, MapPin, User, Heart, Sparkles } from 'lucide-react';
+import { Calendar, MapPin, Heart, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
+import { useTranslation } from '../i18n/useTranslation';
 
 const cardVariants = {
   hidden: { opacity: 0, y: 30 },
@@ -19,6 +20,7 @@ const cardVariants = {
 };
 
 const ImpactStories = () => {
+  const { t, language } = useTranslation();
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -63,7 +65,7 @@ const ImpactStories = () => {
   return (
     <div className="bg-gray-50 min-h-screen">
       <Helmet>
-        <title>Impact Stories - Nek Kaam Foundation</title>
+        <title>{t('impactStories.tag')} - Nek Kaam Foundation</title>
         <meta name="description" content="Read real stories of transformation and impact created by Nek Kaam Foundation in Bihar communities." />
       </Helmet>
 
@@ -73,11 +75,11 @@ const ImpactStories = () => {
         <div className="max-w-7xl mx-auto px-4 relative">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <span className="inline-flex items-center gap-1 bg-white/15 font-semibold text-sm px-4 py-1.5 rounded-full mb-4">
-              <Sparkles size={14} className="text-yellow-300" /> Real Impact
+              <Sparkles size={14} className="text-yellow-300" /> {t('impactStories.tag')}
             </span>
-            <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Stories of Transformation</h1>
+            <h1 className="text-4xl md:text-5xl font-extrabold mb-4">{t('impactStories.title')}</h1>
             <p className="text-green-100 text-xl max-w-2xl">
-              Every donation and project creates a real change. Read the stories of families and communities touched by our work.
+              {t('impactStories.subtitle')}
             </p>
           </motion.div>
         </div>
@@ -145,7 +147,7 @@ const ImpactStories = () => {
                             {story.personName.charAt(0)}
                           </div>
                           <div>
-                            <p className="text-xs text-gray-400 font-medium">Beneficiary</p>
+                            <p className="text-xs text-gray-400 font-medium">{t('impactStories.beneficiary')}</p>
                             <p className="text-sm font-bold text-gray-800">{story.personName}</p>
                           </div>
                         </div>
@@ -155,7 +157,7 @@ const ImpactStories = () => {
                             <MapPin size={14} className="text-green-600" /> {story.location}
                           </span>
                           <span className="flex items-center gap-1">
-                            <Calendar size={14} className="text-green-600" /> {new Date(story.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
+                            <Calendar size={14} className="text-green-600" /> {new Date(story.date).toLocaleDateString(language === 'hi' ? 'hi-IN' : 'en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
                           </span>
                         </div>
                       </div>
@@ -167,7 +169,7 @@ const ImpactStories = () => {
           ) : (
             <div className="text-center py-20 bg-white rounded-3xl shadow-sm border border-gray-100">
               <span className="text-5xl">❤️</span>
-              <p className="text-gray-500 text-lg mt-4 font-semibold">No impact stories found.</p>
+              <p className="text-gray-500 text-lg mt-4 font-semibold">{t('impactStories.noStories')}</p>
             </div>
           )}
         </div>

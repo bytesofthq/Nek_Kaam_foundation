@@ -3,45 +3,44 @@ import { galleryAPI } from '../services/api';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { X, ZoomIn, Tag } from 'lucide-react';
-
-const CATEGORIES = ['All', 'Mosque Projects', 'Madrasa Projects', 'Marriage Assistance', 'Water Projects', 'Medical Help', 'Community Activities'];
-
-const demoGallery = [
-  { _id: '1', title: 'Al-Noor Mosque Renovation', category: 'Mosque Projects', description: 'Before and after renovation of Al-Noor Mosque in Patna' },
-  { _id: '2', title: 'Water Pump Installation', category: 'Water Projects', description: 'Inauguration of new water pump serving 300 families' },
-  { _id: '3', title: 'Marriage Ceremony Support', category: 'Marriage Assistance', description: 'Supporting a family in organizing their daughter\'s wedding' },
-  { _id: '4', title: 'Madrasa Classroom', category: 'Madrasa Projects', description: 'Newly renovated classroom at Jamia Islamia Madrasa' },
-  { _id: '5', title: 'Free Medical Camp', category: 'Medical Help', description: 'Doctor examining patients at our free medical camp' },
-  { _id: '6', title: 'Community Cleaning Drive', category: 'Community Activities', description: 'Volunteers cleaning the local market area' },
-  { _id: '7', title: 'Mosque AC Installation', category: 'Mosque Projects', description: 'Installing new AC units in community mosque' },
-  { _id: '8', title: 'Village Water Access', category: 'Water Projects', description: 'Clean water now accessible in remote village' },
-  { _id: '9', title: 'Madrasa Students', category: 'Madrasa Projects', description: 'Students studying at the newly equipped madrasa' },
-];
-
-const categoryGradients = {
-  'Mosque Projects': 'from-green-500 to-emerald-700',
-  'Madrasa Projects': 'from-yellow-500 to-amber-600',
-  'Marriage Assistance': 'from-pink-400 to-rose-600',
-  'Water Projects': 'from-blue-400 to-cyan-600',
-  'Medical Help': 'from-red-400 to-rose-500',
-  'Community Activities': 'from-teal-400 to-teal-600',
-  default: 'from-green-400 to-green-700',
-};
-
-const categoryEmojis = {
-  'Mosque Projects': '🕌',
-  'Madrasa Projects': '📚',
-  'Marriage Assistance': '💒',
-  'Water Projects': '🚰',
-  'Medical Help': '🏥',
-  'Community Activities': '🤝',
-};
+import { useTranslation } from '../i18n/useTranslation';
 
 const Gallery = () => {
+  const { t } = useTranslation();
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState('All');
   const [lightbox, setLightbox] = useState(null);
+
+  const CATEGORIES = [
+    { key: 'All', label: t('gallery.categories.all') },
+    { key: 'Schools Projects', label: t('gallery.categories.schools') },
+    { key: 'Marriage Assistance', label: t('gallery.categories.marriage') },
+    { key: 'Water Projects', label: t('gallery.categories.water') },
+    { key: 'Medical Help', label: t('gallery.categories.medical') },
+    { key: 'Community Activities', label: t('gallery.categories.community') }
+  ];
+
+  const categoryEmojis = {
+    'Schools Projects': '🏫',
+    'Marriage Assistance': '💒',
+    'Water Projects': '🚰',
+    'Medical Help': '🏥',
+    'Community Activities': '🤝',
+  };
+
+  const categoryLabels = CATEGORIES.reduce((acc, cat) => {
+    acc[cat.key] = cat.label;
+    return acc;
+  }, {});
+  const categoryGradients = {
+    'Schools Projects': 'from-green-500 to-emerald-700',
+    'Marriage Assistance': 'from-pink-400 to-rose-600',
+    'Water Projects': 'from-blue-400 to-cyan-600',
+    'Medical Help': 'from-red-400 to-rose-500',
+    'Community Activities': 'from-teal-400 to-teal-600',
+    default: 'from-green-400 to-green-700',
+  };
 
   useEffect(() => {
     const fetchGallery = async () => {
@@ -60,9 +59,8 @@ const Gallery = () => {
 
   const filtered = category === 'All' ? images : images.filter(img => img.category === category);
 
-  const displayImages = filtered.length > 0 || images.length > 0 ? filtered : demoGallery;
+  const displayImages = filtered;
 
-  // Close lightbox on Escape
   useEffect(() => {
     const handler = (e) => { if (e.key === 'Escape') setLightbox(null); };
     window.addEventListener('keydown', handler);
@@ -72,7 +70,7 @@ const Gallery = () => {
   return (
     <div>
       <Helmet>
-        <title>Gallery - Nek Kaam Foundation</title>
+        <title>{t('gallery.tag')} - Nek Kaam Foundation</title>
         <meta name="description" content="View photos from Nek Kaam Foundation's community projects — mosques, madrasas, water projects, medical camps and more." />
       </Helmet>
 
@@ -81,9 +79,9 @@ const Gallery = () => {
         <div className="absolute bottom-0 right-0 w-80 h-80 bg-yellow-400/10 rounded-full blur-3xl" />
         <div className="max-w-7xl mx-auto px-4 relative">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <span className="inline-block bg-white/15 font-semibold text-sm px-4 py-1.5 rounded-full mb-4">Our Gallery</span>
-            <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Visual Stories of Impact</h1>
-            <p className="text-green-100 text-xl max-w-2xl">Every image tells the story of a life changed, a community helped, and a promise kept.</p>
+            <span className="inline-block bg-white/15 font-semibold text-sm px-4 py-1.5 rounded-full mb-4">{t('gallery.tag')}</span>
+            <h1 className="text-4xl md:text-5xl font-extrabold mb-4">{t('gallery.title')}</h1>
+            <p className="text-green-100 text-xl max-w-2xl">{t('gallery.subtitle')}</p>
           </motion.div>
         </div>
       </section>
@@ -94,12 +92,12 @@ const Gallery = () => {
           <div className="flex gap-2 overflow-x-auto pb-1">
             {CATEGORIES.map((cat) => (
               <button
-                key={cat}
-                onClick={() => setCategory(cat)}
-                className={`px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all duration-200 flex-shrink-0 flex items-center gap-2 ${category === cat ? 'bg-green-600 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-green-50 hover:text-green-600'}`}
+                key={cat.key}
+                onClick={() => setCategory(cat.key)}
+                className={`px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all duration-200 flex-shrink-0 flex items-center gap-2 cursor-pointer ${category === cat.key ? 'bg-green-600 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-green-50 hover:text-green-600'}`}
               >
-                {categoryEmojis[cat] && <span>{categoryEmojis[cat]}</span>}
-                {cat}
+                {categoryEmojis[cat.key] && <span>{categoryEmojis[cat.key]}</span>}
+                {cat.label}
               </button>
             ))}
           </div>
@@ -115,7 +113,7 @@ const Gallery = () => {
             </div>
           ) : displayImages.length > 0 ? (
             <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
-              {displayImages.map((image, index) => {
+              {displayImages.map((image) => {
                 const grad = categoryGradients[image.category] || categoryGradients.default;
                 return (
                   <motion.div
@@ -143,7 +141,7 @@ const Gallery = () => {
                       <p className="text-white font-bold text-sm">{image.title}</p>
                       {image.category && (
                         <span className="text-white/70 text-xs flex items-center gap-1 mt-1">
-                          <Tag size={10} /> {image.category}
+                          <Tag size={10} /> {categoryLabels[image.category] || image.category}
                         </span>
                       )}
                     </div>
@@ -175,7 +173,7 @@ const Gallery = () => {
           >
             <button
               onClick={() => setLightbox(null)}
-              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition"
+              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition cursor-pointer"
             >
               <X size={20} />
             </button>
