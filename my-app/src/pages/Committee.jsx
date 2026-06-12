@@ -6,20 +6,20 @@ import { Mail, MapPin, User, Phone } from 'lucide-react';
 import { useTranslation } from '../i18n/useTranslation';
 
 // Import images from assets/founders folder
-import RahmanImg from '../assets/founders/rahman.jpeg';
-import NihalImg from '../assets/founders/Nihal.jpeg';
-import SaleemImg from '../assets/founders/saleem.jpeg';
-import KamilImg from '../assets/founders/kamil.jpeg';
+import RahmanImg from '../assets/Founders/rahman.jpeg';
+import NihalImg from '../assets/Founders/Nihal.jpeg';
+import SaleemImg from '../assets/Founders/saleem.jpeg';
+import KamilImg from '../assets/Founders/kamil.jpeg';
 import ArmanImg from '../assets/Founders/Arman.jpeg';
-import KamalImg from '../assets/founders/kamal.jpeg';
-import NaushadImg from '../assets/founders/noushad.jpeg';
-import ShuaibImg from '../assets/founders/Wshuaib.jpeg';
-import AzmatImg from '../assets/founders/azmat.jpeg';
-import NafeesImg from '../assets/founders/Nafees.png';
-import SheebuImg from '../assets/founders/Sheebu.jpeg';
-import ShuaibbImg from '../assets/founders/Shuaib.jpeg';
+import KamalImg from '../assets/Founders/kamal.jpeg';
+import NaushadImg from '../assets/Founders/noushad.jpeg';
+import ShuaibImg from '../assets/Founders/Wshuaib.jpeg';
+import AzmatImg from '../assets/Founders/azmat.jpeg';
+import NafeesImg from '../assets/Founders/Nafees.png';
+import SheebuImg from '../assets/Founders/Sheebu.jpeg';
+import ShuaibbImg from '../assets/Founders/Shuaib.jpeg';
 import NishanrImg from '../assets/Founders/Nishar.png';
-import AsadImg from '../assets/founders/Asad.png';
+import AsadImg from '../assets/Founders/Asad.png';
 
 const Committee = () => {
   const { t } = useTranslation();
