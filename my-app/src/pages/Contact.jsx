@@ -12,7 +12,7 @@ const Donate = () => {
 
   const qrDetails = {
     upiId: '9794820273@ptsbi',
-    name: 'Nek Kaam Foundation',
+    name: 'Nek Kaam Foundationn',
     upiUrl: `paytmmp://pay?pa=9794820273@ptsbi&pn=Nek Kaam Foundation&cu=INR`
   };
 
