@@ -21,7 +21,8 @@ export const translations = {
       committee: 'Committee',
       transparency: 'Transparency',
       activities: 'Activities',
-      gallery: 'Gallery'
+      gallery: 'Gallery',
+      donate: 'Donate'
     },
     login: {
       title: 'Member Login',
@@ -70,7 +71,7 @@ export const translations = {
         marriage: { title: 'Marriage Assistance', desc: 'Helping underprivileged families' },
         water: { title: 'Water Projects', desc: 'Clean water for villages' },
         medical: { title: 'Medical Help', desc: 'Healthcare for the needy' },
-        family: { title: 'Family Support', desc: '200+ families helped annually' }
+        family: { title: 'Family Support', desc: '50+ families helped annually' }
       }
     },
     whatWeDo: {
@@ -141,36 +142,56 @@ export const translations = {
       copyright: 'All rights reserved.',
       developedBy: 'Developed by'
     },
-    about: {
-      title: 'About Us - Nek Kaam Foundation',
-      heroTag: 'About Us',
-      heroHeading: 'About Nek Kaam Foundation',
-      heroSubtitle: 'A community-driven organization dedicated to uplifting lives through compassionate action, transparent governance, and collective strength.',
-      whoTag: 'Who We Are',
-      whoHeading: 'Built on Trust, Powered by Community',
-      whoP1: 'Nek Kaam Foundation is a charitable organization established to serve the underprivileged communities of India — with a strong focus on UP. We were founded by a group of concerned community members who believed that real change starts at the grassroots level.',
-      whoP2: 'Our work spans across marriage assistance, medical help, school support, water projects, and emergency relief. Every initiative is driven by the needs of the community and executed with full transparency.',
-      whoP3: 'What sets us apart is our unwavering commitment to financial transparency. We maintain detailed records of every rupee received and spent, making it all publicly available through our Transparency Center.',
-      founded: 'Founded',
-      members: 'Members',
-      familiesHelped: 'Families Helped',
-      fundsManaged: 'Funds Managed',
-      storyTag: 'Our Story',
-      storyHeading: 'Why We Started',
-      storyP1: 'We saw families unable to marry off their daughters due to financial constraints. We saw villages without clean water. We saw schools in disrepair. We saw students dropping out because their schools lacked resources.',
-      storyP2: 'We started Nek Kaam Foundation because we believed that together — through transparency, trust, and collective action — we could solve these problems. And we have. But there is still much more to be done, and we continue to grow stronger every day.',
-      missionTitle: 'Our Mission',
-      missionDescription: 'To empower underprivileged communities across India through compassionate service, comprehensive support programs, and absolute financial transparency — ensuring that every contribution creates measurable, lasting impact.',
-      visionTitle: 'Our Vision',
-      visionDescription: 'A society where no family struggles alone — where communities are supported, schools flourish, and every person has access to clean water, healthcare, and dignity.',
-      valuesTag: 'What We Believe',
-      valuesHeading: 'Our Core Values',
-      promiseTag: 'Our Promise',
-      promiseHeading: 'The Transparency Pledge',
-      promiseBody: 'We solemnly promise to our members, donors, and the communities we serve: every single rupee will be accounted for. We will always publish detailed records of all fund collections and how they were spent. Your trust is our greatest asset — and we will never compromise it.',
-      viewTransparency: 'View Transparency Report',
-      joinFoundation: 'Join the Foundation'
-    },
+  about: {
+  title: 'About Us - Nek Kaam Foundation',
+  heroTag: 'About Us',
+  heroHeading: 'About Nek Kaam Foundation',
+  heroSubtitle: 'A community-driven organization dedicated to uplifting lives through compassionate action, transparent governance, and collective strength.',
+  whoTag: 'Who We Are',
+  whoHeading: 'Built on Trust, Powered by Community',
+  whoP1: 'Nek Kaam Foundation is a charitable organization established to serve the underprivileged communities of India — with a strong focus on UP. We were founded by a group of concerned community members who believed that real change starts at the grassroots level.',
+  whoP2: 'Our work spans across marriage assistance, medical help, school support, water projects, and emergency relief. Every initiative is driven by the needs of the community and executed with full transparency.',
+  whoP3: 'What sets us apart is our unwavering commitment to financial transparency. We maintain detailed records of every rupee received and spent, making it all publicly available through our Transparency Center.',
+  founded: 'Founded',
+  members: 'Members',
+  familiesHelped: 'Families Helped',
+  fundsManaged: 'Funds Managed',
+  storyTag: 'Our Story',
+  storyHeading: 'Why We Started',
+  storyP1: 'We saw families unable to marry off their daughters due to financial constraints. We saw villages without clean water. We saw schools in disrepair. We saw students dropping out because their schools lacked resources.',
+  storyP2: 'We started Nek Kaam Foundation because we believed that together — through transparency, trust, and collective action — we could solve these problems. And we have. But there is still much more to be done, and we continue to grow stronger every day.',
+  missionTitle: 'Our Mission',
+  missionDescription: 'To empower underprivileged communities across India through compassionate service, comprehensive support programs, and absolute financial transparency — ensuring that every contribution creates measurable, lasting impact.',
+  visionTitle: 'Our Vision',
+  visionDescription: 'A society where no family struggles alone — where communities are supported, schools flourish, and every person has access to clean water, healthcare, and dignity.',
+  valuesTag: 'What We Believe',
+  valuesHeading: 'Our Core Values',
+  promiseTag: 'Our Promise',
+  promiseHeading: 'The Transparency Pledge',
+  promiseBody: 'We solemnly promise to our members, donors, and the communities we serve: every single rupee will be accounted for. We will always publish detailed records of all fund collections and how they were spent. Your trust is our greatest asset — and we will never compromise it.',
+  viewTransparency: 'View Transparency Report',
+  joinFoundation: 'Join the Foundation',
+  missionList: {
+    marriage: 'Support poor families with marriage assistance',
+    medical: 'Provide medical help to those in need',
+    madrasa: 'Strengthen madrasas & mosques',
+    water: 'Deliver clean water to villages'
+  },
+  visionList: {
+    communities: 'United Communities',
+    madrasa: 'Helping madarsas & Mosque',
+    food: 'Feeding Food',
+    healthcare: 'Healthcare Support'
+  },
+  values: {
+    integrity: { title: 'Integrity', desc: 'We act with honesty and uphold the highest ethical standards in all our work.' },
+    transparency: { title: 'Transparency', desc: 'Every rupee is accounted for. We publish detailed reports of all fund usage.' },
+    compassion: { title: 'Compassion', desc: 'We serve with empathy, understanding the real needs of those we help.' },
+    community: { title: 'Community', desc: 'We believe in the collective strength of united communities.' },
+    excellence: { title: 'Excellence', desc: 'We strive for the highest quality in every project and initiative.' },
+    accountability: { title: 'Accountability', desc: 'We are answerable to our members, donors, and the communities we serve.' }
+  }
+},
     contact: {
       title: 'Contact Us',
       subtitle: "We'd love to hear from you",
@@ -275,15 +296,24 @@ export const translations = {
       title: 'Committee Members',
       subtitle: 'Meet the dedicated individuals who guide our foundation with integrity, compassion, and unwavering commitment to community service.',
       roles: {
-        president: 'President',
-        vicePresident: 'Vice President',
-        secretary: 'Secretary',
-        treasurer: 'Treasurer',
-        medicalHead: 'Medical Committee Head',
-        advisor: 'Religious Advisor',
-        coordinator: 'Project Coordinator',
-        member: 'Committee Member'
-      }
+    president: 'President',
+    vicePresident: 'Vice President',
+    secretary: 'Secretary',
+    generalSecretary: 'General Secretary',
+    treasurer: 'Treasurer',
+    medicalHead: 'Medical Committee Head',
+    advisor: 'Religious Advisor',
+    coordinator: 'Project Coordinator',
+    member: 'Committee Member',
+    founderPresident: 'Founder & President',
+    coFounder: 'Co-Founder',
+    jointSecretary: 'Joint Secretary',
+    healthMedicalIncharge: 'Health & Medical Incharge',
+    assistantTreasurer: 'Assistant Treasurer',
+    mediaPRIncharge: 'Media & PR Incharge',
+    environmentIncharge: 'Environment Incharge',
+    executiveMember: 'Executive Member'
+  }
     },
     gallery: {
       tag: 'Our Gallery',
@@ -305,6 +335,23 @@ export const translations = {
       beneficiary: 'Beneficiary',
       noStories: 'No impact stories found.'
     },
+    donate: {
+  tag: 'Support Our Cause',
+  title: 'Make a Donation',
+  subtitle: 'Your generous contribution helps us serve underprivileged families, provide medical aid, support education, and build stronger communities.',
+  scanToPay: 'Scan QR to Pay',
+  scanInstruction: 'Scan this QR code with any UPI app to donate',
+  scanNow: 'Scan Now',
+  or: 'OR',
+  upiIdLabel: 'UPI ID',
+  copy: 'Copy',
+  copied: 'Copied!',
+  thankYou: 'Thank you for your generous support! ❤️',
+  scanQRCode: 'Scan QR Code',
+  positionQR: 'Position the QR code within the frame',
+  cameraError: 'Unable to access camera. Please check permissions.'
+},
+    
     memberDashboard: {
       welcome: 'Welcome',
       memberId: 'Member ID',
@@ -338,6 +385,24 @@ export const translations = {
       english: 'अंग्रेज़ी',
       hindi: 'हिंदी'
     },
+
+    donate: {
+  tag: 'हमारे कार्य को समर्थन दें',
+  title: 'दान करें',
+  subtitle: 'आपका उदार योगदान हमें वंचित परिवारों की सेवा करने, चिकित्सा सहायता प्रदान करने, शिक्षा का समर्थन करने और मजबूत समुदायों के निर्माण में मदद करता है।',
+  scanToPay: 'QR स्कैन करें',
+  scanInstruction: 'किसी भी UPI ऐप से दान के लिए इस QR कोड को स्कैन करें',
+  scanNow: 'अभी स्कैन करें',
+  or: 'या',
+  upiIdLabel: 'UPI ID',
+  copy: 'कॉपी करें',
+  copied: 'कॉपी हो गया!',
+  taxBenefit: '₹500 से अधिक दान पर 80G कर छूट उपलब्ध',
+  thankYou: 'आपके उदार समर्थन के लिए धन्यवाद! ❤️',
+  scanQRCode: 'QR कोड स्कैन करें',
+  positionQR: 'QR कोड को फ्रेम के अंदर रखें',
+  cameraError: 'कैमरा एक्सेस नहीं कर सकते। कृपया अनुमति जांचें।'
+},
     navigation: {
       home: 'होम',
       about: 'हमारे बारे में',
@@ -348,7 +413,8 @@ export const translations = {
       committee: 'समिति',
       transparency: 'पारदर्शिता',
       activities: 'गतिविधियाँ',
-      gallery: 'गैलरी'
+      gallery: 'गैलरी',
+      donate: 'दान करें'
     },
     login: {
       title: 'सदस्य लॉगिन',
@@ -418,7 +484,8 @@ export const translations = {
         ac: { title: 'एसी स्थापना', desc: 'धार्मिक और सामुदायिक स्थानों के लिए वातानुकूलन' },
         cleaning: { title: 'सामुदायिक सफाई', desc: 'अपने इलाकों को साफ़ और स्वस्थ रखना' },
         disaster: { title: 'आपदा राहत', desc: 'बाढ़ और प्राकृतिक आपदाओं के समय आपात सहायता' },
-        emergency: { title: 'तुरंत सहायता', desc: 'तत्काल सामुदायिक ज़रूरतों पर तेज़ प्रतिक्रिया' }
+        emergency: { title: 'तुरंत सहायता', desc: 'तत्काल सामुदायिक ज़रूरतों पर तेज़ प्रतिक्रिया' },
+        schools: { title: 'स्कूल सहायता', desc: 'स्कूल सुविधाओं में सुधार और छात्र शिक्षा का समर्थन' }
       }
     },
     stats: {
@@ -470,35 +537,55 @@ export const translations = {
       developedBy: 'विकसित किया गया'
     },
     about: {
-      title: 'हमारे बारे में - नेक काम फाउंडेशन',
-      heroTag: 'हमारे बारे में',
-      heroHeading: 'नेक काम फाउंडेशन के बारे में',
-      heroSubtitle: 'एक समुदाय-संचालित संगठन जो करुणामय कार्य, पारदर्शी प्रशासन और सामूहिक शक्ति के माध्यम से जीवन बेहतर बनाने के लिए समर्पित है।',
-      whoTag: 'हम कौन हैं',
-      whoHeading: 'विश्वास पर बना, समुदाय से संचालित',
-      whoP1: 'नेक काम फाउंडेशन एक चैरिटेबल संगठन है जो भारत के वंचित समुदायों की सेवा के लिए स्थापित किया गया है — विशेष ध्यान यूपी पर है। इसकी शुरुआत उन समुदाय सदस्यों ने की जिन्होंने माना कि असली बदलाव जमीनी स्तर से शुरू होता है।',
-      whoP2: 'हमारा कार्य विवाह सहायता, चिकित्सीय सहायता, स्कूल सहयोग, पानी परियोजनाओं और आपात राहत तक फैला है। हर पहल समुदाय की ज़रूरतों से प्रेरित होती है और पूरी पारदर्शिता के साथ निष्पादित की जाती है।',
-      whoP3: 'हमें सबसे अलग बनाती है वित्तीय पारदर्शिता के प्रति हमारी अटूट प्रतिबद्धता। हम प्राप्त और खर्च किए गए हर रुपये का विस्तृत रिकॉर्ड रखते हैं और उसे पारदर्शिता केंद्र के माध्यम से सार्वजनिक करते हैं।',
-      founded: 'स्थापना',
-      members: 'सदस्य',
-      familiesHelped: 'सहायता प्राप्त परिवार',
-      fundsManaged: 'प्रबंधित धनराशि',
-      storyTag: 'हमारी कहानी',
-      storyHeading: 'हमने क्यों शुरू किया',
-      storyP1: 'हमने ऐसे परिवार देखे जो आर्थिक तंगी के कारण अपनी बेटियों की शादी नहीं कर पा रहे थे। हमने ऐसे गाँव देखे जहाँ साफ पानी नहीं था। हमने स्कूलों को जर्जर देखा। हमने छात्रों को स्कूल के संसाधन न होने के कारण पढ़ाई छोड़ते देखा।',
-      storyP2: 'हमने नेक काम फाउंडेशन इसलिए शुरू किया क्योंकि हमें विश्वास था कि पारदर्शिता, भरोसा और सामूहिक कार्रवाई से हम इन समस्याओं को हल कर सकते हैं। और हमने किया भी। लेकिन अभी बहुत कुछ करना बाकी है, और हम हर दिन और मजबूत हो रहे हैं।',
-      missionTitle: 'हमारा मिशन',
-      missionDescription: 'करुणामय सेवा, व्यापक सहायता कार्यक्रमों और पूर्ण वित्तीय पारदर्शिता के माध्यम से भारत भर के वंचित समुदायों को सशक्त बनाना — ताकि हर योगदान ठोस और स्थायी प्रभाव बनाए।',
-      visionTitle: 'हमारी दृष्टि',
-      visionDescription: 'एक ऐसा समाज जहाँ कोई परिवार अकेला संघर्ष न करे — जहाँ समुदायों को समर्थन मिले, स्कूल फले-फूलें, और हर व्यक्ति के पास साफ पानी, स्वास्थ्य सेवा और गरिमा हो।',
-      valuesTag: 'हम क्या मानते हैं',
-      valuesHeading: 'हमारे मूल मूल्य',
-      promiseTag: 'हमारा वादा',
-      promiseHeading: 'पारदर्शिता की प्रतिज्ञा',
-      promiseBody: 'हम अपने सदस्यों, दाताओं और उन समुदायों से यह वचन देते हैं: प्राप्त हुआ हर रुपया हिसाब में होगा। हम सभी निधि संग्रह और उनके व्यय का विस्तृत रिकॉर्ड हमेशा प्रकाशित करेंगे। आपका भरोसा हमारी सबसे बड़ी पूँजी है — और हम इसमें कभी समझौता नहीं करेंगे।',
-      viewTransparency: 'पारदर्शिता रिपोर्ट देखें',
-      joinFoundation: 'फाउंडेशन से जुड़ें'
-    },
+  title: 'हमारे बारे में - नेक काम फाउंडेशन',
+  heroTag: 'हमारे बारे में',
+  heroHeading: 'नेक काम फाउंडेशन के बारे में',
+  heroSubtitle: 'एक समुदाय-संचालित संगठन जो करुणामय कार्य, पारदर्शी प्रशासन और सामूहिक शक्ति के माध्यम से जीवन बेहतर बनाने के लिए समर्पित है।',
+  whoTag: 'हम कौन हैं',
+  whoHeading: 'विश्वास पर बना, समुदाय से संचालित',
+  whoP1: 'नेक काम फाउंडेशन एक चैरिटेबल संगठन है जो भारत के वंचित समुदायों की सेवा के लिए स्थापित किया गया है — विशेष ध्यान यूपी पर है। इसकी शुरुआत उन समुदाय सदस्यों ने की जिन्होंने माना कि असली बदलाव जमीनी स्तर से शुरू होता है।',
+  whoP2: 'हमारा कार्य विवाह सहायता, चिकित्सीय सहायता, स्कूल सहयोग, पानी परियोजनाओं और आपात राहत तक फैला है। हर पहल समुदाय की ज़रूरतों से प्रेरित होती है और पूरी पारदर्शिता के साथ निष्पादित की जाती है।',
+  whoP3: 'हमें सबसे अलग बनाती है वित्तीय पारदर्शिता के प्रति हमारी अटूट प्रतिबद्धता। हम प्राप्त और खर्च किए गए हर रुपये का विस्तृत रिकॉर्ड रखते हैं और उसे पारदर्शिता केंद्र के माध्यम से सार्वजनिक करते हैं।',
+  founded: 'स्थापना',
+  members: 'सदस्य',
+  familiesHelped: 'सहायता प्राप्त परिवार',
+  fundsManaged: 'प्रबंधित धनराशि',
+  storyTag: 'हमारी कहानी',
+  storyHeading: 'हमने क्यों शुरू किया',
+  storyP1: 'हमने ऐसे परिवार देखे जो आर्थिक तंगी के कारण अपनी बेटियों की शादी नहीं कर पा रहे थे। हमने ऐसे गाँव देखे जहाँ साफ पानी नहीं था। हमने स्कूलों को जर्जर देखा। हमने छात्रों को स्कूल के संसाधन न होने के कारण पढ़ाई छोड़ते देखा।',
+  storyP2: 'हमने नेक काम फाउंडेशन इसलिए शुरू किया क्योंकि हमें विश्वास था कि पारदर्शिता, भरोसा और सामूहिक कार्रवाई से हम इन समस्याओं को हल कर सकते हैं। और हमने किया भी। लेकिन अभी बहुत कुछ करना बाकी है, और हम हर दिन और मजबूत हो रहे हैं।',
+  missionTitle: 'हमारा मिशन',
+  missionDescription: 'करुणामय सेवा, व्यापक सहायता कार्यक्रमों और पूर्ण वित्तीय पारदर्शिता के माध्यम से भारत भर के वंचित समुदायों को सशक्त बनाना — ताकि हर योगदान ठोस और स्थायी प्रभाव बनाए।',
+  visionTitle: 'हमारी दृष्टि',
+  visionDescription: 'एक ऐसा समाज जहाँ कोई परिवार अकेला संघर्ष न करे — जहाँ समुदायों को समर्थन मिले, स्कूल फले-फूलें, और हर व्यक्ति के पास साफ पानी, स्वास्थ्य सेवा और गरिमा हो।',
+  valuesTag: 'हम क्या मानते हैं',
+  valuesHeading: 'हमारे मूल मूल्य',
+  promiseTag: 'हमारा वादा',
+  promiseHeading: 'पारदर्शिता की प्रतिज्ञा',
+  promiseBody: 'हम अपने सदस्यों, दाताओं और उन समुदायों से यह वचन देते हैं: प्राप्त हुआ हर रुपया हिसाब में होगा। हम सभी निधि संग्रह और उनके व्यय का विस्तृत रिकॉर्ड हमेशा प्रकाशित करेंगे। आपका भरोसा हमारी सबसे बड़ी पूँजी है — और हम इसमें कभी समझौता नहीं करेंगे।',
+  viewTransparency: 'पारदर्शिता रिपोर्ट देखें',
+  joinFoundation: 'फाउंडेशन से जुड़ें',
+  missionList: {
+    marriage: 'विवाह सहायता के लिए गरीब परिवारों की मदद करना',
+    medical: 'जरूरतमंदों को चिकित्सा सहायता प्रदान करना',
+    madrasa: 'मदरसों और मस्जिदों को मजबूत करना',
+    water: 'गाँवों तक स्वच्छ पानी पहुँचाना'
+  },
+  visionList: {
+    communities: 'एकजुट समुदाय',
+    madrasa: 'मदरसों और मस्जिदों की सहायता',
+    food: 'भोजन वितरण',
+    healthcare: 'स्वास्थ्य सेवा सहायता'
+  },
+  values: {
+    integrity: { title: 'ईमानदारी', desc: 'हम ईमानदारी के साथ काम करते हैं और अपने सभी कार्यों में उच्चतम नैतिक मानकों का पालन करते हैं।' },
+    transparency: { title: 'पारदर्शिता', desc: 'हर रुपया हिसाब में है। हम सभी फंड उपयोग की विस्तृत रिपोर्ट प्रकाशित करते हैं।' },
+    compassion: { title: 'करुणा', desc: 'हम सहानुभूति के साथ सेवा करते हैं, उन लोगों की वास्तविक जरूरतों को समझते हैं जिनकी हम मदद करते हैं।' },
+    community: { title: 'समुदाय', desc: 'हम एकजुट समुदायों की सामूहिक शक्ति में विश्वास करते हैं।' },
+    excellence: { title: 'उत्कृष्टता', desc: 'हम हर परियोजना और पहल में उच्चतम गुणवत्ता के लिए प्रयास करते हैं।' },
+    accountability: { title: 'जवाबदेही', desc: 'हम अपने सदस्यों, दाताओं और उन समुदायों के प्रति जवाबदेह हैं जिनकी हम सेवा करते हैं।' }
+  }
+},
     contact: {
       title: 'हमसे संपर्क करें',
       subtitle: 'हमें आपसे सुनकर खुशी होगी',
@@ -603,15 +690,24 @@ export const translations = {
       title: 'समिति के सदस्य',
       subtitle: 'उन समर्पित व्यक्तियों से मिलें जो ईमानदारी, करुणा और समाज सेवा के प्रति अटूट प्रतिबद्धता के साथ हमारी संस्था का मार्गदर्शन करते हैं।',
       roles: {
-        president: 'अध्यक्ष',
-        vicePresident: 'उपाध्यक्ष',
-        secretary: 'सचिव',
-        treasurer: 'कोषाध्यक्ष',
-        medicalHead: 'चिकित्सा समिति प्रमुख',
-        advisor: 'धार्मिक सलाहकार',
-        coordinator: 'परियोजना समन्वयक',
-        member: 'समिति सदस्य'
-      }
+  president: 'अध्यक्ष',
+  vicePresident: 'उपाध्यक्ष',
+  secretary: 'सचिव',
+  generalSecretary: 'महासचिव',
+  treasurer: 'कोषाध्यक्ष',
+  medicalHead: 'चिकित्सा समिति प्रमुख',
+  advisor: 'धार्मिक सलाहकार',
+  coordinator: 'परियोजना समन्वयक',
+  member: 'समिति सदस्य',
+  founderPresident: 'संस्थापक एवं अध्यक्ष',
+  coFounder: 'सह-संस्थापक',
+  jointSecretary: 'संयुक्त सचिव',
+  healthMedicalIncharge: 'स्वास्थ्य एवं चिकित्सा प्रभारी',
+  assistantTreasurer: 'सहायक कोषाध्यक्ष',
+  mediaPRIncharge: 'मीडिया एवं जनसंपर्क प्रभारी',
+  environmentIncharge: 'पर्यावरण प्रभारी',
+  executiveMember: 'कार्यकारी सदस्य'
+}
     },
     gallery: {
       tag: 'हमारी गैलरी',

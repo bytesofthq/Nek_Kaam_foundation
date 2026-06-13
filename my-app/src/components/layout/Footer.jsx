@@ -72,17 +72,17 @@ const Footer = () => {
               )}
             </div>
 
-            {/* Quick Links */}
+            {/* Quick Links - FIXED: Now using t() for labels */}
             <div>
               <h4 className="text-white font-bold text-base mb-5">{t('footer.quickLinks')}</h4>
               <ul className="space-y-3">
                 {[
-                  { label: 'About Us', to: '/about' },
-                  { label: 'Our Projects', to: '/projects' },
-                  { label: 'Activities', to: '/activities' },
-                  { label: 'Impact Stories', to: '/impact-stories' },
-                  { label: 'Gallery', to: '/gallery' },
-                  { label: 'Contact Us', to: '/contact' },
+                  { label: t('navigation.about'), to: '/about' },
+                  { label: t('navigation.projects'), to: '/projects' },
+                  { label: t('navigation.activities'), to: '/activities' },
+                  { label: t('navigation.impactStories'), to: '/impact-stories' },
+                  { label: t('navigation.gallery'), to: '/gallery' },
+                  { label: t('navigation.contact'), to: '/contact' },
                 ].map((link) => (
                   <li key={link.to}>
                     <Link to={link.to} className="text-gray-400 hover:text-green-400 text-sm transition-colors duration-200 flex items-center gap-2 group">
@@ -94,16 +94,16 @@ const Footer = () => {
               </ul>
             </div>
 
-            {/* Our Work */}
+            {/* Our Work - FIXED: Now using t() for labels */}
             <div>
               <h4 className="text-white font-bold text-base mb-5">{t('footer.ourWork')}</h4>
               <ul className="space-y-3">
                 {[
-                  { label: 'Transparency Center', to: '/transparency' },
-                  { label: 'Committee Members', to: '/committee' },
-                  { label: 'Member Registration', to: '/member-register' },
-                  { label: 'Marriage Assistance', to: '/activities' },
-                  { label: 'Schools Support', to: '/activities' },
+                  { label: t('navigation.transparency'), to: '/transparency' },
+                  { label: t('navigation.committee'), to: '/committee' },
+                  { label: t('common.joinUs'), to: '/member-register' },
+                  { label: t('whatWeDo.categories.marriage.title'), to: '/activities' },
+                  { label: t('whatWeDo.categories.schools.title'), to: '/activities' },
                 ].map((link, i) => (
                   <li key={i}>
                     <Link to={link.to} className="text-gray-400 hover:text-green-400 text-sm transition-colors duration-200 flex items-center gap-2 group">
@@ -115,7 +115,7 @@ const Footer = () => {
               </ul>
             </div>
 
-            
+            {/* Contact Info */}
             <div>
               <h4 className="text-white font-bold text-base mb-5">{t('footer.contactInfo')}</h4>
               <div className="space-y-4">
@@ -125,7 +125,7 @@ const Footer = () => {
                     <Phone size={14} className="text-green-400" />
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500">Mobile (President)</p>
+                    <p className="text-xs text-gray-500">{t('footer.phone')} (President)</p>
                     <p className="text-sm font-medium">+91 97948 20273</p>
                   </div>
                 </a>
@@ -135,7 +135,7 @@ const Footer = () => {
                     <Phone size={14} className="text-green-400" />
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500">Mobile</p>
+                    <p className="text-xs text-gray-500">{t('footer.phone')}</p>
                     <p className="text-sm font-medium">+91 9559057411</p>
                   </div>
                 </a>
@@ -145,7 +145,7 @@ const Footer = () => {
                     <Mail size={14} className="text-green-400" />
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500">Email</p>
+                    <p className="text-xs text-gray-500">{t('footer.email')}</p>
                     <p className="text-sm font-medium truncate">abdurrahman.mohdusman@gmail.com</p>
                   </div>
                 </a>
@@ -155,7 +155,7 @@ const Footer = () => {
                     <MapPin size={14} className="text-green-400" />
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500">Address</p>
+                    <p className="text-xs text-gray-500">{t('footer.address')}</p>
                     <p className="text-sm font-medium">Akbapur Biswan Sitapur 261201 UP India</p>
                   </div>
                 </div>

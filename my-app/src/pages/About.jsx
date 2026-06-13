@@ -15,12 +15,20 @@ const About = () => {
   const { t } = useTranslation();
 
   const coreValues = [
-    { title: 'Integrity', desc: 'We act with honesty and uphold the highest ethical standards in all our work.', emoji: '🤝' },
-    { title: 'Transparency', desc: 'Every rupee is accounted for. We publish detailed reports of all fund usage.', emoji: '📊' },
-    { title: 'Compassion', desc: 'We serve with empathy, understanding the real needs of those we help.', emoji: '💝' },
-    { title: 'Community', desc: 'We believe in the collective strength of united communities.', emoji: '🏘️' },
-    { title: 'Excellence', desc: 'We strive for the highest quality in every project and initiative.', emoji: '⭐' },
-    { title: 'Accountability', desc: 'We are answerable to our members, donors, and the communities we serve.', emoji: '📋' },
+    { key: 'integrity', emoji: '🤝' },
+    { key: 'transparency', emoji: '📊' },
+    { key: 'compassion', emoji: '💝' },
+    { key: 'community', emoji: '🏘️' },
+    { key: 'excellence', emoji: '⭐' },
+    { key: 'accountability', emoji: '📋' },
+  ];
+
+  const missionItems = ['marriage', 'medical', 'madrasa', 'water'];
+  const visionItems = [
+    { key: 'communities', emoji: '🏘️' },
+    { key: 'madrasa', emoji: '📚' },
+    { key: 'food', emoji: '🚰' },
+    { key: 'healthcare', emoji: '💊' },
   ];
 
   return (
@@ -113,10 +121,10 @@ const About = () => {
                 {t('about.missionDescription')}
               </p>
               <ul className="mt-6 space-y-3">
-                {['Support poor families with marriage assistance', 'Provide medical help to those in need', 'Strengthen madrasas & mosques', 'Deliver clean water to villages'].map((item, i) => (
+                {missionItems.map((item, i) => (
                   <li key={i} className="flex items-center gap-2 text-green-100">
                     <CheckCircle size={16} className="text-yellow-300 flex-shrink-0" />
-                    <span className="text-sm">{item}</span>
+                    <span className="text-sm">{t(`about.missionList.${item}`)}</span>
                   </li>
                 ))}
               </ul>
@@ -133,15 +141,10 @@ const About = () => {
                 {t('about.visionDescription')}
               </p>
               <div className="mt-6 grid grid-cols-2 gap-3">
-                {[
-                  { emoji: '🏘️', text: 'United Communities' },
-                  { emoji: '📚', text: 'Helping madarsas & Mosque' },
-                  { emoji: '🚰', text: 'Feeding Food' },
-                  { emoji: '💊', text: 'Healthcare Support' },
-                ].map((item, i) => (
+                {visionItems.map((item, i) => (
                   <div key={i} className="bg-white/10 rounded-xl p-3 flex items-center gap-2">
                     <span className="text-xl">{item.emoji}</span>
-                    <span className="text-xs font-medium text-gray-200">{item.text}</span>
+                    <span className="text-xs font-medium text-gray-200">{t(`about.visionList.${item.key}`)}</span>
                   </div>
                 ))}
               </div>
@@ -168,8 +171,12 @@ const About = () => {
                 className="bg-white rounded-2xl shadow-md hover:shadow-xl border border-gray-100 hover:border-green-200 p-7 transition-all duration-300 group"
               >
                 <div className="text-4xl mb-4">{val.emoji}</div>
-                <h3 className="text-xl font-bold text-gray-800 mb-2 group-hover:text-green-700 transition-colors">{val.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{val.desc}</p>
+                <h3 className="text-xl font-bold text-gray-800 mb-2 group-hover:text-green-700 transition-colors">
+                  {t(`about.values.${val.key}.title`)}
+                </h3>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  {t(`about.values.${val.key}.desc`)}
+                </p>
               </motion.div>
             ))}
           </div>

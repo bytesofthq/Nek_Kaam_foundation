@@ -6,20 +6,20 @@ import { Mail, MapPin, User, Phone } from 'lucide-react';
 import { useTranslation } from '../i18n/useTranslation';
 
 // Import images from assets/founders folder
-import RahmanImg from '../assets/founders/rahman.jpeg';
-import NihalImg from '../assets/founders/Nihal.jpeg';
-import SaleemImg from '../assets/founders/saleem.jpeg';
-import KamilImg from '../assets/founders/kamil.jpeg';
+import RahmanImg from '../assets/Founders/rahman.jpeg';
+import NihalImg from '../assets/Founders/Nihal.jpeg';
+import SaleemImg from '../assets/Founders/saleem.jpeg';
+import KamilImg from '../assets/Founders/kamil.jpeg';
 import ArmanImg from '../assets/Founders/Arman.jpeg';
-import KamalImg from '../assets/founders/kamal.jpeg';
-import NaushadImg from '../assets/founders/noushad.jpeg';
-import ShuaibImg from '../assets/founders/Wshuaib.jpeg';
-import AzmatImg from '../assets/founders/azmat.jpeg';
-import NafeesImg from '../assets/founders/Nafees.png';
-import SheebuImg from '../assets/founders/Sheebu.jpeg';
-import ShuaibbImg from '../assets/founders/Shuaib.jpeg';
+import KamalImg from '../assets/Founders/kamal.jpeg';
+import NaushadImg from '../assets/Founders/noushad.jpeg';
+import ShuaibImg from '../assets/Founders/Wshuaib.jpeg';
+import AzmatImg from '../assets/Founders/azmat.jpeg';
+import NafeesImg from '../assets/Founders/Nafees.png';
+import SheebuImg from '../assets/Founders/Sheebu.jpeg';
+import ShuaibbImg from '../assets/Founders/Shuaib.jpeg';
 import NishanrImg from '../assets/Founders/Nishar.png';
-import AsadImg from '../assets/founders/Asad.png';
+import AsadImg from '../assets/Founders/Asad.png';
 
 const Committee = () => {
   const { t } = useTranslation();
@@ -44,30 +44,32 @@ const Committee = () => {
     default: 'from-green-400 to-green-700',
   };
 
-  const roleLabels = {
-    'Founder & President': 'Founder & President',
-    'Co-Founder': 'Co-Founder',
+  const getRoleLabel = (position) => {
+  const roleMap = {
+    'Founder & President': t('committee.roles.founderPresident'),
+    'Co-Founder': t('committee.roles.coFounder'),
     'President': t('committee.roles.president'),
     'Vice President': t('committee.roles.vicePresident'),
-    'Genral Secretary': t('committee.roles.secretary'),
-    'Joint Secretary': 'Joint Secretary',  
-    'Secretary': 'Secretary',              
+    'Genral Secretary': t('committee.roles.generalSecretary'),  
+    'General Secretary': t('committee.roles.generalSecretary'),
+    'Secretary': t('committee.roles.secretary'),
+    'Joint Secretary': t('committee.roles.jointSecretary'),
     'Treasurer': t('committee.roles.treasurer'),
-    'Assistant Treasurer': 'Assistant Treasurer',
-    'Media & Public Relation Incharge': 'Media & PR Incharge',
-    'Environment Incharge': 'Environment Incharge',
-    'Disaster Relief & Service': 'Disaster Relief Incharge',
-    'Health & Medical Incharge': 'Health & Medical Incharge',  
-    'Executive Member': 'Executive Member', 
+    'Assistant Treasurer': t('committee.roles.assistantTreasurer'),
+    'Media & Public Relation Incharge': t('committee.roles.mediaPRIncharge'),
+    'Environment Incharge': t('committee.roles.environmentIncharge'),
+    'Health & Medical Incharge': t('committee.roles.healthMedicalIncharge'),
+    'Executive Member': t('committee.roles.executiveMember'),
   };
+  return roleMap[position] || position;
+};
 
-  
   const positionOrder = [
     'Founder & President',
     'Co-Founder',
-    'Vice President',      
+    'Vice President', 
+    'Genral Secretary',     
     'Secretary',
-    'Genral Secretary',
     'Joint Secretary',
     'Health & Medical Incharge',
     'Treasurer',
@@ -164,8 +166,8 @@ const Committee = () => {
       position: 'Treasurer', 
       bio: 'Manages the foundation\'s finances and ensures complete transparency in fund management.', 
       address: 'India, UP',
-      email: 'azmat@nekkaamfoundation.org',
-      phone: '+91 98765 43218',
+      email: 'azmatali6809@gmail.com',
+      phone: '+91 7860477523',
       photo: AzmatImg 
     },
     { 
@@ -174,7 +176,7 @@ const Committee = () => {
       position: 'Assistant Treasurer', 
       bio: 'Assists in financial management and maintains accurate records of all transactions.', 
       address: 'Kuwait',
-      email: 'nafees@nekkaamfoundation.org',
+      email: 'nafeeskhan98096377@gmail.com',
       phone: '+965 1234 5678',
       photo: NafeesImg 
     },
@@ -318,7 +320,7 @@ const Committee = () => {
                         {member.name}
                       </h3>
                       <span className={`inline-block text-xs font-bold px-3 py-1 rounded-full mb-3 bg-gradient-to-r ${gradientClass} text-white`}>
-                        {roleLabels[member.position] || member.position}
+                        {getRoleLabel(member.position)}
                       </span>
                       {member.bio && (
                         <p className="text-gray-600 text-xs leading-relaxed mb-4 line-clamp-3">

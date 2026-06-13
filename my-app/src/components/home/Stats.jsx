@@ -104,7 +104,7 @@ const Stats = () => {
     {
       label: 'Families Supported',
       label: t('stats.families'),
-      value: apiStats?.familiesSupported || 10,
+      value: apiStats?.familiesSupported || 50,
       icon: Home,
       color: 'from-green-600 to-emerald-600',
       prefix: '',

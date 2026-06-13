@@ -11,15 +11,16 @@ import logoImg from './nek_kaam.png';
 const navLinks = [
   { labelKey: 'navigation.home', to: '/' },
   { labelKey: 'navigation.about', to: '/about' },
-  // { label: 'Activities', to: '/activities' },
   { labelKey: 'navigation.projects', to: '/projects' },
+  { labelKey: 'navigation.donate', to: '/donate' }, // ✅ Added donate link
   {
     labelKey: 'navigation.explore',
     children: [
-      // { label: 'Gallery', to: '/gallery' },
       { labelKey: 'navigation.impactStories', to: '/impact-stories' },
       { labelKey: 'navigation.committee', to: '/committee' },
       { labelKey: 'navigation.transparency', to: '/transparency' },
+      { labelKey: 'navigation.activities', to: '/activities' }, // ✅ Added activities
+      { labelKey: 'navigation.gallery', to: '/gallery' }, // ✅ Added gallery
     ],
   },
   { labelKey: 'navigation.contact', to: '/contact' },
@@ -41,13 +42,16 @@ const Navbar = () => {
 
   const isActive = (to) => location.pathname === to;
 
+  // Close dropdown when clicking outside or navigating
+  const closeDropdown = () => setDropdownOpen(false);
+
   return (
     <nav className="sticky top-0 z-50 border-b border-green-100/80 bg-white/90 backdrop-blur-xl shadow-[0_8px_30px_rgba(16,185,129,0.08)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between gap-3 min-h-20 py-3">
           {/* Logo with Image */}
           <Link to="/" className="flex items-center gap-3 group shrink-0">
-            <div className="w-22 h-20 rounded-full justify-center shadow-lg shadow-green-200 group-hover:shadow-green-300 transition-shadow overflow-hidden">
+            <div className="w-21 h-19 rounded-full bg-gradient-to-br  justify-center shadow-lg shadow-green-200 group-hover:shadow-green-300 transition-shadow overflow-hidden">
               {logoImg ? (
                 <img src={logoImg} alt="Nek Kaam Foundation" className="w-full h-full object-cover" />
               ) : (
@@ -70,7 +74,9 @@ const Navbar = () => {
                   <button
                     type="button"
                     onClick={() => setDropdownOpen(!dropdownOpen)}
-                    className={`flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${dropdownOpen ? 'text-green-700 bg-white shadow-sm' : 'text-gray-700 hover:text-green-700 hover:bg-white/70'}`}
+                    className={`flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
+                      dropdownOpen ? 'text-green-700 bg-white shadow-sm' : 'text-gray-700 hover:text-green-700 hover:bg-white/70'
+                    }`}
                   >
                     {t(link.labelKey)}
                     <ChevronDown size={14} className={`transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
@@ -83,13 +89,16 @@ const Navbar = () => {
                         exit={{ opacity: 0, y: 8 }}
                         transition={{ duration: 0.15 }}
                         className="absolute top-full left-0 mt-2 w-52 bg-white rounded-2xl shadow-2xl border border-gray-100 py-2 z-50 overflow-hidden"
-                        onMouseLeave={() => setDropdownOpen(false)}
+                        onMouseLeave={closeDropdown}
                       >
                         {link.children.map((child) => (
                           <Link
                             key={child.to}
                             to={child.to}
-                            className={`block px-4 py-3 text-sm font-medium transition-colors ${isActive(child.to) ? 'text-green-700 bg-green-50' : 'text-gray-700 hover:text-green-700 hover:bg-green-50'}`}
+                            onClick={closeDropdown}
+                            className={`block px-4 py-3 text-sm font-medium transition-colors ${
+                              isActive(child.to) ? 'text-green-700 bg-green-50' : 'text-gray-700 hover:text-green-700 hover:bg-green-50'
+                            }`}
                           >
                             {t(child.labelKey)}
                           </Link>
@@ -102,7 +111,9 @@ const Navbar = () => {
                 <Link
                   key={link.to}
                   to={link.to}
-                  className={`px-3.5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${isActive(link.to) ? 'text-green-700 bg-white shadow-sm' : 'text-gray-700 hover:text-green-700 hover:bg-white/70'}`}
+                  className={`px-3.5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
+                    isActive(link.to) ? 'text-green-700 bg-white shadow-sm' : 'text-gray-700 hover:text-green-700 hover:bg-white/70'
+                  }`}
                 >
                   {t(link.labelKey)}
                 </Link>
@@ -161,77 +172,92 @@ const Navbar = () => {
       {/* Mobile Menu */}
       <AnimatePresence>
         {isOpen && (
-          <div className="xl:hidden bg-white border-t border-gray-100 shadow-lg px-4 py-4 space-y-2">
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="xl:hidden bg-white border-t border-gray-100 shadow-lg px-4 py-4 space-y-2 max-h-[80vh] overflow-y-auto"
+          >
             {/* Language switcher mobile */}
             <div className="flex items-center gap-2 pb-3 border-b border-gray-100 overflow-x-auto">
               <LanguageSwitcher variant="simple" />
             </div>
 
-            <Link to="/" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 rounded-lg text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium transition">
-              {t('navigation.home')}
-            </Link>
-            <Link to="/about" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 rounded-lg text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium transition">
-              {t('navigation.about')}
-            </Link>
-            <Link to="/projects" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 rounded-lg text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium transition">
-              {t('navigation.projects')}
-            </Link>
-            <Link to="/activities" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 rounded-lg text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium transition">
-              {t('navigation.activities')}
-            </Link>
-            <Link to="/gallery" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 rounded-lg text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium transition">
-              {t('navigation.gallery')}
-            </Link>
-            <Link to="/impact-stories" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 rounded-lg text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium transition">
-              {t('navigation.impactStories')}
-            </Link>
-            <Link to="/committee" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 rounded-lg text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium transition">
-              {t('navigation.committee')}
-            </Link>
-            <Link to="/transparency" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 rounded-lg text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium transition">
-              {t('navigation.transparency')}
-            </Link>
-            <Link to="/contact" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 rounded-lg text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium transition">
-              {t('navigation.contact')}
-            </Link>
-
-            {isAdminLoggedIn ? (
-              <>
-                <Link to="/admin-dashboard" className="block">
-                  <Button variant="primary" size="sm" className="w-full">
-                    {t('common.adminDashboard')}
-                  </Button>
+            {navLinks.map((link) =>
+              link.children ? (
+                <div key={link.labelKey} className="space-y-1">
+                  <div className="px-3 py-2.5 text-gray-700 font-semibold">
+                    {t(link.labelKey)}
+                  </div>
+                  <div className="pl-4 space-y-1 border-l-2 border-green-200 ml-3">
+                    {link.children.map((child) => (
+                      <Link
+                        key={child.to}
+                        to={child.to}
+                        onClick={() => setIsOpen(false)}
+                        className={`block px-3 py-2 rounded-lg text-sm transition ${
+                          isActive(child.to) ? 'text-green-700 bg-green-50 font-medium' : 'text-gray-600 hover:text-green-600 hover:bg-green-50'
+                        }`}
+                      >
+                        {t(child.labelKey)}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  onClick={() => setIsOpen(false)}
+                  className={`block px-3 py-2.5 rounded-lg transition ${
+                    isActive(link.to) ? 'text-green-700 bg-green-50 font-semibold' : 'text-gray-700 hover:text-green-600 hover:bg-green-50 font-medium'
+                  }`}
+                >
+                  {t(link.labelKey)}
                 </Link>
-                <Button onClick={handleLogout} variant="outline" size="sm" className="w-full">
-                  {t('common.logout')}
-                </Button>
-              </>
-            ) : isMemberLoggedIn ? (
-              <>
-                <Link to="/member-dashboard" className="block">
-                  <Button variant="primary" size="sm" className="w-full">
-                    {t('common.dashboard')}
-                  </Button>
-                </Link>
-                <Button onClick={handleLogout} variant="outline" size="sm" className="w-full">
-                  {t('common.logout')}
-                </Button>
-              </>
-            ) : (
-              <>
-                <Link to="/member-login" className="block">
-                  <Button variant="outline" size="sm" className="w-full">
-                    {t('common.login')}
-                  </Button>
-                </Link>
-                <Link to="/member-register" className="block">
-                  <Button variant="primary" size="sm" className="w-full">
-                    {t('common.register')}
-                  </Button>
-                </Link>
-              </>
+              )
             )}
-          </div>
+
+            <div className="pt-3 border-t border-gray-100 space-y-2">
+              {isAdminLoggedIn ? (
+                <>
+                  <Link to="/admin-dashboard" onClick={() => setIsOpen(false)} className="block">
+                    <Button variant="primary" size="sm" className="w-full">
+                      {t('common.adminDashboard')}
+                    </Button>
+                  </Link>
+                  <Button onClick={handleLogout} variant="outline" size="sm" className="w-full">
+                    {t('common.logout')}
+                  </Button>
+                </>
+              ) : isMemberLoggedIn ? (
+                <>
+                  <Link to="/member-dashboard" onClick={() => setIsOpen(false)} className="block">
+                    <Button variant="primary" size="sm" className="w-full">
+                      {t('common.dashboard')}
+                    </Button>
+                  </Link>
+                  <Button onClick={handleLogout} variant="outline" size="sm" className="w-full">
+                    {t('common.logout')}
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Link to="/member-login" onClick={() => setIsOpen(false)} className="block">
+                    <Button variant="outline" size="sm" className="w-full">
+                      {t('common.login')}
+                    </Button>
+                  </Link>
+                  <Link to="/member-register" onClick={() => setIsOpen(false)} className="block">
+                    <Button variant="primary" size="sm" className="w-full">
+                      {t('common.register')}
+                    </Button>
+                  </Link>
+                </>
+              )}
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </nav>

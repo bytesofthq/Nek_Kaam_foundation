@@ -86,8 +86,9 @@ export const activityAPI = {
 };
 
 // Fund endpoints
+// Fund endpoints
 export const fundAPI = {
-  getTotalCollections:()=>api.get('/api/funds/collections/total'),
+  getTotalCollections: () => api.get('/api/funds/collections/total'),
   getCollections: () => api.get('/api/funds/collections'),
   getUsage: (params) => api.get('/api/funds/usages', { params }),
   createCollection: (data) => api.post('/api/funds/collections', data),

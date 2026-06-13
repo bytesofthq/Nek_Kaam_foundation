@@ -14,6 +14,7 @@ import MemberLogin from './pages/MemberLogin';
 import MemberDashboard from './pages/MemberDashboard';
 import Login from './pages/Login';
 import AdminDashboard from './pages/AdminDashboard';
+import Donate from "./pages/Donate";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
         <Route path="member-dashboard" element={<MemberDashboard />} />
         <Route path="admin/login" element={<Login />} />
         <Route path="admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/donate" element={<Donate></Donate>}></Route>
       </Route>
     </Routes>
   );
