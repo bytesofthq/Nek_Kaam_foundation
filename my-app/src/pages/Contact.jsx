@@ -1,50 +1,52 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { QrCode, Copy, CheckCircle, Heart, ScanLine, Smartphone, Loader2 } from 'lucide-react';
+import { Mail, Phone, MapPin, Clock, Send, CheckCircle, AlertCircle, MessageSquare, PhoneCall, MailOpen } from 'lucide-react';
 import { useTranslation } from '../i18n/useTranslation';
-import donateQr from './AbudrQR.jpeg';
+import { messageAPI } from '../services/api';
 
-const Donate = () => {
+const Contact = () => {
   const { t, language } = useTranslation();
-  const [copied, setCopied] = useState(false);
-  const [isScanning, setIsScanning] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    subject: '',
+    message: ''
+  });
+  const [status, setStatus] = useState({ type: '', message: '', loading: false });
 
-  const qrDetails = {
-    upiId: '9794820273@ptsbiiii',
-    name: 'Nek Kaam Foundationn',
-    upiUrl: `paytmmp://pay?pa=9794820273@ptsbi&pn=Nek Kaam Foundation&cu=INR`
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleCopyUpiId = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus({ type: '', message: '', loading: true });
+
     try {
-      await navigator.clipboard.writeText(qrDetails.upiId);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error('Failed to copy:', err);
+      await messageAPI.sendMessage(formData);
+      setStatus({
+        type: 'success',
+        message: t('contact.success'),
+        loading: false
+      });
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        subject: '',
+        message: ''
+      });
+      setTimeout(() => setStatus({ type: '', message: '', loading: false }), 5000);
+    } catch (error) {
+      setStatus({
+        type: 'error',
+        message: t('contact.failure'),
+        loading: false
+      });
+      setTimeout(() => setStatus({ type: '', message: '', loading: false }), 5000);
     }
-  };
-
-  // Function to simulate scanning QR code and open UPI app
-  const handleScanNow = () => {
-    setIsScanning(true);
-    
-    // Animation effect for scanning
-    setTimeout(() => {
-      // Check if on mobile device
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-      
-      if (isMobile) {
-        // Open UPI app directly
-        window.location.href = qrDetails.upiUrl;
-      } else {
-        // On desktop, show alert with UPI ID
-        alert(`Please use your mobile phone to scan the QR code or use UPI ID: ${qrDetails.upiId}`);
-      }
-      
-      setIsScanning(false);
-    }, 1500);
   };
 
   const fadeInUp = {
@@ -53,19 +55,46 @@ const Donate = () => {
     transition: { duration: 0.6 }
   };
 
-  const pulseAnimation = {
-    scale: [1, 1.05, 1],
-    transition: { duration: 2, repeat: Infinity }
+  const staggerContainer = {
+    animate: {
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
   };
+
+  const contactInfo = [
+    {
+      icon: PhoneCall,
+      title: t('contact.phone'),
+      details: ['+91 97948 20273', '+91 95590 57411'],
+      color: 'green',
+      link: 'tel:+919794820273'
+    },
+    {
+      icon: MailOpen,
+      title: t('contact.email'),
+      details: ['abdurrahman.mohdusman@gmail.com'],
+      color: 'emerald',
+      link: 'mailto:abdurrahman.mohdusman@gmail.com'
+    },
+    {
+      icon: MapPin,
+      title: t('contact.address'),
+      details: ['Akbapur Biswan Sitapur', '261201 UP India'],
+      color: 'teal',
+      link: null
+    }
+  ];
 
   return (
     <div>
       <Helmet>
-        <title>{t('donate.title')} - Nek Kaam Foundation</title>
-        <meta name="description" content={t('donate.subtitle')} />
+        <title>{t('contact.title')} - Nek Kaam Foundation</title>
+        <meta name="description" content={t('contact.subtitle')} />
       </Helmet>
 
-      {/* Hero Section with Description */}
+      {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-green-700 via-emerald-700 to-teal-800 text-white">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 left-10 w-72 h-72 bg-white rounded-full blur-3xl animate-pulse" />
@@ -76,163 +105,231 @@ const Donate = () => {
           <motion.div {...fadeInUp} className="max-w-2xl text-center mx-auto">
             <div className="flex items-center justify-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
-                <Heart size={22} className="text-pink-400" />
+                <MessageSquare size={22} className="text-pink-400" />
               </div>
               <span className="bg-white/10 backdrop-blur-sm font-semibold text-sm px-4 py-1.5 rounded-full">
-                {t('donate.tag')}
+                {t('contact.tag') || 'Get in Touch'}
               </span>
             </div>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-              {t('donate.title')}
+              {t('contact.title')}
             </h1>
             <p className="text-base md:text-lg text-emerald-100 leading-relaxed">
-              {t('donate.subtitle')}
+              {t('contact.subtitle')}
             </p>
-            <div className="mt-6 flex flex-wrap gap-3 justify-center">
-              <div className="bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 text-sm">
-                💝 100% Transparent
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 text-sm">
-                🤝 500+ Families Helped
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 text-sm">
-                📊 Real-time Updates
-              </div>
-            </div>
           </motion.div>
         </div>
       </section>
 
-    
+      {/* Main Content */}
       <section className="py-12 md:py-16 bg-gray-50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div 
-            {...fadeInUp}
-            className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden"
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            variants={staggerContainer}
+            initial="initial"
+            animate="animate"
+            className="grid grid-cols-1 lg:grid-cols-3 gap-8"
           >
-            <div className="bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-4 text-center">
-              <h2 className="text-xl font-bold text-white flex items-center justify-center gap-2">
-                <QrCode size={22} />
-                {t('donate.scanToPay')}
-              </h2>
-              <p className="text-green-100 text-sm mt-1">
-                {t('donate.scanInstruction')}
-              </p>
-            </div>
-            
-            <div className="p-8 text-center">
-            
-              <motion.div 
-                className="relative inline-block cursor-pointer"
-                whileHover={{ scale: 1.02 }}
-                onClick={handleScanNow}
-              >
-                <motion.div 
-                  className="w-64 h-64 mx-auto bg-white rounded-2xl shadow-md p-3 border-2 border-green-100 relative overflow-hidden"
-                  animate={isScanning ? { boxShadow: ['0 0 0 0 rgba(34,197,94,0.4)', '0 0 0 20px rgba(34,197,94,0)'] } : {}}
-                  transition={{ duration: 1, repeat: isScanning ? 1 : 0 }}
+            {/* Contact Info Cards */}
+            <div className="lg:col-span-1 space-y-6">
+              {contactInfo.map((info, idx) => (
+                <motion.div
+                  key={idx}
+                  variants={fadeInUp}
+                  className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 hover:shadow-lg transition-shadow duration-300"
                 >
-                  <img 
-                    src={donateQr} 
-                    alt="UPI QR Code"
-                    className="w-full h-full object-contain"
-                  />
-                  
-                  
-                  {isScanning && (
-                    <motion.div 
-                      className="absolute inset-0 overflow-hidden"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                    >
-                      <motion.div 
-                        className="absolute left-0 right-0 h-1 bg-green-500 shadow-lg shadow-green-500"
-                        animate={{ top: ['0%', '100%'] }}
-                        transition={{ duration: 1, repeat: 1, ease: 'linear' }}
-                      />
-                    </motion.div>
-                  )}
+                  <div className={`w-12 h-12 rounded-xl bg-${info.color}-50 flex items-center justify-center mb-4`}>
+                    <info.icon size={22} className={`text-${info.color}-600`} />
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-800 mb-3">{info.title}</h3>
+                  <div className="space-y-2">
+                    {info.details.map((detail, i) => (
+                      info.link ? (
+                        <a
+                          key={i}
+                          href={info.link}
+                          className="text-gray-600 hover:text-green-600 transition-colors block text-sm"
+                        >
+                          {detail}
+                        </a>
+                      ) : (
+                        <p key={i} className="text-gray-600 text-sm">{detail}</p>
+                      )
+                    ))}
+                  </div>
                 </motion.div>
-                
-            
-                <div className="absolute inset-0 bg-black/40 rounded-2xl opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  <ScanLine size={40} className="text-white" />
+              ))}
+
+              {/* Hours Card */}
+              <motion.div
+                variants={fadeInUp}
+                className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl shadow-md border border-green-100 p-6"
+              >
+                <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center mb-4">
+                  <Clock size={22} className="text-green-600" />
+                </div>
+                <h3 className="text-lg font-bold text-gray-800 mb-3">{t('contact.hours')}</h3>
+                <div className="space-y-2">
+                  <p className="text-gray-600 text-sm">Monday - Saturday: 9:00 AM - 6:00 PM</p>
+                  <p className="text-gray-600 text-sm">Sunday: Closed</p>
                 </div>
               </motion.div>
-
-            
-              <motion.button
-                onClick={handleScanNow}
-                className="mt-6 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold py-3 px-8 rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 mx-auto"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                disabled={isScanning}
-              >
-                {isScanning ? (
-                  <>
-                    <Loader2 size={20} className="animate-spin" />
-                    {t('donate.scanning')}
-                  </>
-                ) : (
-                  <>
-                    <Smartphone size={20} />
-                    {t('donate.scanNow')}
-                  </>
-                )}
-              </motion.button>
-
-            
-              <div className="relative my-6">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-200"></div>
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-3 bg-white text-gray-500">{t('donate.or')}</span>
-                </div>
-              </div>
-
-              
-              <div>
-                <p className="text-sm text-gray-500 mb-2">{t('donate.upiIdLabel')}</p>
-                <div className="flex items-center justify-between gap-3 bg-gray-50 rounded-xl p-3 border border-gray-200 max-w-md mx-auto">
-                  <code className="text-sm md:text-base font-mono text-gray-800 break-all">
-                    {qrDetails.upiId}
-                  </code>
-                  <motion.button
-                    onClick={handleCopyUpiId}
-                    className="flex items-center gap-1 text-green-600 hover:text-green-700 font-medium text-sm px-3 py-1.5 rounded-lg hover:bg-green-50 transition-all"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    {copied ? (
-                      <>
-                        <CheckCircle size={16} />
-                        {t('donate.copied')}
-                      </>
-                    ) : (
-                      <>
-                        <Copy size={16} />
-                        {t('donate.copy')}
-                      </>
-                    )}
-                  </motion.button>
-                </div>
-              </div>
-
-              
-              
             </div>
-          </motion.div>
 
-          
-          <motion.div 
+            {/* Contact Form */}
+            <motion.div
+              variants={fadeInUp}
+              className="lg:col-span-2 bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden"
+            >
+              <div className="bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-4">
+                <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                  <Send size={20} />
+                  {t('contact.sendMessage')}
+                </h2>
+                <p className="text-green-100 text-sm mt-1">
+                  {t('contact.subtitle')}
+                </p>
+              </div>
+
+              <form onSubmit={handleSubmit} className="p-6 space-y-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      {t('contact.name')} <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition-all"
+                      placeholder={t('contact.name')}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      {t('contact.emailLabel')} <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition-all"
+                      placeholder={t('contact.emailLabel')}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      {t('contact.phoneLabel')}
+                    </label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition-all"
+                      placeholder={t('contact.phoneLabel')}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      {t('contact.subject')} <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="subject"
+                      value={formData.subject}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition-all"
+                      placeholder={t('contact.subject')}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {t('contact.message')} <span className="text-red-500">*</span>
+                  </label>
+                  <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
+                    rows={5}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition-all resize-none"
+                    placeholder={t('contact.message')}
+                  />
+                </div>
+
+                {/* Status Messages */}
+                {status.message && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`p-4 rounded-xl flex items-center gap-3 ${
+                      status.type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'
+                    }`}
+                  >
+                    {status.type === 'success' ? (
+                      <CheckCircle size={18} className="text-green-600" />
+                    ) : (
+                      <AlertCircle size={18} className="text-red-600" />
+                    )}
+                    <p className="text-sm">{status.message}</p>
+                  </motion.div>
+                )}
+
+                <motion.button
+                  type="submit"
+                  disabled={status.loading}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold py-3 px-6 rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                >
+                  {status.loading ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      {t('contact.sending')}
+                    </>
+                  ) : (
+                    <>
+                      <Send size={18} />
+                      {t('contact.send')}
+                    </>
+                  )}
+                </motion.button>
+              </form>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Map Section */}
+      <section className="py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
             {...fadeInUp}
-            className="mt-8 text-center"
+            className="rounded-2xl overflow-hidden shadow-lg border border-gray-100"
           >
-            <p className="text-gray-500 text-sm">
-              {t('donate.thankYou')}
-            </p>
+            <iframe
+              title="Nek Kaam Foundation Location"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3552.567890123456!2d80.98765432101234!3d27.12345678901234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjfCsDA3JzI0LjQiTiA4MMKwNTknMTUuNiJF!5e0!3m2!1sen!2sin!4v1234567890123!5m2!1sen!2sin"
+              width="100%"
+              height="350"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="w-full"
+              title="Nek Kaam Foundation Location Map"
+            />
           </motion.div>
         </div>
       </section>
@@ -240,4 +337,4 @@ const Donate = () => {
   );
 };
 
-export default Donate;
+export default Contact;
