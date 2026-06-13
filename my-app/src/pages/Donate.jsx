@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
+
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { QrCode, Copy, CheckCircle, Heart, ScanLine, Smartphone, Loader2, X, Camera } from 'lucide-react';
@@ -10,7 +11,8 @@ const Donate = () => {
   const { t, language } = useTranslation();
   const [copied, setCopied] = useState(false);
   const [showScanner, setShowScanner] = useState(false);
-  const [scanning, setScanning] = useState(false);
+  const [isScanning, setIsScanning] = useState(false);
+  const [scanResult, setScanResult] = useState(null);
   const scannerRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -20,7 +22,7 @@ const Donate = () => {
     upiUrl: `paytmmp://pay?pa=9794820273@ptsbi&pn=Nek Kaam Foundation&cu=INR`
   };
 
-  // Check if device is mobile based on screen width
+  // Check if device is mobile
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
@@ -43,61 +45,71 @@ const Donate = () => {
   // Start QR Scanner
   const startScanner = () => {
     setShowScanner(true);
-    setScanning(true);
+    setIsScanning(true);
+    setScanResult(null);
   };
 
   // Stop Scanner
   const stopScanner = () => {
     if (scannerRef.current) {
       scannerRef.current.clear();
+      scannerRef.current = null;
     }
     setShowScanner(false);
-    setScanning(false);
+    setIsScanning(false);
   };
 
-  // Handle QR Code Scan Success
+  // Handle successful QR scan
   const onScanSuccess = (decodedText, decodedResult) => {
-    console.log('QR Code Scanned:', decodedText);
+    console.log('QR Code detected:', decodedText);
+    setScanResult(decodedText);
     
     // Open UPI app with payment
     window.location.href = qrDetails.upiUrl;
     
-    // Close scanner
-    stopScanner();
+    // Close scanner after redirect
+    setTimeout(() => {
+      stopScanner();
+    }, 500);
   };
 
-  // Initialize QR Scanner when modal opens
+  const onScanError = (error) => {
+    console.log('Scan error:', error);
+  };
+
+  // Initialize scanner when modal opens
   useEffect(() => {
-    if (showScanner && isMobile) {
-      // Initialize html5-qrcode scanner
-      const scanner = new Html5QrcodeScanner('qr-reader', {
-        fps: 10,
-        qrbox: { width: 250, height: 250 },
-        aspectRatio: 1.0
-      }, false);
+    if (showScanner && !scannerRef.current) {
+      const scanner = new Html5QrcodeScanner(
+        "qr-reader",
+        {
+          fps: 10,
+          qrbox: { width: 250, height: 250 },
+          aspectRatio: 1.0,
+          showTorchButton: true,
+          showZoomSlider: true,
+          defaultZoomValue: 2,
+          videoConstraints: {
+            facingMode: "environment"
+          }
+        },
+        false
+      );
       
-      scanner.render(onScanSuccess, (error) => {
-        console.log('Scan error:', error);
-      });
-      
+      scanner.render(onScanSuccess, onScanError);
       scannerRef.current = scanner;
-      
-      return () => {
-        if (scannerRef.current) {
-          scannerRef.current.clear();
-        }
-      };
     }
-  }, [showScanner, isMobile]);
+    
+    return () => {
+      if (scannerRef.current && showScanner) {
+        scannerRef.current.clear();
+        scannerRef.current = null;
+      }
+    };
+  }, [showScanner]);
 
   const handleScanNow = () => {
-    if (isMobile) {
-      // Mobile: Open camera to scan QR code from screen
-      startScanner();
-    } else {
-      // Desktop: Show alert with instructions
-      alert(`Please use your mobile phone to scan the QR code or use UPI ID: ${qrDetails.upiId}`);
-    }
+    startScanner();
   };
 
   const fadeInUp = {
@@ -156,7 +168,7 @@ const Donate = () => {
         </div>
       </section>
 
-      {/* Main Content - QR Code Section */}
+      {/* Main Content */}
       <section className="py-12 md:py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
@@ -174,7 +186,7 @@ const Donate = () => {
             </div>
             
             <div className="p-8 text-center">
-              {/* QR Code */}
+              {/* QR Code Display */}
               <motion.div 
                 className="relative inline-block"
                 animate={pulseAnimation}
@@ -191,7 +203,7 @@ const Donate = () => {
               {/* Scan Now Button */}
               <motion.button
                 onClick={handleScanNow}
-                className="mt-6 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold py-3 px-8 rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 mx-auto"
+                className="mt-6 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold py-3 px-8 rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 mx-auto w-full md:w-auto"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -200,8 +212,9 @@ const Donate = () => {
               </motion.button>
 
               {/* Instruction */}
-              <p className="text-xs text-gray-500 mt-4">
-                {isMobile ? t('donate.mobileInstruction') : t('donate.desktopInstruction')}
+              <p className="text-xs text-gray-500 mt-4 flex items-center justify-center gap-2">
+                <Smartphone size={14} />
+                {t('donate.howItWorks')}
               </p>
 
               {/* OR Divider */}
@@ -264,8 +277,8 @@ const Donate = () => {
         </div>
       </section>
 
-      {/* QR Scanner Modal - Mobile only */}
-      {showScanner && isMobile && (
+      {/* QR Scanner Modal */}
+      {showScanner && (
         <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4">
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
@@ -282,12 +295,12 @@ const Donate = () => {
               </button>
             </div>
             
-            <div className="p-6">
+            <div className="p-4">
               <div className="relative bg-black rounded-xl overflow-hidden">
                 <div id="qr-reader" className="w-full"></div>
               </div>
               
-              <div className="mt-6 text-center">
+              <div className="mt-4 text-center">
                 <p className="text-gray-600 text-sm">
                   {t('donate.positionQR')}
                 </p>
