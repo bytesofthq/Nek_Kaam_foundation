@@ -1,20 +1,34 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { QrCode, Copy, CheckCircle, Heart, ScanLine, Smartphone, Loader2 } from 'lucide-react';
+import { QrCode, Copy, CheckCircle, Heart, ScanLine, Smartphone, Loader2, X, Camera } from 'lucide-react';
 import { useTranslation } from '../i18n/useTranslation';
+import { Html5QrcodeScanner } from 'html5-qrcode';
 import donateQr from './AbudrQR.jpeg';
 
 const Donate = () => {
   const { t, language } = useTranslation();
   const [copied, setCopied] = useState(false);
-  const [isScanning, setIsScanning] = useState(false);
+  const [showScanner, setShowScanner] = useState(false);
+  const [scanning, setScanning] = useState(false);
+  const scannerRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   const qrDetails = {
     upiId: '9794820273@ptsbi',
     name: 'Nek Kaam Foundation',
     upiUrl: `paytmmp://pay?pa=9794820273@ptsbi&pn=Nek Kaam Foundation&cu=INR`
   };
+
+  // Check if device is mobile based on screen width
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const handleCopyUpiId = async () => {
     try {
@@ -26,25 +40,64 @@ const Donate = () => {
     }
   };
 
-  // Function to simulate scanning QR code and open UPI app
-  const handleScanNow = () => {
-    setIsScanning(true);
+  // Start QR Scanner
+  const startScanner = () => {
+    setShowScanner(true);
+    setScanning(true);
+  };
+
+  // Stop Scanner
+  const stopScanner = () => {
+    if (scannerRef.current) {
+      scannerRef.current.clear();
+    }
+    setShowScanner(false);
+    setScanning(false);
+  };
+
+  // Handle QR Code Scan Success
+  const onScanSuccess = (decodedText, decodedResult) => {
+    console.log('QR Code Scanned:', decodedText);
     
-    // Animation effect for scanning
-    setTimeout(() => {
-      // Check if on mobile device
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    // Open UPI app with payment
+    window.location.href = qrDetails.upiUrl;
+    
+    // Close scanner
+    stopScanner();
+  };
+
+  // Initialize QR Scanner when modal opens
+  useEffect(() => {
+    if (showScanner && isMobile) {
+      // Initialize html5-qrcode scanner
+      const scanner = new Html5QrcodeScanner('qr-reader', {
+        fps: 10,
+        qrbox: { width: 250, height: 250 },
+        aspectRatio: 1.0
+      }, false);
       
-      if (isMobile) {
-        // Open UPI app directly
-        window.location.href = qrDetails.upiUrl;
-      } else {
-        // On desktop, show alert with UPI ID
-        alert(`Please use your mobile phone to scan the QR code or use UPI ID: ${qrDetails.upiId}`);
-      }
+      scanner.render(onScanSuccess, (error) => {
+        console.log('Scan error:', error);
+      });
       
-      setIsScanning(false);
-    }, 1500);
+      scannerRef.current = scanner;
+      
+      return () => {
+        if (scannerRef.current) {
+          scannerRef.current.clear();
+        }
+      };
+    }
+  }, [showScanner, isMobile]);
+
+  const handleScanNow = () => {
+    if (isMobile) {
+      // Mobile: Open camera to scan QR code from screen
+      startScanner();
+    } else {
+      // Desktop: Show alert with instructions
+      alert(`Please use your mobile phone to scan the QR code or use UPI ID: ${qrDetails.upiId}`);
+    }
   };
 
   const fadeInUp = {
@@ -54,7 +107,7 @@ const Donate = () => {
   };
 
   const pulseAnimation = {
-    scale: [1, 1.05, 1],
+    scale: [1, 1.02, 1],
     transition: { duration: 2, repeat: Infinity }
   };
 
@@ -65,7 +118,7 @@ const Donate = () => {
         <meta name="description" content={t('donate.subtitle')} />
       </Helmet>
 
-      {/* Hero Section with Description */}
+      {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-green-700 via-emerald-700 to-teal-800 text-white">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 left-10 w-72 h-72 bg-white rounded-full blur-3xl animate-pulse" />
@@ -121,66 +174,35 @@ const Donate = () => {
             </div>
             
             <div className="p-8 text-center">
-              {/* QR Code with Scan Animation */}
+              {/* QR Code */}
               <motion.div 
-                className="relative inline-block cursor-pointer"
-                whileHover={{ scale: 1.02 }}
-                onClick={handleScanNow}
+                className="relative inline-block"
+                animate={pulseAnimation}
               >
-                <motion.div 
-                  className="w-64 h-64 mx-auto bg-white rounded-2xl shadow-md p-3 border-2 border-green-100 relative overflow-hidden"
-                  animate={isScanning ? { boxShadow: ['0 0 0 0 rgba(34,197,94,0.4)', '0 0 0 20px rgba(34,197,94,0)'] } : {}}
-                  transition={{ duration: 1, repeat: isScanning ? 1 : 0 }}
-                >
+                <div className="w-64 h-64 mx-auto bg-white rounded-2xl shadow-md p-3 border-2 border-green-100">
                   <img 
                     src={donateQr} 
                     alt="UPI QR Code"
                     className="w-full h-full object-contain"
                   />
-                  
-                  {/* Scanning Line Animation */}
-                  {isScanning && (
-                    <motion.div 
-                      className="absolute inset-0 overflow-hidden"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                    >
-                      <motion.div 
-                        className="absolute left-0 right-0 h-1 bg-green-500 shadow-lg shadow-green-500"
-                        animate={{ top: ['0%', '100%'] }}
-                        transition={{ duration: 1, repeat: 1, ease: 'linear' }}
-                      />
-                    </motion.div>
-                  )}
-                </motion.div>
-                
-                {/* Scan Overlay on Hover */}
-                <div className="absolute inset-0 bg-black/40 rounded-2xl opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  <ScanLine size={40} className="text-white" />
                 </div>
               </motion.div>
 
-              {/* Scan Now Button with Animation */}
+              {/* Scan Now Button */}
               <motion.button
                 onClick={handleScanNow}
                 className="mt-6 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold py-3 px-8 rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 mx-auto"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                disabled={isScanning}
               >
-                {isScanning ? (
-                  <>
-                    <Loader2 size={20} className="animate-spin" />
-                    {t('donate.scanning')}
-                  </>
-                ) : (
-                  <>
-                    <Smartphone size={20} />
-                    {t('donate.scanNow')}
-                  </>
-                )}
+                <Camera size={20} />
+                {t('donate.scanNow')}
               </motion.button>
+
+              {/* Instruction */}
+              <p className="text-xs text-gray-500 mt-4">
+                {isMobile ? t('donate.mobileInstruction') : t('donate.desktopInstruction')}
+              </p>
 
               {/* OR Divider */}
               <div className="relative my-6">
@@ -220,16 +242,8 @@ const Donate = () => {
                 </div>
               </div>
 
-              {/* Instruction Note */}
+              {/* Tax Benefit */}
               <div className="mt-6 pt-4 border-t border-gray-100">
-                <p className="text-xs text-gray-400 flex items-center justify-center gap-2">
-                  <ScanLine size={12} />
-                  {t('donate.scanInstructionNote')}
-                </p>
-              </div>
-
-              {/* Tax Benefit Note */}
-              <div className="mt-4">
                 <p className="text-sm text-amber-600 flex items-center justify-center gap-2">
                   <span>💰</span>
                   {t('donate.taxBenefit')}
@@ -249,6 +263,42 @@ const Donate = () => {
           </motion.div>
         </div>
       </section>
+
+      {/* QR Scanner Modal - Mobile only */}
+      {showScanner && isMobile && (
+        <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="relative bg-white rounded-2xl max-w-md w-full overflow-hidden"
+          >
+            <div className="bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-4 flex justify-between items-center">
+              <h3 className="text-white font-bold flex items-center gap-2">
+                <ScanLine size={20} />
+                {t('donate.scanQRCode')}
+              </h3>
+              <button onClick={stopScanner} className="text-white hover:bg-white/20 p-1 rounded-lg transition">
+                <X size={24} />
+              </button>
+            </div>
+            
+            <div className="p-6">
+              <div className="relative bg-black rounded-xl overflow-hidden">
+                <div id="qr-reader" className="w-full"></div>
+              </div>
+              
+              <div className="mt-6 text-center">
+                <p className="text-gray-600 text-sm">
+                  {t('donate.positionQR')}
+                </p>
+                <p className="text-xs text-gray-400 mt-2">
+                  {t('donate.scannerInstruction')}
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 };
