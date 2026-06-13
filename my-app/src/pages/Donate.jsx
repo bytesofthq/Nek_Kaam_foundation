@@ -103,7 +103,7 @@ const Donate = () => {
         </div>
       </section>
 
-    
+      {/* Main Content - QR Code Section */}
       <section className="py-12 md:py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
@@ -121,7 +121,7 @@ const Donate = () => {
             </div>
             
             <div className="p-8 text-center">
-            
+              {/* QR Code with Scan Animation */}
               <motion.div 
                 className="relative inline-block cursor-pointer"
                 whileHover={{ scale: 1.02 }}
@@ -138,7 +138,7 @@ const Donate = () => {
                     className="w-full h-full object-contain"
                   />
                   
-                  
+                  {/* Scanning Line Animation */}
                   {isScanning && (
                     <motion.div 
                       className="absolute inset-0 overflow-hidden"
@@ -155,13 +155,13 @@ const Donate = () => {
                   )}
                 </motion.div>
                 
-            
+                {/* Scan Overlay on Hover */}
                 <div className="absolute inset-0 bg-black/40 rounded-2xl opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                   <ScanLine size={40} className="text-white" />
                 </div>
               </motion.div>
 
-            
+              {/* Scan Now Button with Animation */}
               <motion.button
                 onClick={handleScanNow}
                 className="mt-6 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold py-3 px-8 rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 mx-auto"
@@ -182,7 +182,7 @@ const Donate = () => {
                 )}
               </motion.button>
 
-            
+              {/* OR Divider */}
               <div className="relative my-6">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-gray-200"></div>
@@ -192,7 +192,7 @@ const Donate = () => {
                 </div>
               </div>
 
-              
+              {/* UPI ID Section */}
               <div>
                 <p className="text-sm text-gray-500 mb-2">{t('donate.upiIdLabel')}</p>
                 <div className="flex items-center justify-between gap-3 bg-gray-50 rounded-xl p-3 border border-gray-200 max-w-md mx-auto">
@@ -220,12 +220,25 @@ const Donate = () => {
                 </div>
               </div>
 
-              
-              
+              {/* Instruction Note */}
+              <div className="mt-6 pt-4 border-t border-gray-100">
+                <p className="text-xs text-gray-400 flex items-center justify-center gap-2">
+                  <ScanLine size={12} />
+                  {t('donate.scanInstructionNote')}
+                </p>
+              </div>
+
+              {/* Tax Benefit Note */}
+              <div className="mt-4">
+                <p className="text-sm text-amber-600 flex items-center justify-center gap-2">
+                  <span>💰</span>
+                  {t('donate.taxBenefit')}
+                </p>
+              </div>
             </div>
           </motion.div>
 
-          
+          {/* Thank You Message */}
           <motion.div 
             {...fadeInUp}
             className="mt-8 text-center"
