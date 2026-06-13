@@ -20,7 +20,7 @@ const navLinks = [
       { labelKey: 'navigation.committee', to: '/committee' },
       { labelKey: 'navigation.transparency', to: '/transparency' },
       { labelKey: 'navigation.activities', to: '/activities' }, // ✅ Added activities
-      { labelKey: 'navigation.gallery', to: '/gallery' }, // ✅ Added gallery
+      // { labelKey: 'navigation.gallery', to: '/gallery' }, // ✅ Added gallery
     ],
   },
   { labelKey: 'navigation.contact', to: '/contact' },
