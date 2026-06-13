@@ -93,7 +93,7 @@ const Donate = () => {
                 💝 100% Transparent
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 text-sm">
-                🤝 50+ Families Helped
+                🤝 500+ Families Helped
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 text-sm">
                 📊 Real-time Updates
