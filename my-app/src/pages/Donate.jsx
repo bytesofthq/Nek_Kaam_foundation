@@ -10,7 +10,7 @@ const Donate = () => {
   const [copied, setCopied] = useState(false);
 
   const qrDetails = {
-    upiId: '9794820273@ptsbi',
+    upiId: '8810743304@ybl',
     name: 'Nek Kaam Foundation'
   };
 
