@@ -11,7 +11,7 @@ const Donate = () => {
   const [isScanning, setIsScanning] = useState(false);
 
   const qrDetails = {
-    upiId: '9794820273@ptsbi',
+    upiId: '9794820273@ptsbiiii',
     name: 'Nek Kaam Foundationn',
     upiUrl: `paytmmp://pay?pa=9794820273@ptsbi&pn=Nek Kaam Foundation&cu=INR`
   };
