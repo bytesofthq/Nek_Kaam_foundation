@@ -1,5 +1,4 @@
-
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { QrCode, Copy, CheckCircle, Heart, ScanLine, Smartphone, Loader2, X, Camera } from 'lucide-react';
@@ -10,27 +9,13 @@ import donateQr from './AbudrQR.jpeg';
 const Donate = () => {
   const { t, language } = useTranslation();
   const [copied, setCopied] = useState(false);
-  const [showScanner, setShowScanner] = useState(false);
   const [isScanning, setIsScanning] = useState(false);
-  const [scanResult, setScanResult] = useState(null);
-  const scannerRef = useRef(null);
-  const [isMobile, setIsMobile] = useState(false);
 
   const qrDetails = {
     upiId: '9794820273@ptsbi',
     name: 'Nek Kaam Foundation',
     upiUrl: `paytmmp://pay?pa=9794820273@ptsbi&pn=Nek Kaam Foundation&cu=INR`
   };
-
-  // Check if device is mobile
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
 
   const handleCopyUpiId = async () => {
     try {
@@ -42,74 +27,25 @@ const Donate = () => {
     }
   };
 
-  // Start QR Scanner
-  const startScanner = () => {
-    setShowScanner(true);
-    setIsScanning(true);
-    setScanResult(null);
-  };
-
-  // Stop Scanner
-  const stopScanner = () => {
-    if (scannerRef.current) {
-      scannerRef.current.clear();
-      scannerRef.current = null;
-    }
-    setShowScanner(false);
-    setIsScanning(false);
-  };
-
-  // Handle successful QR scan
-  const onScanSuccess = (decodedText, decodedResult) => {
-    console.log('QR Code detected:', decodedText);
-    setScanResult(decodedText);
-    
-    // Open UPI app with payment
-    window.location.href = qrDetails.upiUrl;
-    
-    // Close scanner after redirect
-    setTimeout(() => {
-      stopScanner();
-    }, 500);
-  };
-
-  const onScanError = (error) => {
-    console.log('Scan error:', error);
-  };
-
-  // Initialize scanner when modal opens
-  useEffect(() => {
-    if (showScanner && !scannerRef.current) {
-      const scanner = new Html5QrcodeScanner(
-        "qr-reader",
-        {
-          fps: 10,
-          qrbox: { width: 250, height: 250 },
-          aspectRatio: 1.0,
-          showTorchButton: true,
-          showZoomSlider: true,
-          defaultZoomValue: 2,
-          videoConstraints: {
-            facingMode: "environment"
-          }
-        },
-        false
-      );
-      
-      scanner.render(onScanSuccess, onScanError);
-      scannerRef.current = scanner;
-    }
-    
-    return () => {
-      if (scannerRef.current && showScanner) {
-        scannerRef.current.clear();
-        scannerRef.current = null;
-      }
-    };
-  }, [showScanner]);
-
+  // Function to simulate scanning QR code and open UPI app
   const handleScanNow = () => {
-    startScanner();
+    setIsScanning(true);
+    
+    // Animation effect for scanning
+    setTimeout(() => {
+      // Check if on mobile device
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      
+      if (isMobile) {
+        // Open UPI app directly
+        window.location.href = qrDetails.upiUrl;
+      } else {
+        // On desktop, show alert with UPI ID
+        alert(`Please use your mobile phone to scan the QR code or use UPI ID: ${qrDetails.upiId}`);
+      }
+      
+      setIsScanning(false);
+    }, 1500);
   };
 
   const fadeInUp = {
@@ -186,7 +122,7 @@ const Donate = () => {
             </div>
             
             <div className="p-8 text-center">
-              {/* QR Code Display */}
+              {/* QR Code with Scan Animation */}
               <motion.div 
                 className="relative inline-block"
                 animate={pulseAnimation}
@@ -210,12 +146,6 @@ const Donate = () => {
                 <Camera size={20} />
                 {t('donate.scanNow')}
               </motion.button>
-
-              {/* Instruction */}
-              <p className="text-xs text-gray-500 mt-4 flex items-center justify-center gap-2">
-                <Smartphone size={14} />
-                {t('donate.howItWorks')}
-              </p>
 
               {/* OR Divider */}
               <div className="relative my-6">
@@ -276,42 +206,6 @@ const Donate = () => {
           </motion.div>
         </div>
       </section>
-
-      {/* QR Scanner Modal */}
-      {showScanner && (
-        <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4">
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="relative bg-white rounded-2xl max-w-md w-full overflow-hidden"
-          >
-            <div className="bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-4 flex justify-between items-center">
-              <h3 className="text-white font-bold flex items-center gap-2">
-                <ScanLine size={20} />
-                {t('donate.scanQRCode')}
-              </h3>
-              <button onClick={stopScanner} className="text-white hover:bg-white/20 p-1 rounded-lg transition">
-                <X size={24} />
-              </button>
-            </div>
-            
-            <div className="p-4">
-              <div className="relative bg-black rounded-xl overflow-hidden">
-                <div id="qr-reader" className="w-full"></div>
-              </div>
-              
-              <div className="mt-4 text-center">
-                <p className="text-gray-600 text-sm">
-                  {t('donate.positionQR')}
-                </p>
-                <p className="text-xs text-gray-400 mt-2">
-                  {t('donate.scannerInstruction')}
-                </p>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      )}
     </div>
   );
 };
