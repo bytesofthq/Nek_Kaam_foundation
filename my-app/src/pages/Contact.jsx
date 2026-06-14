@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { Mail, Phone, MapPin, Clock, Send, CheckCircle, AlertCircle, MessageSquare, PhoneCall, MailOpen } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle, MessageSquare, PhoneCall, MailOpen } from 'lucide-react';
 import { useTranslation } from '../i18n/useTranslation';
 import { messageAPI } from '../services/api';
 
@@ -81,7 +81,7 @@ const Contact = () => {
     {
       icon: MapPin,
       title: t('contact.address'),
-      details: ['Akbapur Biswan Sitapur', '261201 UP India'],
+      details: ['Akbapur, Biswan, Sitapur', 'Uttar Pradesh - 261201', 'India'],
       color: 'teal',
       link: null
     }
@@ -159,21 +159,6 @@ const Contact = () => {
                   </div>
                 </motion.div>
               ))}
-
-              {/* Hours Card */}
-              <motion.div
-                variants={fadeInUp}
-                className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl shadow-md border border-green-100 p-6"
-              >
-                <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center mb-4">
-                  <Clock size={22} className="text-green-600" />
-                </div>
-                <h3 className="text-lg font-bold text-gray-800 mb-3">{t('contact.hours')}</h3>
-                <div className="space-y-2">
-                  <p className="text-gray-600 text-sm">Monday - Saturday: 9:00 AM - 6:00 PM</p>
-                  <p className="text-gray-600 text-sm">Sunday: Closed</p>
-                </div>
-              </motion.div>
             </div>
 
             {/* Contact Form */}
@@ -311,7 +296,7 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* Map Section */}
+      {/* Map Section - Akbapur Location */}
       <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -319,16 +304,15 @@ const Contact = () => {
             className="rounded-2xl overflow-hidden shadow-lg border border-gray-100"
           >
             <iframe
-              title="Nek Kaam Foundation Location"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3552.567890123456!2d80.98765432101234!3d27.12345678901234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjfCsDA3JzI0LjQiTiA4MMKwNTknMTUuNiJF!5e0!3m2!1sen!2sin!4v1234567890123!5m2!1sen!2sin"
+              title="Nek Kaam Foundation - Akbapur, Biswan, Sitapur"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3552.5!2d80.9876!3d27.1235!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399e5a1234567891%3A0x1234567890abcdef!2sAkbapur%2C%20Biswan%2C%20Sitapur%2C%20Uttar%20Pradesh!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
               width="100%"
-              height="350"
+              height="400"
               style={{ border: 0 }}
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               className="w-full"
-              title="Nek Kaam Foundation Location Map"
             />
           </motion.div>
         </div>

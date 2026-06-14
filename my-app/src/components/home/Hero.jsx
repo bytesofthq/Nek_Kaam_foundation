@@ -1,10 +1,47 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Eye, Shield, ChevronDown, Users, Star } from 'lucide-react';
+import { ChevronDown, Users, Download, ArrowRight } from 'lucide-react';
 import { useTranslation } from '../../i18n/useTranslation';
+import { useEffect, useState } from 'react';
 
 const Hero = () => {
   const { t } = useTranslation();
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [showDownloadBtn, setShowDownloadBtn] = useState(false);
+
+  useEffect(() => {
+    // Listen for the beforeinstallprompt event
+    const handleBeforeInstallPrompt = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setShowDownloadBtn(true);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    // Check if app already installed
+    const isInstalled = window.matchMedia('(display-mode: standalone)').matches || 
+                        window.navigator.standalone === true;
+    
+    if (isInstalled) {
+      setShowDownloadBtn(false);
+    }
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
+  }, []);
+
+  const handleDownloadClick = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        setShowDownloadBtn(false);
+      }
+      setDeferredPrompt(null);
+    }
+  };
 
   const scrollToStats = () => {
     const el = document.getElementById('stats-section');
@@ -31,9 +68,9 @@ const Hero = () => {
           transition={{ duration: 0.6 }}
           className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-5 py-2 mb-8"
         >
-          <Star size={14} className="text-yellow-400 fill-yellow-400" />
+          <span className="text-yellow-400 text-lg">✦</span>
           <span className="text-white/90 text-sm font-medium">{t('hero.badge')}</span>
-          <Star size={14} className="text-yellow-400 fill-yellow-400" />
+          <span className="text-yellow-400 text-lg">✦</span>
         </motion.div>
 
         {/* Main heading */}
@@ -59,43 +96,44 @@ const Hero = () => {
           {t('hero.subtitle')}
         </motion.p>
 
-        {/* CTA Buttons */}
+        {/* Professional CTA Buttons - Both Yellow Theme */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="flex flex-col sm:flex-row justify-center gap-4 mb-16"
+          className="flex flex-col sm:flex-row justify-center gap-5 mb-16"
         >
+          {/* Become a Member Button */}
           <Link to="/member-register">
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-yellow-400/30 transition-all duration-300 text-lg"
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              className="group relative flex items-center gap-3 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-gray-900 font-bold px-10 py-4 rounded-xl shadow-xl hover:shadow-2xl hover:shadow-yellow-500/30 transition-all duration-300 text-lg overflow-hidden"
             >
-              <Users size={20} />
-              {t('hero.ctaMember')}
+              <div className="absolute inset-0 bg-gradient-to-r from-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <Users size={22} className="relative z-10" />
+              <span className="relative z-10">{t('hero.ctaMember')}</span>
+              <ArrowRight size={18} className="relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
             </motion.button>
           </Link>
-          <Link to="/activities">
+          
+          {/* Download App Button - Same Yellow Theme */}
+          {showDownloadBtn && (
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white font-bold px-8 py-4 rounded-xl transition-all duration-300 text-lg"
+              onClick={handleDownloadClick}
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.35 }}
+              className="group relative flex items-center gap-3 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-gray-900 font-bold px-10 py-4 rounded-xl shadow-xl hover:shadow-2xl hover:shadow-yellow-500/30 transition-all duration-300 text-lg overflow-hidden"
             >
-              <Eye size={20} />
-              {t('hero.ctaActivities')}
+              <div className="absolute inset-0 bg-gradient-to-r from-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <Download size={22} className="relative z-10" />
+              <span className="relative z-10">{t('hero.ctaDownload') || 'Download App'}</span>
+              
             </motion.button>
-          </Link>
-          <Link to="/transparency">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white font-bold px-8 py-4 rounded-xl transition-all duration-300 text-lg"
-            >
-              <Shield size={20} />
-              {t('hero.ctaTransparency')}
-            </motion.button>
-          </Link>
+          )}
         </motion.div>
 
         {/* Trust indicators */}

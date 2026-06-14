@@ -50,6 +50,7 @@ export const translations = {
       ctaActivities: 'View Activities',
       ctaTransparency: 'Transparency Center',
       trustTransparent: '100% Transparent',
+      ctaDownload: "Download App",
       trustCommunity: 'Community Driven',
       trustFamily: 'Welfare First'
     },

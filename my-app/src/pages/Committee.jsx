@@ -97,7 +97,7 @@ const Committee = () => {
       bio: 'Co-Founder of Nek Kaam Foundation. Expert in community development and charity management, leading various initiatives.', 
       address: 'India, UP',
       email: 'Nihalkhan31561@gmail.com',
-      phone: '+91 97948 20273',
+      phone: '+91 79058 93742',
       photo: NihalImg 
     },
     { 
@@ -196,8 +196,8 @@ const Committee = () => {
       position: 'Environment Incharge', 
       bio: 'Leads environmental initiatives, tree plantation drives, and sustainability programs.', 
       address: 'India, Delhi',
-      email: 'shuaib.env@nekkaamfoundation.org',
-      phone: '+91 98765 43220',
+      email: '-',
+      phone: '+91 ',
       photo: ShuaibbImg 
     },
     { 
