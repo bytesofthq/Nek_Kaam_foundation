@@ -187,7 +187,7 @@ const Committee = () => {
       bio: 'Manages media relations, social media presence, and public communications for the foundation.', 
       address: 'India, UP',
       email: 'arifkhan000779@gmail.com',
-      phone: '+91 98765 43219',
+      phone: '+91 8009822257',
       photo: SheebuImg 
     },
     { 

@@ -125,7 +125,7 @@ const Footer = () => {
                     <Phone size={14} className="text-green-400" />
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500">{t('footer.phone')} (President)</p>
+                    <p className="text-xs text-gray-500">{t('footer.phone')}</p>
                     <p className="text-sm font-medium">+91 97948 20273</p>
                   </div>
                 </a>
@@ -136,7 +136,7 @@ const Footer = () => {
                   </div>
                   <div>
                     <p className="text-xs text-gray-500">{t('footer.phone')}</p>
-                    <p className="text-sm font-medium">+91 9559057411</p>
+                    <p className="text-sm font-medium">+91 70077 65521</p>
                   </div>
                 </a>
                 {/* Email */}

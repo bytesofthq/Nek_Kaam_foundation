@@ -70,7 +70,7 @@ export const translations = {
       },
       cards: {
         marriage: { title: 'Marriage Assistance', desc: 'Helping underprivileged families' },
-        water: { title: 'Water Projects', desc: 'Clean water for villages' },
+        water: { title: 'Enviornment & Plantation', desc: 'Plant trees and save the envioronment' },
         medical: { title: 'Medical Help', desc: 'Healthcare for the needy' },
         family: { title: 'Family Support', desc: '50+ families helped annually' }
       }
@@ -87,7 +87,7 @@ export const translations = {
         medical: { title: 'Medical Help', desc: 'Healthcare assistance for those who cannot afford treatment' },
         education: { title: 'Educational Support', desc: 'Enabling education for deserving underprivileged students' },
         schools: { title: 'Schools Support', desc: 'Improving school facilities and supporting student education' },
-        water: { title: 'Water Pump Installation', desc: 'Providing clean water access to villages' },
+        water: { title: 'Save Environment', desc: 'Plant trees and save the environment' },
         freezer: { title: 'Freezer Installation', desc: 'Cold storage facilities for communities' },
         ac: { title: 'AC Installation', desc: 'Air conditioning for religious and community spaces' },
         cleaning: { title: 'Community Cleaning', desc: 'Keeping our neighborhoods clean and healthy' },

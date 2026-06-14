@@ -68,7 +68,7 @@ const Stats = () => {
     {
       label: 'Registered Members',
       label: t('stats.members'),
-      value: apiStats?.totalMembers ||500,
+      value: 500,
       icon: Users,
       color: 'from-green-500 to-green-700',
       prefix: '',

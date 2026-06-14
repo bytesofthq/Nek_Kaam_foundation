@@ -67,7 +67,7 @@ const Contact = () => {
     {
       icon: PhoneCall,
       title: t('contact.phone'),
-      details: ['+91 97948 20273', '+91 95590 57411'],
+      details: ['+91 97948 20273', '+91 70077 65521'],
       color: 'green',
       link: 'tel:+919794820273'
     },
