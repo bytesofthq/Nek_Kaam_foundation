@@ -6,21 +6,21 @@ import { useTranslation } from '../../i18n/useTranslation';
 import LanguageSwitcher from '../../i18n/LanguageSwitcher';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../common/Button';
-import logoImg from './nek_kaam.png'; 
+import logoImg from './FinalNek.png'; 
 
 const navLinks = [
   { labelKey: 'navigation.home', to: '/' },
   { labelKey: 'navigation.about', to: '/about' },
   { labelKey: 'navigation.projects', to: '/projects' },
-  { labelKey: 'navigation.donate', to: '/donate' }, // ✅ Added donate link
+  { labelKey: 'navigation.donate', to: '/donate' }, 
   {
     labelKey: 'navigation.explore',
     children: [
       { labelKey: 'navigation.impactStories', to: '/impact-stories' },
       { labelKey: 'navigation.committee', to: '/committee' },
       { labelKey: 'navigation.transparency', to: '/transparency' },
-      { labelKey: 'navigation.activities', to: '/activities' }, // ✅ Added activities
-      // { labelKey: 'navigation.gallery', to: '/gallery' }, // ✅ Added gallery
+      { labelKey: 'navigation.activities', to: '/activities' }, 
+      
     ],
   },
   { labelKey: 'navigation.contact', to: '/contact' },
@@ -51,7 +51,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between gap-3 min-h-20 py-3">
           {/* Logo with Image */}
           <Link to="/" className="flex items-center gap-3 group shrink-0">
-            <div className="w-21 h-19 rounded-full bg-gradient-to-br  justify-center shadow-lg shadow-green-200 group-hover:shadow-green-300 transition-shadow overflow-hidden">
+            <div className="w-19 h-18 rounded-full bg-gradient-to-br  justify-center shadow-lg shadow-blue-200 group-hover:shadow-green-300 transition-shadow overflow-hidden">
               {logoImg ? (
                 <img src={logoImg} alt="Nek Kaam Foundation" className="w-full h-full object-cover" />
               ) : (

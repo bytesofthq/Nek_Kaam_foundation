@@ -22,12 +22,12 @@ export default defineConfig({
         start_url: '/',
         icons: [
           {
-            src: '/nek_kaam.png',
+            src: '/FinalNek.png',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: '/nek_kaam.png',
+            src: '/FinalNek.png',
             sizes: '512x512',
             type: 'image/png'
           }

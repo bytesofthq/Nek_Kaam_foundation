@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { Mail, Phone, MapPin, Heart, ArrowRight } from 'lucide-react';
 import bytesoftlogo from '../../assets/image.png';
 import { useTranslation } from '../../i18n/useTranslation';
-import logoImg from './nek_kaam.png';
+import logoImg from './FinalNek.png';
 
 // Social links hidden for now - empty array
 const socialLinks = [];
