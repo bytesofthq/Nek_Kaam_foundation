@@ -273,11 +273,18 @@ const AdminDashboard = () => {
     description: '',
     location: '',
     date: new Date().toISOString().split('T')[0],
-    isFeatured: false
+    isFeatured: false,
+    project: ''
   });
   const [submittingActivity, setSubmittingActivity] = useState(false);
   const [activityPage, setActivityPage] = useState(1);
   const [totalActivityPages, setTotalActivityPages] = useState(1);
+  const [allProjectsList, setAllProjectsList] = useState([]);
+  const [selectedActivityImages, setSelectedActivityImages] = useState([]);
+  const [activityImagePreviews, setActivityImagePreviews] = useState([]);
+  const [selectedActivityVideo, setSelectedActivityVideo] = useState(null);
+  const [activityVideoPreview, setActivityVideoPreview] = useState('');
+  const [activityVideoError, setActivityVideoError] = useState(null);
 
   // Funds state
   const [fundTab, setFundTab] = useState('collections'); // 'collections' or 'expenses'
@@ -608,13 +615,122 @@ const AdminDashboard = () => {
     }
   };
 
+  const fetchAllProjectsList = async () => {
+    try {
+      const response = await projectAPI.getAll({ limit: 100 });
+      if (response.data && response.data.success) {
+        setAllProjectsList(response.data.projects || []);
+      }
+    } catch (error) {
+      console.error('Failed to fetch all projects list:', error);
+    }
+  };
+
+  const handleActivityImagesChange = (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+    
+    // Check total limit (max 3 images)
+    const newFiles = [...selectedActivityImages, ...files].slice(0, 3);
+    setSelectedActivityImages(newFiles);
+    
+    // Generate previews
+    const previews = newFiles.map(file => URL.createObjectURL(file));
+    activityImagePreviews.forEach(url => URL.revokeObjectURL(url));
+    setActivityImagePreviews(previews);
+  };
+
+  const handleRemoveActivityImage = (index) => {
+    const newFiles = selectedActivityImages.filter((_, i) => i !== index);
+    setSelectedActivityImages(newFiles);
+    
+    const newPreviews = [...activityImagePreviews];
+    URL.revokeObjectURL(newPreviews[index]);
+    newPreviews.splice(index, 1);
+    setActivityImagePreviews(newPreviews);
+  };
+
+  const handleActivityVideoChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setActivityVideoError(null);
+
+    // Enforce 1-minute limit on client side
+    const videoElement = document.createElement('video');
+    videoElement.preload = 'metadata';
+    videoElement.onloadedmetadata = () => {
+      window.URL.revokeObjectURL(videoElement.src);
+      const duration = videoElement.duration;
+      if (duration > 60) {
+        setActivityVideoError('Video duration must not exceed 1 minute (60 seconds).');
+        setSelectedActivityVideo(null);
+        setActivityVideoPreview('');
+      } else {
+        setSelectedActivityVideo(file);
+        setActivityVideoPreview(URL.createObjectURL(file));
+      }
+    };
+    videoElement.src = URL.createObjectURL(file);
+  };
+
+  const handleRemoveActivityVideo = () => {
+    setSelectedActivityVideo(null);
+    if (activityVideoPreview) {
+      URL.revokeObjectURL(activityVideoPreview);
+      setActivityVideoPreview('');
+    }
+    setActivityVideoError(null);
+  };
+
+  // Cleanup object URLs on unmount
+  useEffect(() => {
+    return () => {
+      activityImagePreviews.forEach(url => URL.revokeObjectURL(url));
+      if (activityVideoPreview) URL.revokeObjectURL(activityVideoPreview);
+    };
+  }, [activityImagePreviews, activityVideoPreview]);
+
   const handleCreateActivity = async (e) => {
     e.preventDefault();
+
+    if (!activityForm.project) {
+      setFormError('Project association is required.');
+      return;
+    }
+
+    if (selectedActivityImages.length === 0) {
+      setFormError('At least 1 photo is required.');
+      return;
+    }
+
+    if (activityVideoError) {
+      setFormError(activityVideoError);
+      return;
+    }
+
     setSubmittingActivity(true);
     setFormError(null);
     setFormSuccess(null);
+
+    const formData = new FormData();
+    formData.append('title', activityForm.title);
+    formData.append('description', activityForm.description);
+    formData.append('location', activityForm.location);
+    formData.append('date', activityForm.date);
+    formData.append('isFeatured', activityForm.isFeatured);
+    formData.append('project', activityForm.project);
+
+    selectedActivityImages.forEach((img) => {
+      formData.append('images', img);
+    });
+
+    if (selectedActivityVideo) {
+      formData.append('video', selectedActivityVideo);
+    }
+
     try {
-      const res = await activityAPI.create(activityForm);
+      const res = await activityAPI.create(formData);
       if (res.data.success) {
         setFormSuccess('Activity created successfully!');
         setActivityForm({
@@ -622,8 +738,13 @@ const AdminDashboard = () => {
           description: '',
           location: '',
           date: new Date().toISOString().split('T')[0],
-          isFeatured: false
+          isFeatured: false,
+          project: ''
         });
+        setSelectedActivityImages([]);
+        setActivityImagePreviews([]);
+        setSelectedActivityVideo(null);
+        setActivityVideoPreview('');
         setShowActivityForm(false);
         fetchActivities();
         fetchDashboardStats();
@@ -791,6 +912,7 @@ const AdminDashboard = () => {
       fetchProjects();
     } else if (activeTab === 'activities') {
       fetchActivities();
+      fetchAllProjectsList();
     } else if (activeTab === 'funds') {
       fetchCollections();
       fetchExpenses();
@@ -1771,6 +1893,26 @@ const AdminDashboard = () => {
                       />
                     </div>
 
+                    <div>
+                      <label className="block text-gray-700 font-semibold mb-1 text-sm flex items-center gap-1.5">
+                        <FolderGit2 size={16} className="text-gray-400" /> Associated Project
+                      </label>
+                      <select
+                        name="project"
+                        value={activityForm.project}
+                        onChange={(e) => setActivityForm({ ...activityForm, project: e.target.value })}
+                        required
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-600 transition bg-white"
+                      >
+                        <option value="">-- Select Project --</option>
+                        {allProjectsList.map((proj) => (
+                          <option key={proj._id} value={proj._id}>
+                            {proj.title}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-gray-700 font-semibold mb-1 text-sm flex items-center gap-1.5">
@@ -1815,6 +1957,81 @@ const AdminDashboard = () => {
                       </label>
                     </div>
 
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {/* Photo Upload section */}
+                      <div>
+                        <label className="block text-gray-700 font-semibold mb-2 text-sm flex items-center gap-1.5">
+                          <ImageIcon size={16} className="text-gray-400" /> Upload Photos (1 to 3)
+                        </label>
+                        <div className="grid grid-cols-3 gap-3 mb-2">
+                          {activityImagePreviews.map((preview, idx) => (
+                            <div key={idx} className="relative h-20 rounded-lg overflow-hidden border border-gray-200 group">
+                              <img src={preview} alt={`preview-${idx}`} className="w-full h-full object-cover" />
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveActivityImage(idx)}
+                                className="absolute top-1 right-1 bg-red-600 hover:bg-red-700 text-white rounded-full p-1 shadow-md transition transform hover:scale-110 active:scale-95"
+                                title="Remove image"
+                              >
+                                <X size={10} />
+                              </button>
+                            </div>
+                          ))}
+                          {activityImagePreviews.length < 3 && (
+                            <div className="flex flex-col items-center justify-center h-20 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 hover:bg-gray-100 transition cursor-pointer relative">
+                              <input
+                                type="file"
+                                accept="image/*"
+                                multiple
+                                onChange={handleActivityImagesChange}
+                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                              />
+                              <Upload size={16} className="text-gray-400 mb-1" />
+                              <p className="text-[9px] text-gray-500 font-semibold">Add Photo</p>
+                            </div>
+                          )}
+                        </div>
+                        <p className="text-[10px] text-gray-400">At least 1 photo is required. Max 3 photos. PNG, JPG up to 5MB.</p>
+                      </div>
+
+                      {/* Video Upload section */}
+                      <div>
+                        <label className="block text-gray-700 font-semibold mb-2 text-sm flex items-center gap-1.5">
+                          <ImageIcon size={16} className="text-gray-400" /> Upload Video (Optional, max 1 min)
+                        </label>
+                        {activityVideoPreview ? (
+                          <div className="relative w-full rounded-lg overflow-hidden border border-gray-200 bg-black">
+                            <video src={activityVideoPreview} controls className="w-full h-20 object-contain" />
+                            <button
+                              type="button"
+                              onClick={handleRemoveActivityVideo}
+                              className="absolute top-1 right-1 bg-red-650 hover:bg-red-700 text-white rounded-full p-1 shadow-md transition transform hover:scale-110 active:scale-95 z-10"
+                              title="Remove video"
+                            >
+                              <X size={10} />
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="flex flex-col items-center justify-center w-full h-20 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 hover:bg-gray-100 transition cursor-pointer relative">
+                            <input
+                              type="file"
+                              accept="video/*"
+                              onChange={handleActivityVideoChange}
+                              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                            />
+                            <Upload size={16} className="text-gray-400 mb-1" />
+                            <p className="text-[9px] text-gray-500 font-semibold">Select Video</p>
+                            <p className="text-[8px] text-gray-400 mt-0.5">MP4, WebM up to 15MB. Max 1 min duration.</p>
+                          </div>
+                        )}
+                        {activityVideoError && (
+                          <p className="text-rose-500 text-[10px] mt-1 font-semibold flex items-center gap-1">
+                            <AlertCircle size={10} /> {activityVideoError}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
                     <div>
                       <label className="block text-gray-700 font-semibold mb-1 text-sm">Description</label>
                       <textarea
@@ -1823,7 +2040,7 @@ const AdminDashboard = () => {
                         onChange={(e) => setActivityForm({ ...activityForm, description: e.target.value })}
                         required
                         maxLength={2000}
-                        rows={5}
+                        rows={4}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-600 transition"
                         placeholder="Provide detailed description of the activity and its outcomes..."
                       />

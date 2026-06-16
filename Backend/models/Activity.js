@@ -15,10 +15,18 @@ const activitySchema = new mongoose.Schema({
     maxlength: [2000, 'Description cannot exceed 2000 characters']
   },
   images: [{
-    type: String,
     url: String,
     publicId: String
   }],
+  video: {
+    url: String,
+    publicId: String
+  },
+  project: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Project',
+    required: [true, 'Project is required']
+  },
   location: {
     type: String,
     required: [true, 'Location is required'],

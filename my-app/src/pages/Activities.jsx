@@ -11,6 +11,19 @@ const Activities = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
+  
+  const [activeImageIndexes, setActiveImageIndexes] = useState({});
+  const [activeMediaTab, setActiveMediaTab] = useState({});
+
+  const getActiveImageIndex = (activityId) => activeImageIndexes[activityId] || 0;
+  const setActiveImageIndex = (activityId, index) => {
+    setActiveImageIndexes(prev => ({ ...prev, [activityId]: index }));
+  };
+
+  const getMediaTab = (activityId) => activeMediaTab[activityId] || 'photos';
+  const setMediaTab = (activityId, tab) => {
+    setActiveMediaTab(prev => ({ ...prev, [activityId]: tab }));
+  };
 
   const CATEGORIES = [
     { key: 'All', label: t('activities.categories.all') },
@@ -130,14 +143,61 @@ const Activities = () => {
                     {/* Card */}
                     <div className={`w-full md:w-[calc(50%-2rem)] ${index % 2 === 0 ? 'md:pr-8' : 'md:pl-8'}`}>
                       <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-green-200 group">
-                        {activity.images && activity.images.length > 0 && activity.images[0].url ? (
-                          <img src={activity.images[0].url} alt={activity.title} className="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-500" />
-                        ) : (
-                          <div className="w-full h-44 bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center text-white text-4xl">
-                            {activity.category === 'Schools Support' ? '🏫' : activity.category === 'Medical Help' ? '🏥' : activity.category === 'Marriage Assistance' ? '💒' : activity.category === 'Water Project' ? '🚰' : activity.category === 'Disaster Relief' ? '🌊' : '🤝'}
-                          </div>
-                        )}
+                        {/* Media Container */}
+                        <div className="relative overflow-hidden w-full h-44 bg-gray-900">
+                          {/* Photos/Video selector overlay */}
+                          {activity.video && activity.video.url && (
+                            <div className="absolute top-2 right-2 flex gap-1.5 z-20">
+                              <button
+                                onClick={() => setMediaTab(activity._id, 'photos')}
+                                className={`px-2 py-0.5 text-[9px] font-extrabold rounded-md backdrop-blur-md transition-all cursor-pointer ${getMediaTab(activity._id) === 'photos' ? 'bg-green-600 text-white shadow' : 'bg-white/80 text-gray-700 hover:bg-white'}`}
+                              >
+                                Photos
+                              </button>
+                              <button
+                                onClick={() => setMediaTab(activity._id, 'video')}
+                                className={`px-2 py-0.5 text-[9px] font-extrabold rounded-md backdrop-blur-md transition-all cursor-pointer ${getMediaTab(activity._id) === 'video' ? 'bg-green-600 text-white shadow' : 'bg-white/80 text-gray-700 hover:bg-white'}`}
+                              >
+                                Video
+                              </button>
+                            </div>
+                          )}
+
+                          {getMediaTab(activity._id) === 'video' && activity.video?.url ? (
+                            <video src={activity.video.url} controls className="w-full h-full object-contain" />
+                          ) : (
+                            <>
+                              {activity.images && activity.images.length > 0 && activity.images[getActiveImageIndex(activity._id)]?.url ? (
+                                <img src={activity.images[getActiveImageIndex(activity._id)].url} alt={activity.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                              ) : (
+                                <div className="w-full h-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center text-white text-4xl">
+                                  {activity.category === 'Schools Support' ? '🏫' : activity.category === 'Medical Help' ? '🏥' : activity.category === 'Marriage Assistance' ? '💒' : activity.category === 'Water Project' ? '🚰' : activity.category === 'Disaster Relief' ? '🌊' : '🤝'}
+                                </div>
+                              )}
+
+                              {/* Dot Pagination indicators */}
+                              {activity.images && activity.images.length > 1 && (
+                                <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-1.5 z-10">
+                                  {activity.images.map((_, idx) => (
+                                    <button
+                                      key={idx}
+                                      onClick={() => setActiveImageIndex(activity._id, idx)}
+                                      className={`w-2 h-2 rounded-full border border-white/50 transition-all cursor-pointer ${getActiveImageIndex(activity._id) === idx ? 'bg-green-600 scale-110 shadow' : 'bg-white/60 hover:bg-white'}`}
+                                    />
+                                  ))}
+                                </div>
+                              )}
+                            </>
+                          )}
+                        </div>
+
                         <div className="p-6">
+                          {activity.project && (
+                            <div className="text-[10px] font-bold tracking-wide text-green-700 bg-green-50/70 border border-green-100 rounded-lg px-2.5 py-1 mb-3 inline-block">
+                              Project: {activity.project.title || activity.project}
+                            </div>
+                          )}
+
                           <div className="flex items-center justify-between mb-3">
                             <span className="inline-flex items-center gap-1 bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">
                               <Tag size={10} />

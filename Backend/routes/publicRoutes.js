@@ -103,7 +103,7 @@ router.get('/stats', async (req, res) => {
 router.get('/latest-updates', async (req, res) => {
   try {
     const [latestActivities, latestNews, featuredStories] = await Promise.all([
-      Activity.find().sort({ date: -1 }).limit(3),
+      Activity.find().sort({ date: -1 }).limit(3).populate('project', 'title'),
       NewsUpdate.find({ isActive: true }).sort({ publishedDate: -1 }).limit(3),
       ImpactStory.find({ isApproved: true }).sort({ date: -1 }).limit(3)
     ]);

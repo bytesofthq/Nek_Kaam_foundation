@@ -1,24 +1,77 @@
-
 const Activity = require('../models/Activity');
+const cloudinary = require('../config/cloudinary');
+
+const uploadToCloudinary = (fileBuffer, resourceType = 'image') => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { 
+        folder: 'nek_kaam_activities',
+        resource_type: resourceType
+      },
+      (error, result) => {
+        if (error) return reject(error);
+        resolve(result);
+      }
+    );
+    stream.end(fileBuffer);
+  });
+};
 
 const createActivity = async (req, res) => {
   try {
-    const { title, description, images, location, date, isFeatured } = req.body;
+    const { title, description, location, date, isFeatured, project } = req.body;
     
-    if (!title || !description || !location || !date) {
+    if (!title || !description || !location || !date || !project) {
       return res.status(400).json({ 
         success: false, 
-        message: 'Title, description, location and date are required' 
+        message: 'Title, description, location, date and project are required' 
       });
+    }
+
+    // Handle image uploads (min 1, max 3)
+    const imageFiles = req.files?.images || [];
+    if (imageFiles.length === 0) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'At least one photo is required' 
+      });
+    }
+    if (imageFiles.length > 3) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'A maximum of 3 photos are allowed' 
+      });
+    }
+
+    const images = [];
+    for (const file of imageFiles) {
+      const result = await uploadToCloudinary(file.buffer, 'image');
+      images.push({
+        url: result.secure_url,
+        publicId: result.public_id
+      });
+    }
+
+    // Handle optional video upload
+    let video = undefined;
+    const videoFiles = req.files?.video || [];
+    if (videoFiles.length > 0 && videoFiles[0]) {
+      const result = await uploadToCloudinary(videoFiles[0].buffer, 'video');
+      video = {
+        url: result.secure_url,
+        publicId: result.public_id
+      };
     }
     
     const activity = await Activity.create({
       title,
       description,
       images,
+      video,
+      project,
       location,
       date,
-      isFeatured: isFeatured || false,
+      isFeatured: isFeatured === 'true' || isFeatured === true,
       addedBy: req.admin._id
     });
     
@@ -51,7 +104,8 @@ const getAllActivities = async (req, res) => {
       .sort({ date: -1 })
       .limit(limit * 1)
       .skip((page - 1) * limit)
-      .populate('addedBy', 'name');
+      .populate('addedBy', 'name')
+      .populate('project', 'title');
     
     const total = await Activity.countDocuments(filter);
     
@@ -79,7 +133,8 @@ const getFeaturedActivities = async (req, res) => {
     const activities = await Activity.find({ isFeatured: true })
       .sort({ date: -1 })
       .limit(6)
-      .populate('addedBy', 'name');
+      .populate('addedBy', 'name')
+      .populate('project', 'title');
     
     res.status(200).json({ 
       success: true, 
@@ -97,7 +152,8 @@ const getFeaturedActivities = async (req, res) => {
 const getActivityById = async (req, res) => {
   try {
     const activity = await Activity.findById(req.params.id)
-      .populate('addedBy', 'name');
+      .populate('addedBy', 'name')
+      .populate('project', 'title');
     
     if (!activity) {
       return res.status(404).json({ 
@@ -121,9 +177,50 @@ const getActivityById = async (req, res) => {
 
 const updateActivity = async (req, res) => {
   try {
+    const { title, description, location, date, isFeatured, project } = req.body;
+    
+    let updateData = { 
+      title, 
+      description, 
+      location, 
+      date, 
+      isFeatured: isFeatured === 'true' || isFeatured === true, 
+      project 
+    };
+
+    // Handle optional image uploads
+    const imageFiles = req.files?.images || [];
+    if (imageFiles.length > 0) {
+      if (imageFiles.length > 3) {
+        return res.status(400).json({ 
+          success: false, 
+          message: 'A maximum of 3 photos are allowed' 
+        });
+      }
+      const images = [];
+      for (const file of imageFiles) {
+        const result = await uploadToCloudinary(file.buffer, 'image');
+        images.push({
+          url: result.secure_url,
+          publicId: result.public_id
+        });
+      }
+      updateData.images = images;
+    }
+
+    // Handle optional video upload
+    const videoFiles = req.files?.video || [];
+    if (videoFiles.length > 0 && videoFiles[0]) {
+      const result = await uploadToCloudinary(videoFiles[0].buffer, 'video');
+      updateData.video = {
+        url: result.secure_url,
+        publicId: result.public_id
+      };
+    }
+
     const activity = await Activity.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      updateData,
       { new: true, runValidators: true }
     );
     

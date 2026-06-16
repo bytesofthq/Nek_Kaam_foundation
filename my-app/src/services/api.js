@@ -80,8 +80,16 @@ export const projectAPI = {
 export const activityAPI = {
   getAll: (params) => api.get('/api/activities', { params }),
   getById: (id) => api.get(`/api/activities/${id}`),
-  create: (data) => api.post('/api/activities', data),
-  update: (id, data) => api.put(`/api/activities/${id}`, data),
+  create: (data) => api.post('/api/activities', data, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  }),
+  update: (id, data) => api.put(`/api/activities/${id}`, data, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  }),
   delete: (id) => api.delete(`/api/activities/${id}`),
 };
 
