@@ -1,39 +1,35 @@
 import axios from 'axios';
 
-const API_BASE_URL ='https://nek-kaam-foundationb.onrender.com';
+// Use empty string so requests go to the same origin (Vite proxy handles /api -> backend)
+const API_BASE_URL = '';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true, // Send cookies with requests
+  withCredentials: true, // Send cookies with every request
 });
 
-// Add token to requests
-api.interceptors.request.use((config) => {
-  const adminToken = localStorage.getItem('adminToken');
-  const memberToken = localStorage.getItem('memberToken');
-  const token = adminToken || memberToken;
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+// No need for Bearer token interceptor - cookies are sent automatically via withCredentials
 
 // Handle response errors
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    // Only redirect on 401 if it's NOT a verify/profile check (avoid redirect loops)
     if (error.response?.status === 401) {
-      if (localStorage.getItem('adminToken')) {
-        localStorage.removeItem('adminToken');
-        window.location.href = '/admin/login';
-      } else if (localStorage.getItem('memberToken')) {
-        localStorage.removeItem('memberToken');
-        window.location.href = '/member-login';
-      } else {
-        window.location.href = '/member-login';
+      const requestUrl = error.config?.url || '';
+      const isAuthCheck = requestUrl.includes('/auth/verify') || requestUrl.includes('/members/profile');
+      
+      if (!isAuthCheck) {
+        // For non-auth-check requests, redirect to login
+        const currentPath = window.location.pathname;
+        if (currentPath.startsWith('/admin')) {
+          window.location.href = '/admin/login';
+        } else if (currentPath.startsWith('/member')) {
+          window.location.href = '/member-login';
+        }
       }
     }
     return Promise.reject(error);
@@ -93,7 +89,6 @@ export const activityAPI = {
   delete: (id) => api.delete(`/api/activities/${id}`),
 };
 
-// Fund endpoints
 // Fund endpoints
 export const fundAPI = {
   getTotalCollections: () => api.get('/api/funds/collections/total'),

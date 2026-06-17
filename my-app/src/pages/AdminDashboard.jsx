@@ -171,7 +171,7 @@ const MonthlyFundsChart = ({ data }) => {
 };
 
 const AdminDashboard = () => {
-  const { admin, isAdminLoggedIn, logout } = useAuth();
+  const { admin, isAdminLoggedIn, loading, logout } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
 
@@ -512,10 +512,10 @@ const AdminDashboard = () => {
   };
 
   useEffect(() => {
-    if (!isAdminLoggedIn) {
-      navigate('/login');
+    if (!loading && !isAdminLoggedIn) {
+      navigate('/admin/login');
     }
-  }, [isAdminLoggedIn, navigate]);
+  }, [isAdminLoggedIn, loading, navigate]);
 
   useEffect(() => {
     if (activeTab === 'impactStories') {
@@ -997,6 +997,14 @@ const AdminDashboard = () => {
     setFormSuccess(null);
     setFormError(null);
   }, [activeTab]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <Loader size="lg" />
+      </div>
+    );
+  }
 
   if (!isAdminLoggedIn) {
     return null;

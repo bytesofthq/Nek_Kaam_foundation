@@ -26,7 +26,7 @@ const seed = async () => {
       admin = await Admin.create({
         name: 'Nek Kaam Admin',
         email: 'admin@nekkaam.org',
-        password: 'admin123', // Will be hashed by pre-save middleware
+        password: 'admin123', 
         role: 'admin',
         isActive: true
       });
@@ -35,7 +35,7 @@ const seed = async () => {
       console.log('✅ Admin already exists');
     }
 
-    // Clear existing data to avoid duplicates (optional but good for clean state)
+  
     await Project.deleteMany({});
     await ImpactStory.deleteMany({});
     await FundCollection.deleteMany({});
@@ -45,7 +45,6 @@ const seed = async () => {
     await Gallery.deleteMany({});
     console.log('Cleared existing projects, stories, funds, committee members, activities, and gallery...');
 
-    // 2. Seed Projects
     console.log('Seeding projects...');
     const projects = await Project.create([
       {

@@ -9,27 +9,32 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Check auth state on mount
+  // Check auth state on mount using cookies (no localStorage)
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const adminToken = localStorage.getItem('adminToken');
-        const memberToken = localStorage.getItem('memberToken');
-
-        if (adminToken) {
-          const response = await authAPI.verifyAdmin();
-          setAdmin(response.data.admin);
-        } else if (memberToken) {
-          const response = await memberAPI.getProfile();
-          setMember(response.data.member);
+        // Try verifying admin session via cookie
+        const adminRes = await authAPI.verifyAdmin();
+        if (adminRes.data?.success && adminRes.data?.admin) {
+          setAdmin(adminRes.data.admin);
+          setLoading(false);
+          return;
         }
       } catch (err) {
-        console.error('Auth verification failed:', err);
-        localStorage.removeItem('adminToken');
-        localStorage.removeItem('memberToken');
-      } finally {
-        setLoading(false);
+        // Admin cookie not valid or not present, try member
       }
+
+      try {
+        // Try verifying member session via cookie
+        const memberRes = await memberAPI.getProfile();
+        if (memberRes.data?.success && memberRes.data?.member) {
+          setMember(memberRes.data.member);
+        }
+      } catch (err) {
+        // No valid session - user is not logged in
+      }
+
+      setLoading(false);
     };
 
     checkAuth();
@@ -39,7 +44,8 @@ export const AuthProvider = ({ children }) => {
     try {
       setError(null);
       const response = await authAPI.adminLogin({ email, password });
-      localStorage.setItem('adminToken', response.data.token);
+      // Cookie is set automatically by the backend response (httpOnly)
+      // We just store the admin data in state
       setAdmin(response.data.admin);
       return response.data;
     } catch (err) {
@@ -53,7 +59,7 @@ export const AuthProvider = ({ children }) => {
     try {
       setError(null);
       const response = await memberAPI.login({ fullName, phoneNumber });
-      localStorage.setItem('memberToken', response.data.token);
+      // Cookie is set automatically by the backend response (httpOnly)
       setMember(response.data.member);
       return response.data;
     } catch (err) {
@@ -69,8 +75,7 @@ export const AuthProvider = ({ children }) => {
     } catch (err) {
       console.error('Logout failed:', err);
     } finally {
-      localStorage.removeItem('adminToken');
-      localStorage.removeItem('memberToken');
+      // Clear state - cookies are cleared by the backend
       setAdmin(null);
       setMember(null);
     }
