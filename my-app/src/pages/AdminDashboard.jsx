@@ -694,11 +694,6 @@ const AdminDashboard = () => {
   const handleCreateActivity = async (e) => {
     e.preventDefault();
 
-    if (!activityForm.project) {
-      setFormError('Project association is required.');
-      return;
-    }
-
     if (selectedActivityImages.length === 0) {
       setFormError('At least 1 photo is required.');
       return;
@@ -1909,10 +1904,9 @@ const AdminDashboard = () => {
                         name="project"
                         value={activityForm.project}
                         onChange={(e) => setActivityForm({ ...activityForm, project: e.target.value })}
-                        required
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-600 transition bg-white"
                       >
-                        <option value="">-- Select Project --</option>
+                        <option value="">-- Independent Activity (No Project) --</option>
                         {allProjectsList.map((proj) => (
                           <option key={proj._id} value={proj._id}>
                             {proj.title}

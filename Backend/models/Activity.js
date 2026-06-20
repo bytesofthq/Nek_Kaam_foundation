@@ -25,7 +25,7 @@ const activitySchema = new mongoose.Schema({
   project: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Project',
-    required: [true, 'Project is required']
+    required: false
   },
   location: {
     type: String,

@@ -113,6 +113,12 @@ export const translations = {
       headingHighlight: 'Active Projects',
       cta: 'View All Projects'
     },
+    activitiesPreview: {
+      tag: 'Our Activities',
+      headingStart: 'Recent',
+      headingHighlight: 'Activities & Updates',
+      cta: 'See All Activities'
+    },
     newsPreview: {
       tag: 'Latest Updates',
       headingStart: 'News &',
@@ -506,6 +512,12 @@ export const translations = {
       headingStart: 'हमारी',
       headingHighlight: 'सक्रिय परियोजनाएँ',
       cta: 'सभी परियोजनाएँ देखें'
+    },
+    activitiesPreview: {
+      tag: 'हमारी गतिविधियाँ',
+      headingStart: 'हालिया',
+      headingHighlight: 'गतिविधियाँ और अपडेट',
+      cta: 'सभी गतिविधियाँ देखें'
     },
     newsPreview: {
       tag: 'ताज़ा अपडेट',

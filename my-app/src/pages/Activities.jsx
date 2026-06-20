@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
-import { activityAPI } from '../services/api';
+import { activityAPI, projectAPI } from '../services/api';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { Calendar, MapPin, Tag, Search, Filter } from 'lucide-react';
+import { Calendar, MapPin, Tag, Search, Filter, FolderGit2 } from 'lucide-react';
 import { useTranslation } from '../i18n/useTranslation';
 
 const Activities = () => {
   const { t, language } = useTranslation();
   const [activities, setActivities] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [selectedProject, setSelectedProject] = useState('All');
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
@@ -56,12 +58,31 @@ const Activities = () => {
         setLoading(false);
       }
     };
+    const fetchProjects = async () => {
+      try {
+        const res = await projectAPI.getAll({ limit: 100 });
+        const data = res.data?.projects || res.data || [];
+        setProjects(data);
+      } catch (err) {
+        console.error('Failed to fetch projects for filter:', err);
+      }
+    };
     fetch();
+    fetchProjects();
   }, []);
 
   const filtered = activities.filter(a => {
     if (category !== 'All' && a.category !== category) return false;
     if (search && !(a.title?.toLowerCase().includes(search.toLowerCase()) || a.description?.toLowerCase().includes(search.toLowerCase()))) return false;
+    
+    if (selectedProject !== 'All') {
+      if (selectedProject === 'None') {
+        if (a.project) return false;
+      } else {
+        const activityProjectId = a.project?._id || a.project;
+        if (activityProjectId !== selectedProject) return false;
+      }
+    }
     return true;
   });
   const displayActivities = filtered;
@@ -88,28 +109,38 @@ const Activities = () => {
       {/* Filters */}
       <section className="bg-white border-b border-gray-100 py-6 sticky top-16 z-40 shadow-sm">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex flex-col md:flex-row gap-4 items-center">
-            <div className="relative flex-1 max-w-sm">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <div className="flex flex-col sm:flex-row gap-4 items-center justify-between w-full">
+            {/* Search Input */}
+            <div className="relative flex-1 w-full max-w-lg">
+              <Search size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
               <input
                 type="text"
                 placeholder={t('activities.searchPlaceholder')}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
+                className="w-full pl-11 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 shadow-sm transition-all duration-200"
               />
             </div>
-            <div className="flex items-center gap-2 overflow-x-auto pb-1 w-full md:w-auto">
-              <Filter size={16} className="text-gray-400 flex-shrink-0" />
-              {CATEGORIES.slice(0, 6).map((cat) => (
-                <button
-                  key={cat.key}
-                  onClick={() => setCategory(cat.key)}
-                  className={`px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all duration-200 flex-shrink-0 cursor-pointer ${category === cat.key ? 'bg-green-600 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-green-50 hover:text-green-600'}`}
-                >
-                  {cat.label}
-                </button>
-              ))}
+
+            {/* Project Filter Select */}
+            <div className="relative w-full sm:w-72">
+              <FolderGit2 size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+              <select
+                value={selectedProject}
+                onChange={(e) => setSelectedProject(e.target.value)}
+                className="w-full pl-11 pr-10 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 bg-white cursor-pointer shadow-sm transition-all duration-200 appearance-none font-semibold text-gray-700"
+              >
+                <option value="All">{language === 'hi' ? '📂 सभी प्रोजेक्ट्स' : '📂 All Projects'}</option>
+                <option value="None">{language === 'hi' ? '👤 स्वतंत्र गतिविधियाँ (कोई प्रोजेक्ट नहीं)' : '👤 Independent (No Project)'}</option>
+                {projects.map((proj) => (
+                  <option key={proj._id} value={proj._id}>
+                    📋 {proj.title}
+                  </option>
+                ))}
+              </select>
+              <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
+              </div>
             </div>
           </div>
         </div>
@@ -229,7 +260,7 @@ const Activities = () => {
             <div className="text-center py-20">
               <div className="text-5xl mb-4">📋</div>
               <p className="text-gray-500 text-lg">{t('activities.noActivities')}</p>
-              <button onClick={() => { setSearch(''); setCategory('All'); }} className="mt-4 text-green-600 hover:underline font-semibold cursor-pointer">
+              <button onClick={() => { setSearch(''); setCategory('All'); setSelectedProject('All'); }} className="mt-4 text-green-600 hover:underline font-semibold cursor-pointer">
                 {t('activities.clearFilters')}
               </button>
             </div>

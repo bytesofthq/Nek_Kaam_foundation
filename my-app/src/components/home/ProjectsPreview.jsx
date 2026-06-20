@@ -64,10 +64,10 @@ const ProjectsPreview = () => {
                   initial={{ opacity: 0, y: 30 }}
                   animate={inView ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.5, delay: index * 0.15 }}
-                  className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-green-200 group"
+                  className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-green-200 flex flex-col h-full group"
                 >
-                  <div className="h-3 bg-gradient-to-r from-green-500 to-emerald-600" />
-                  <div className="p-6">
+                  <div className="h-3 bg-gradient-to-r from-green-500 to-emerald-600 flex-shrink-0" />
+                  <div className="p-6 flex-1 flex flex-col">
                     <div className="flex items-center justify-between mb-4">
                       <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full ${sc.color}`}>
                         <span className={`w-1.5 h-1.5 rounded-full ${sc.dot}`} />
@@ -80,12 +80,12 @@ const ProjectsPreview = () => {
                         </span>
                       )}
                     </div>
-                    <h3 className="font-bold text-gray-800 text-lg mb-2 group-hover:text-green-700 transition-colors">{project.title}</h3>
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">{project.description || project.objective}</p>
+                    <h3 className="font-bold text-gray-800 text-lg mb-2 group-hover:text-green-700 transition-colors line-clamp-1">{project.title}</h3>
+                    <p className="text-gray-600 text-sm mb-4 line-clamp-3 flex-1">{project.description || project.objective}</p>
                     {project.location && (
-                      <div className="flex items-center gap-1 text-gray-500 text-xs">
-                        <MapPin size={12} className="text-green-500" />
-                        {project.location}
+                      <div className="flex items-center gap-1 text-gray-500 text-xs mt-auto pt-2 border-t border-gray-50">
+                        <MapPin size={12} className="text-green-500 flex-shrink-0" />
+                        <span className="truncate">{project.location}</span>
                       </div>
                     )}
                   </div>

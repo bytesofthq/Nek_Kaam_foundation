@@ -3,11 +3,12 @@ import { motion } from 'framer-motion';
 import { ChevronDown, Users, Download, ArrowRight } from 'lucide-react';
 import { useTranslation } from '../../i18n/useTranslation';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-hot-toast';
 
 const Hero = () => {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const [deferredPrompt, setDeferredPrompt] = useState(null);
-  const [showDownloadBtn, setShowDownloadBtn] = useState(false);
+  const [showDownloadBtn, setShowDownloadBtn] = useState(true);
 
   useEffect(() => {
     // Listen for the beforeinstallprompt event
@@ -40,6 +41,33 @@ const Hero = () => {
         setShowDownloadBtn(false);
       }
       setDeferredPrompt(null);
+    } else {
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      if (language === 'hi') {
+        if (isIOS) {
+          toast('इस ऐप को अपने iPhone पर इंस्टॉल करने के लिए, Safari के "शेयर" बटन पर टैप करें और "होम स्क्रीन पर जोड़ें" चुनें।', {
+            icon: '📱',
+            duration: 6000
+          });
+        } else {
+          toast('इंस्टॉल करने के लिए, कृपया अपने ब्राउज़र एड्रेस बार में इंस्टॉल आइकन (⊕) देखें या मेनू से "इंस्टॉल" चुनें।', {
+            icon: '✨',
+            duration: 6000
+          });
+        }
+      } else {
+        if (isIOS) {
+          toast('To install this app on your iPhone, tap Safari\'s "Share" button and select "Add to Home Screen".', {
+            icon: '📱',
+            duration: 6000
+          });
+        } else {
+          toast('To install, please check your browser address bar for the install icon (⊕) or select "Install" from the menu.', {
+            icon: '✨',
+            duration: 6000
+          });
+        }
+      }
     }
   };
 

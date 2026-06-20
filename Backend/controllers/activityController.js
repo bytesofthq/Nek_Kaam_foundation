@@ -21,10 +21,10 @@ const createActivity = async (req, res) => {
   try {
     const { title, description, location, date, isFeatured, project } = req.body;
     
-    if (!title || !description || !location || !date || !project) {
+    if (!title || !description || !location || !date) {
       return res.status(400).json({ 
         success: false, 
-        message: 'Title, description, location, date and project are required' 
+        message: 'Title, description, location and date are required' 
       });
     }
 
@@ -68,7 +68,7 @@ const createActivity = async (req, res) => {
       description,
       images,
       video,
-      project,
+      project: (project && project.trim() !== '') ? project : undefined,
       location,
       date,
       isFeatured: isFeatured === 'true' || isFeatured === true,
@@ -185,7 +185,7 @@ const updateActivity = async (req, res) => {
       location, 
       date, 
       isFeatured: isFeatured === 'true' || isFeatured === true, 
-      project 
+      project: (project && project.trim() !== '') ? project : null 
     };
 
     // Handle optional image uploads

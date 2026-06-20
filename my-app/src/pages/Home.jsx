@@ -6,7 +6,7 @@ import Stats from '../components/home/Stats';
 import AboutPreview from '../components/home/AboutPreview';
 import WhatWeDo from '../components/home/WhatWeDo';
 import ProjectsPreview from '../components/home/ProjectsPreview';
-import NewsPreview from '../components/home/NewsPreview';
+import ActivitiesPreview from '../components/home/ActivitiesPreview';
 import Testimonials from '../components/home/Testimonials';
 
 const Home = () => {
@@ -31,7 +31,7 @@ const Home = () => {
         <AboutPreview />
         <WhatWeDo />
         <ProjectsPreview />
-        <NewsPreview />
+        <ActivitiesPreview />
         <Testimonials />
       </motion.div>
     </>
