@@ -53,6 +53,7 @@ app.use(cors({
 
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
+    console.log('✅ Connected to MongoDB');
     if (settingRoutes && typeof settingRoutes.initSettings === 'function') {
       settingRoutes.initSettings()
         .catch(err => console.error('Failed to initialize settings:', err));
@@ -134,7 +135,10 @@ app.use((req, res) => {
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
-const server = app.listen(PORT);
+const server = app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`📝 Environment: ${process.env.NODE_ENV || 'development'}`);
+});
 
 process.on('unhandledRejection', (err) => {
   console.error(err.name, err.message);

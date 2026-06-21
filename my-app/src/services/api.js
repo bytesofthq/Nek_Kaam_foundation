@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// Use empty string so requests go to the same origin (Vite proxy handles /api -> backend)
-const API_BASE_URL = 'https://nek-kaam-foundationb.onrender.com';
+// Use empty string in development so Vite proxy handles it, otherwise point to production backend
+const API_BASE_URL = import.meta.env.DEV ? '' : 'https://nek-kaam-foundationb.onrender.com';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
