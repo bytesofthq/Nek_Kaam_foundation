@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { projectAPI } from '../services/api';
 import { motion } from 'framer-motion';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/seo/SEO';
 import { MapPin, IndianRupee, Search, CheckCircle, Clock, Calendar } from 'lucide-react';
 import { useTranslation } from '../i18n/useTranslation';
 
@@ -49,10 +49,11 @@ const Projects = () => {
 
   return (
     <div>
-      <Helmet>
-        <title>{t('projects.tag')} - Nek Kaam Foundation</title>
-        <meta name="description" content="Explore all the projects undertaken by Nek Kaam Foundation — from mosque renovation to village water access and madrasa development." />
-      </Helmet>
+      <SEO 
+        title={t('seo.projectsTitle')}
+        description={t('seo.projectsDesc')}
+        keywords="Nek Kaam Foundation projects, ongoing projects, completed projects, budget charity India, Sitapur NGO projects, community initiatives"
+      />
 
       {/* Hero */}
       <section className="bg-gradient-to-br from-green-800 to-emerald-900 text-white py-20 relative overflow-hidden">

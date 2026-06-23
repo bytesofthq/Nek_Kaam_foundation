@@ -3,7 +3,7 @@ import { impactStoryAPI } from '../services/api';
 import Loader from '../components/common/Loader';
 import { Calendar, MapPin, Heart, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/seo/SEO';
 import { useTranslation } from '../i18n/useTranslation';
 
 const cardVariants = {
@@ -64,10 +64,11 @@ const ImpactStories = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <Helmet>
-        <title>{t('impactStories.tag')} - Nek Kaam Foundation</title>
-        <meta name="description" content="Read real stories of transformation and impact created by Nek Kaam Foundation in Bihar communities." />
-      </Helmet>
+      <SEO 
+        title={t('seo.impactStoriesTitle')}
+        description={t('seo.impactStoriesDesc')}
+        keywords="Nek Kaam Foundation impact, charity success stories, water pump installation impact, school transformation stories, beneficiary testimonials"
+      />
 
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-green-800 to-emerald-900 text-white py-20 relative overflow-hidden">

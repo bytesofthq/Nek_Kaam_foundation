@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { memberAPI } from '../services/api';
+import SEO from '../components/seo/SEO';
 import Button from '../components/common/Button';
 import { CheckCircle, MapPin, Loader2, User, Phone, Globe, Home, Compass, LocateFixed } from 'lucide-react';
 import { useTranslation } from '../i18n/useTranslation';
@@ -201,6 +202,11 @@ const MemberRegister = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-800 via-emerald-900 to-teal-950 flex items-center justify-center py-16 px-4 relative overflow-hidden">
+      <SEO 
+        title={t('memberRegister.title')}
+        description={t('memberRegister.subtitle')}
+        robots="noindex, nofollow"
+      />
       {/* Background blobs for rich aesthetics */}
       <div className="absolute top-[-20%] left-[-20%] w-[600px] h-[600px] bg-green-500/20 rounded-full blur-3xl opacity-40" />
       <div className="absolute bottom-[-20%] right-[-20%] w-[600px] h-[600px] bg-yellow-500/10 rounded-full blur-3xl opacity-30 animate-pulse" />

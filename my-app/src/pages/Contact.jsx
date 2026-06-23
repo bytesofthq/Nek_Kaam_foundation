@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/seo/SEO';
 import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle, MessageSquare, PhoneCall, MailOpen } from 'lucide-react';
 import { useTranslation } from '../i18n/useTranslation';
 import { messageAPI } from '../services/api';
@@ -89,10 +89,32 @@ const Contact = () => {
 
   return (
     <div>
-      <Helmet>
-        <title>{t('contact.title')} - Nek Kaam Foundation</title>
-        <meta name="description" content={t('contact.subtitle')} />
-      </Helmet>
+      <SEO 
+        title={t('seo.contactTitle')}
+        description={t('seo.contactDesc')}
+        keywords="Contact Nek Kaam Foundation, NGO phone number, email address charity, location Sitapur, Biswan NGO contact"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "ContactPage",
+          "name": "Contact Us | Nek Kaam Foundation",
+          "description": t('seo.contactDesc'),
+          "url": "https://nekkamfoundation.in/contact",
+          "mainEntity": {
+            "@type": "NGO",
+            "name": "Nek Kaam Foundation",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Akbapur, Biswan",
+              "addressLocality": "Sitapur",
+              "addressRegion": "Uttar Pradesh",
+              "postalCode": "261201",
+              "addressCountry": "IN"
+            },
+            "telephone": "+91 97948 20273",
+            "email": "abdurrahman.mohdusman@gmail.com"
+          }
+        }}
+      />
 
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-green-700 via-emerald-700 to-teal-800 text-white">

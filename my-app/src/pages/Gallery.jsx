@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { galleryAPI } from '../services/api';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/seo/SEO';
 import { X, ZoomIn, Tag } from 'lucide-react';
 import { useTranslation } from '../i18n/useTranslation';
 
@@ -69,10 +69,11 @@ const Gallery = () => {
 
   return (
     <div>
-      <Helmet>
-        <title>{t('gallery.tag')} - Nek Kaam Foundation</title>
-        <meta name="description" content="View photos from Nek Kaam Foundation's community projects — mosques, madrasas, water projects, medical camps and more." />
-      </Helmet>
+      <SEO 
+        title={t('seo.galleryTitle')}
+        description={t('seo.galleryDesc')}
+        keywords="Nek Kaam Foundation gallery, photo gallery charity, NGO photos UP, clean water projects images, school development photos"
+      />
 
       {/* Hero */}
       <section className="bg-gradient-to-br from-green-800 to-emerald-900 text-white py-20 relative overflow-hidden">

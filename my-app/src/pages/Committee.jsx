@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { committeeAPI } from '../services/api';
 import { motion } from 'framer-motion';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/seo/SEO';
 import { Mail, MapPin, User, Phone } from 'lucide-react';
 import { useTranslation } from '../i18n/useTranslation';
 
@@ -264,10 +264,11 @@ const Committee = () => {
 
   return (
     <div>
-      <Helmet>
-        <title>{t('committee.tag')} - Nek Kaam Foundation</title>
-        <meta name="description" content="Meet the dedicated committee members of Nek Kaam Foundation — the people guiding our mission with integrity and compassion." />
-      </Helmet>
+      <SEO 
+        title={t('seo.committeeTitle')}
+        description={t('seo.committeeDesc')}
+        keywords="Nek Kaam Foundation committee, board members, NGO founders, Abdur Rahman, Mohd Nehal, Saleem Subhan, NGO team Sitapur"
+      />
 
       {/* Hero */}
       <section className="bg-gradient-to-br from-green-800 to-emerald-900 text-white py-20 relative overflow-hidden">

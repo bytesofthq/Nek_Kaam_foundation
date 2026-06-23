@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import SEO from '../components/seo/SEO';
 import Button from '../components/common/Button';
 import Loader from '../components/common/Loader';
 import { User, Phone, LogIn } from 'lucide-react';
@@ -33,6 +34,11 @@ const MemberLogin = () => {
 
   return (
     <div className="min-h-[85vh] bg-gradient-to-br from-green-800 via-emerald-900 to-teal-950 flex items-center justify-center py-16 px-4 relative overflow-hidden">
+      <SEO 
+        title={t('memberLogin.title')}
+        description={t('memberLogin.subtitle')}
+        robots="noindex, nofollow"
+      />
       {/* Decorative background blobs for rich premium aesthetics */}
       <div className="absolute top-[-25%] left-[-20%] w-[500px] h-[500px] bg-green-500/20 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-pulse" />
       <div className="absolute bottom-[-25%] right-[-20%] w-[500px] h-[500px] bg-yellow-500/10 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-pulse delay-1000" />

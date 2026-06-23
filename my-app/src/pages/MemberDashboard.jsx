@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { memberAPI, newsAPI } from '../services/api';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/seo/SEO';
 import { 
   User, Phone, MapPin, Calendar, Edit3, Save, X, Hash, Bell, 
   Camera, LogOut, CheckCircle, AlertCircle, Award, Heart, 
@@ -179,9 +179,10 @@ const MemberDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
-      <Helmet>
-        <title>{t('memberDashboard.myProfile')} - Nek Kaam Foundation</title>
-      </Helmet>
+      <SEO 
+        title={t('memberDashboard.myProfile')}
+        robots="noindex, nofollow"
+      />
 
       {/* Animated Success Toast */}
       <AnimatePresence>

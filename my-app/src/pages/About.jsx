@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/seo/SEO';
 import { CheckCircle, Target, Eye, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from '../i18n/useTranslation';
@@ -33,10 +33,11 @@ const About = () => {
 
   return (
     <div>
-      <Helmet>
-        <title>{t('about.title')}</title>
-        <meta name="description" content={t('about.heroSubtitle')} />
-      </Helmet>
+      <SEO 
+        title={t('seo.aboutTitle')}
+        description={t('seo.aboutDesc')}
+        keywords="About Nek Kaam Foundation, NGO Uttar Pradesh, NGO mission, transparent charity Sitapur, core values, NGO vision"
+      />
 
       {/* Hero */}
       <section className="bg-gradient-to-br from-green-800 via-green-700 to-emerald-800 text-white py-20 relative overflow-hidden">

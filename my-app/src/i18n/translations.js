@@ -11,6 +11,28 @@ export const translations = {
       english: 'English',
       hindi: 'Hindi'
     },
+    seo: {
+      homeTitle: 'Nek Kaam Foundation - Building Trust Through Transparency',
+      homeDesc: 'Nek Kaam Foundation helps communities, supports families, strengthens madrasas, and improves schools through collective efforts. 100% transparent NGO.',
+      aboutTitle: 'About Us | Nek Kaam Foundation',
+      aboutDesc: 'Learn about our mission, vision, core values, and our commitment to absolute financial transparency.',
+      activitiesTitle: 'Our Activities | Nek Kaam Foundation',
+      activitiesDesc: 'Explore our community projects: marriage assistance, medical aid, school support, clean water projects, and disaster relief.',
+      projectsTitle: 'Active Projects | Nek Kaam Foundation',
+      projectsDesc: 'Details of ongoing and completed community projects by Nek Kaam Foundation.',
+      transparencyTitle: 'Transparency Center | Nek Kaam Foundation',
+      transparencyDesc: '100% transparent financial records. Check our real-time donations received and funds utilized reports.',
+      committeeTitle: 'Committee Members | Nek Kaam Foundation',
+      committeeDesc: 'Meet the dedicated board of committee members governing and guiding the Nek Kaam Foundation.',
+      galleryTitle: 'Impact Gallery | Nek Kaam Foundation',
+      galleryDesc: 'Visual stories of our community projects, aid distribution, and clean water installations.',
+      impactStoriesTitle: 'Impact Stories | Nek Kaam Foundation',
+      impactStoriesDesc: 'Read real stories of transformation from families and communities we have supported.',
+      contactTitle: 'Contact Us | Nek Kaam Foundation',
+      contactDesc: 'Get in touch with Nek Kaam Foundation for inquiries, membership, or support details.',
+      donateTitle: 'Support Our Cause | Nek Kaam Foundation',
+      donateDesc: 'Donate to support underprivileged families, medical aid, and school improvements. 100% transparent donations.'
+    },
     navigation: {
       home: 'Home',
       about: 'About',
@@ -391,6 +413,28 @@ export const translations = {
       joinUs: 'हमसे जुड़ें',
       english: 'अंग्रेज़ी',
       hindi: 'हिंदी'
+    },
+    seo: {
+      homeTitle: 'नेक काम फाउंडेशन - पारदर्शिता के साथ सामाजिक सेवा',
+      homeDesc: 'नेक काम फाउंडेशन जरूरतमंद परिवारों की मदद करने, स्कूलों में सुधार करने और समाज में सकारात्मक बदलाव लाने के लिए हमारा एक सामूहिक प्रयास है।',
+      aboutTitle: 'हमारे बारे में | नेक काम फाउंडेशन',
+      aboutDesc: 'नेक काम फाउंडेशन के उद्देश्य, दृष्टि, मूल मूल्यों और पूर्ण वित्तीय पारदर्शिता के प्रति हमारे संकल्प के बारे में जानें।',
+      activitiesTitle: 'गतिविधियाँ और कार्य | नेक काम फाउंडेशन',
+      activitiesDesc: 'विवाह सहायता, चिकित्सा सहायता, स्कूल सुधार, स्वच्छ पेयजल और आपात राहत गतिविधियों का विवरण।',
+      projectsTitle: 'सक्रिय प्रोजेक्ट्स | नेक काम फाउंडेशन',
+      projectsDesc: 'नेक काम फाउंडेशन द्वारा संचालित की जा रही एवं पूरी हो चुकी कल्याणकारी योजनाओं की जानकारी।',
+      transparencyTitle: 'पारदर्शिता रिपोर्ट | नेक काम फाउंडेशन',
+      transparencyDesc: '100% वित्तीय पारदर्शिता। हमारे वास्तविक समय के दान प्राप्ति और खर्च के रिकॉर्ड की जांच करें।',
+      committeeTitle: 'समिति के सदस्य | नेक काम फाउंडेशन',
+      committeeDesc: 'नेक काम फाउंडेशन के मार्गदर्शक और समिति के समर्पित सदस्यों से मिलें।',
+      galleryTitle: 'प्रभाव गैलरी | नेक काम फाउंडेशन',
+      galleryDesc: 'विवाह सहायता, जल परियोजना और सामाजिक गतिविधियों की तस्वीरें।',
+      impactStoriesTitle: 'प्रभाव कहानियां | नेक काम फाउंडेशन',
+      impactStoriesDesc: 'हमारे द्वारा सहायता प्राप्त परिवारों और समुदायों के जीवन में आए सकारात्मक बदलावों की कहानियां।',
+      contactTitle: 'हमसे संपर्क करें | नेक काम फाउंडेशन',
+      contactDesc: 'नेक काम फाउंडेशन से संपर्क करें, सदस्य बनने या सहायता के लिए विस्तृत जानकारी प्राप्त करें।',
+      donateTitle: 'सहयोग और दान | नेक काम फाउंडेशन',
+      donateDesc: 'वंचित परिवारों, चिकित्सा सहायता और शिक्षा को सहारा देने के लिए दान करें। 100% पारदर्शी दान प्रक्रिया।'
     },
 
     donate: {

@@ -1,0 +1,16 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Disallow private user/admin dashboards and logins
+Disallow: /admin-dashboard
+Disallow: /member-dashboard
+Disallow: /admin/login
+Disallow: /member-login
+Disallow: /member-register
+
+# Host
+Host: https://nekkamfoundation.in
+
+# Sitemap
+Sitemap: https://nekkamfoundation.in/sitemap.xml

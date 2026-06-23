@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import SEO from '../components/seo/SEO';
 import Button from '../components/common/Button';
 import Loader from '../components/common/Loader';
 import { impactStoryAPI, dashboardAPI, memberAPI, projectAPI, activityAPI, fundAPI, settingAPI } from '../services/api';
@@ -1006,6 +1007,10 @@ const AdminDashboard = () => {
   }
   return (
     <div className="bg-gray-50 min-h-screen">
+      <SEO 
+        title="Admin Dashboard"
+        robots="noindex, nofollow"
+      />
       {/* Header */}
       <div className="bg-gradient-to-r from-green-600 via-emerald-700 to-teal-800 text-white py-8 shadow-md relative overflow-hidden">
         <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:16px_16px] pointer-events-none" />

@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { fundAPI } from '../services/api';
 import { motion, useInView } from 'framer-motion';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/seo/SEO';
 import { ShieldCheck, ArrowDownRight, ArrowUpRight, Wallet, Calendar, User, Tag, FileText } from 'lucide-react';
 import Loader from '../components/common/Loader';
 import { useTranslation } from '../i18n/useTranslation';
@@ -154,10 +154,11 @@ const Transparency = () => {
 
   return (
     <div>
-      <Helmet>
-        <title>{t('transparency.tag')} - Nek Kaam Foundation</title>
-        <meta name="description" content={t('transparency.subtitle')} />
-      </Helmet>
+      <SEO 
+        title={t('seo.transparencyTitle')}
+        description={t('seo.transparencyDesc')}
+        keywords="100% transparent charity, financial report NGO, donation list Sitapur, fund usage record UP, Nek Kaam Foundation transparency"
+      />
 
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-emerald-900 via-green-800 to-teal-900 text-white">

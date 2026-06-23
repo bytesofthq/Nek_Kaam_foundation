@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/seo/SEO';
 import { QrCode, Heart } from 'lucide-react';
 import { useTranslation } from '../i18n/useTranslation';
 import donateQr from './AbudrQR.jpeg';
@@ -20,10 +20,11 @@ const Donate = () => {
 
   return (
     <div>
-      <Helmet>
-        <title>{t('donate.title')} - Nek Kaam Foundation</title>
-        <meta name="description" content={t('donate.subtitle')} />
-      </Helmet>
+      <SEO 
+        title={t('seo.donateTitle')}
+        description={t('seo.donateDesc')}
+        keywords="Donate Nek Kaam Foundation, NGO donations Sitapur, charity contributions UP, support underprivileged families, direct UPI donation NGO"
+      />
 
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-green-700 via-emerald-700 to-teal-800 text-white">
