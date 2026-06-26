@@ -262,12 +262,51 @@ const Committee = () => {
 
   const displayMembers = members.length > 0 ? members : sortedMembers;
 
+  // Build Person schema for each committee member - helps Google show them in search
+  const committeeJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Committee Members of Nek Kaam Foundation",
+    "description": "Board of directors, founders, and committee members of Nek Kaam Foundation NGO based in Akbapur, Biswan, Sitapur, Uttar Pradesh.",
+    "url": "https://nekkamfoundation.in/committee",
+    "numberOfItems": demoMembers.length,
+    "itemListElement": demoMembers.map((member, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "item": {
+        "@type": "Person",
+        "name": member.name,
+        "jobTitle": member.position,
+        "worksFor": {
+          "@type": "NGO",
+          "name": "Nek Kaam Foundation",
+          "url": "https://nekkamfoundation.in"
+        },
+        "url": "https://nekkamfoundation.in/committee",
+        ...(member.email && member.email !== '-' ? { "email": member.email } : {}),
+        ...(member.phone && member.phone !== '+91 ' ? { "telephone": member.phone } : {})
+      }
+    }))
+  };
+
+  // Breadcrumb schema
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://nekkamfoundation.in" },
+      { "@type": "ListItem", "position": 2, "name": "Committee Members", "item": "https://nekkamfoundation.in/committee" }
+    ]
+  };
+
   return (
     <div>
       <SEO 
-        title={t('seo.committeeTitle')}
-        description={t('seo.committeeDesc')}
-        keywords="Nek Kaam Foundation committee, board members, NGO founders, Abdur Rahman, Mohd Nehal, Saleem Subhan, NGO team Sitapur"
+        title="Committee Members | Founders & Board | Nek Kaam Foundation Sitapur UP"
+        description="Meet the committee members and founders of Nek Kaam Foundation. Abdur Rahman - Founder & President. Mohd Nehal - Co-Founder. NGO leaders in Akbapur, Biswan, Sitapur, Uttar Pradesh."
+        keywords="Nek Kaam Foundation committee members, who is founder of Nek Kaam Foundation, who is president of Nek Kaam Foundation, Abdur Rahman Nek Kaam Foundation, Mohd Nehal co-founder, Nek Kaam Foundation board members, NGO founders Sitapur, NGO team Biswan, Salim Subhan vice president, Kamal Khan secretary, NGO leadership Uttar Pradesh"
+        jsonLd={committeeJsonLd}
+        extraJsonLd={breadcrumbJsonLd}
       />
 
       {/* Hero */}

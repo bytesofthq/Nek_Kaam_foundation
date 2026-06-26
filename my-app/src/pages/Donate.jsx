@@ -21,9 +21,21 @@ const Donate = () => {
   return (
     <div>
       <SEO 
-        title={t('seo.donateTitle')}
-        description={t('seo.donateDesc')}
-        keywords="Donate Nek Kaam Foundation, NGO donations Sitapur, charity contributions UP, support underprivileged families, direct UPI donation NGO"
+        title="Donate to Nek Kaam Foundation | UPI Donation | NGO Sitapur UP"
+        description="Donate to Nek Kaam Foundation via UPI. Support underprivileged families in Akbapur, Biswan, Sitapur, Uttar Pradesh. 100% transparent - every rupee accounted for. Scan QR to donate instantly."
+        keywords="donate Nek Kaam Foundation, NGO donation Sitapur, UPI donation charity UP, support underprivileged Biswan, charity donation India, how to donate NGO, contribute to Nek Kaam Foundation, give charity Akbapur"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "DonateAction",
+          "name": "Donate to Nek Kaam Foundation",
+          "description": "Support Nek Kaam Foundation's work in Sitapur, UP via UPI donation",
+          "url": "https://nekkamfoundation.in/donate",
+          "recipient": {
+            "@type": "NGO",
+            "name": "Nek Kaam Foundation",
+            "url": "https://nekkamfoundation.in"
+          }
+        }}
       />
 
       {/* Hero Section */}

@@ -65,9 +65,9 @@ const ImpactStories = () => {
   return (
     <div className="bg-gray-50 min-h-screen">
       <SEO 
-        title={t('seo.impactStoriesTitle')}
-        description={t('seo.impactStoriesDesc')}
-        keywords="Nek Kaam Foundation impact, charity success stories, water pump installation impact, school transformation stories, beneficiary testimonials"
+        title="Impact Stories | Lives Changed by Nek Kaam Foundation | Sitapur UP"
+        description="Real stories of transformation from families helped by Nek Kaam Foundation in Akbapur, Biswan, Sitapur, Uttar Pradesh. Clean water, marriage assistance, medical aid - read how lives changed."
+        keywords="Nek Kaam Foundation impact stories, charity success stories Sitapur, lives changed NGO UP, water pump impact stories, school transformation Biswan, marriage assistance beneficiary, medical help stories India, NGO testimonials Sitapur"
       />
 
       {/* Hero Section */}

@@ -155,9 +155,23 @@ const Transparency = () => {
   return (
     <div>
       <SEO 
-        title={t('seo.transparencyTitle')}
-        description={t('seo.transparencyDesc')}
-        keywords="100% transparent charity, financial report NGO, donation list Sitapur, fund usage record UP, Nek Kaam Foundation transparency"
+        title="100% Transparent Financial Report | Nek Kaam Foundation Sitapur UP"
+        description="Nek Kaam Foundation maintains 100% financial transparency. View all donations received and funds utilized in real-time. NGO transparency report for Akbapur, Biswan, Sitapur, Uttar Pradesh."
+        keywords="Nek Kaam Foundation transparency, NGO financial report, donation record Sitapur, fund utilization NGO, charity transparency UP, how is money spent NGO, transparent charity India, NGO accounts Biswan, financial accountability charity"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Transparency Center - Nek Kaam Foundation",
+          "description": "100% transparent financial records of Nek Kaam Foundation NGO.",
+          "url": "https://nekkamfoundation.in/transparency",
+          "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://nekkamfoundation.in" },
+              { "@type": "ListItem", "position": 2, "name": "Transparency", "item": "https://nekkamfoundation.in/transparency" }
+            ]
+          }
+        }}
       />
 
       {/* Hero Section */}

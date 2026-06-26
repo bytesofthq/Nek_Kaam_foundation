@@ -70,9 +70,10 @@ const Gallery = () => {
   return (
     <div>
       <SEO 
-        title={t('seo.galleryTitle')}
-        description={t('seo.galleryDesc')}
-        keywords="Nek Kaam Foundation gallery, photo gallery charity, NGO photos UP, clean water projects images, school development photos"
+        title="Photo Gallery | NGO Work in Sitapur Biswan UP | Nek Kaam Foundation"
+        description="View photos and videos of Nek Kaam Foundation's work in Akbapur, Biswan, Sitapur, Uttar Pradesh: school improvements, marriage assistance, medical camps, clean water projects, community activities."
+        keywords="Nek Kaam Foundation gallery, NGO photos Sitapur, charity work images Biswan, school improvement photos UP, marriage assistance photos, medical camp images, handpump installation photos, community cleaning Sitapur"
+        ogType="website"
       />
 
       {/* Hero */}

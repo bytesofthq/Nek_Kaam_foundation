@@ -31,12 +31,42 @@ const About = () => {
     { key: 'healthcare', emoji: '💊' },
   ];
 
+  const aboutJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "About Nek Kaam Foundation",
+    "description": "Learn about the mission, vision, and core values of Nek Kaam Foundation - a transparent NGO in Akbapur, Biswan, Sitapur, Uttar Pradesh.",
+    "url": "https://nekkamfoundation.in/about",
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://nekkamfoundation.in" },
+        { "@type": "ListItem", "position": 2, "name": "About Us", "item": "https://nekkamfoundation.in/about" }
+      ]
+    },
+    "mainEntity": {
+      "@type": "NGO",
+      "name": "Nek Kaam Foundation",
+      "foundingDate": "2025",
+      "founder": { "@type": "Person", "name": "Abdur Rahman", "jobTitle": "Founder & President" },
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Akbapur, Biswan",
+        "addressLocality": "Sitapur",
+        "addressRegion": "Uttar Pradesh",
+        "postalCode": "261201",
+        "addressCountry": "IN"
+      }
+    }
+  };
+
   return (
     <div>
       <SEO 
-        title={t('seo.aboutTitle')}
-        description={t('seo.aboutDesc')}
-        keywords="About Nek Kaam Foundation, NGO Uttar Pradesh, NGO mission, transparent charity Sitapur, core values, NGO vision"
+        title="About Nek Kaam Foundation - NGO Akbapur Biswan Sitapur | Mission & Vision"
+        description="Nek Kaam Foundation (nekkamfoundation) - About us. Founded by Abdur Rahman in Akbapur, Biswan, Sitapur, Uttar Pradesh. Our mission: marriage assistance, medical aid, school support, clean water, and disaster relief with 100% transparency."
+        keywords="about Nek Kaam Foundation, nekkamfoundation about, NGO Akbapur, NGO Biswan Sitapur, Nek Kaam Foundation mission, Nek Kaam Foundation vision, transparent NGO UP, charity organization Sitapur, community service Biswan, Abdur Rahman founder, NGO Uttar Pradesh"
+        jsonLd={aboutJsonLd}
       />
 
       {/* Hero */}

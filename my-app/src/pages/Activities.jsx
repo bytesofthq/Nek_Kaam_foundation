@@ -90,9 +90,23 @@ const Activities = () => {
   return (
     <div>
       <SEO 
-        title={t('seo.activitiesTitle')}
-        description={t('seo.activitiesDesc')}
-        keywords="Nek Kaam Foundation activities, marriage assistance, medical help, educational support, school support Sitapur, Handpump installation UP, community cleaning"
+        title="Activities & Community Work | Nek Kaam Foundation Sitapur Biswan UP"
+        description="Nek Kaam Foundation activities in Akbapur, Biswan, Sitapur, UP: marriage assistance for poor families, medical camps, handpump installation, school support, tree plantation, community cleaning, disaster relief. View all activities."
+        keywords="Nek Kaam Foundation activities, marriage assistance Sitapur, medical camp Biswan, handpump installation UP, school support Akbapur, community cleaning Sitapur, tree plantation UP, disaster relief Uttar Pradesh, nek kaam foundation work, NGO activities Sitapur Biswan, community NGO Uttar Pradesh"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Activities - Nek Kaam Foundation",
+          "description": "All community activities and projects of Nek Kaam Foundation in Sitapur, Biswan, Akbapur, Uttar Pradesh.",
+          "url": "https://nekkamfoundation.in/activities",
+          "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://nekkamfoundation.in" },
+              { "@type": "ListItem", "position": 2, "name": "Activities", "item": "https://nekkamfoundation.in/activities" }
+            ]
+          }
+        }}
       />
 
       {/* Hero */}
