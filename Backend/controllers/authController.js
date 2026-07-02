@@ -51,7 +51,7 @@ const adminRegister = async (req, res) => {
       { expiresIn: "30d" }
     );
 
-    const isProd = process.env.NODE_ENV === 'production';
+    const isProd = process.env.NODE_ENV === 'production' || req.hostname !== 'localhost';
     res.cookie("token", token, {
       httpOnly: true,
       secure: isProd,
@@ -143,7 +143,7 @@ const adminLogin = async (req, res) => {
       { expiresIn: '30d' }
     );
     
-    const isProd = process.env.NODE_ENV === 'production';
+    const isProd = process.env.NODE_ENV === 'production' || req.hostname !== 'localhost';
     console.log('Login Success. NODE_ENV:', process.env.NODE_ENV, 'Setting cookies with secure:', isProd);
     
     // Set cookies
@@ -185,7 +185,7 @@ const adminLogin = async (req, res) => {
 
 
 const logout = (req, res) => {
-  const isProd = process.env.NODE_ENV === 'production';
+  const isProd = process.env.NODE_ENV === 'production' || req.hostname !== 'localhost';
   res.clearCookie('token', {
     httpOnly: true,
     secure: isProd,

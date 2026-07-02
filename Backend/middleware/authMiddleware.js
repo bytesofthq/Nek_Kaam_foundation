@@ -99,7 +99,7 @@ const refreshAdminToken = async (req, res) => {
     );
 
     // Set new cookies
-    const isProd = process.env.NODE_ENV === 'production';
+    const isProd = process.env.NODE_ENV === 'production' || req.hostname !== 'localhost';
     res.cookie('token', newToken, {
       httpOnly: true,
       secure: isProd,

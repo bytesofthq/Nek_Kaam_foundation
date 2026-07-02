@@ -217,7 +217,7 @@ const loginMember = async (req, res) => {
     );
 
     // Set cookie
-    const isProd = process.env.NODE_ENV === 'production';
+    const isProd = process.env.NODE_ENV === 'production' || req.hostname !== 'localhost';
     res.cookie('memberToken', token, {
       httpOnly: true,
       secure: isProd,
