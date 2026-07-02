@@ -51,18 +51,19 @@ const adminRegister = async (req, res) => {
       { expiresIn: "30d" }
     );
 
+    const isProd = process.env.NODE_ENV === 'production';
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: 'lax',
+      secure: isProd,
+      sameSite: isProd ? 'none' : 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000,
       path: "/"
     });
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: 'lax',
+      secure: isProd,
+      sameSite: isProd ? 'none' : 'lax',
       maxAge: 30 * 24 * 60 * 60 * 1000,
       path: "/"
     });
@@ -91,6 +92,8 @@ const adminRegister = async (req, res) => {
 const adminLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log('--- Admin Login Attempt ---');
+    console.log('Email:', email);
     
     // Validation
     if (!email || !password) {
@@ -104,6 +107,7 @@ const adminLogin = async (req, res) => {
     const admin = await Admin.findOne({ email }).select('+password');
     
     if (!admin) {
+      console.log('Login: Admin not found with email:', email);
       return res.status(401).json({ 
         success: false, 
         message: 'Invalid credentials' 
@@ -114,6 +118,7 @@ const adminLogin = async (req, res) => {
     const isMatch = await bcrypt.compare(password, admin.password);
     
     if (!isMatch) {
+      console.log('Login: Password mismatch for email:', email);
       return res.status(401).json({ 
         success: false, 
         message: 'Invalid credentials' 
@@ -138,19 +143,22 @@ const adminLogin = async (req, res) => {
       { expiresIn: '30d' }
     );
     
+    const isProd = process.env.NODE_ENV === 'production';
+    console.log('Login Success. NODE_ENV:', process.env.NODE_ENV, 'Setting cookies with secure:', isProd);
+    
     // Set cookies
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: isProd,
+      sameSite: isProd ? 'none' : 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000,
       path: '/'
     });
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: isProd,
+      sameSite: isProd ? 'none' : 'lax',
       maxAge: 30 * 24 * 60 * 60 * 1000,
       path: '/'
     });
@@ -177,17 +185,25 @@ const adminLogin = async (req, res) => {
 
 
 const logout = (req, res) => {
+  const isProd = process.env.NODE_ENV === 'production';
   res.clearCookie('token', {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
+    secure: isProd,
+    sameSite: isProd ? 'none' : 'lax',
     path: '/'
   });
 
   res.clearCookie('refreshToken', {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
+    secure: isProd,
+    sameSite: isProd ? 'none' : 'lax',
+    path: '/'
+  });
+
+  res.clearCookie('memberToken', {
+    httpOnly: true,
+    secure: isProd,
+    sameSite: isProd ? 'none' : 'lax',
     path: '/'
   });
   

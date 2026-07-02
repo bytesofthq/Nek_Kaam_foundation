@@ -217,10 +217,11 @@ const loginMember = async (req, res) => {
     );
 
     // Set cookie
+    const isProd = process.env.NODE_ENV === 'production';
     res.cookie('memberToken', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: isProd,
+      sameSite: isProd ? 'none' : 'lax',
       maxAge: 30 * 24 * 60 * 60 * 1000,
       path: '/'
     });

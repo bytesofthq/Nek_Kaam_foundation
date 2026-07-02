@@ -9,16 +9,23 @@ const protect = async (req, res, next) => {
   try {
     // Get token from cookie
     const token = req.cookies.token;
+    console.log('--- Protect Middleware ---');
+    console.log('Request Cookies:', req.cookies);
+    console.log('Request Headers:', req.headers);
+    console.log('Token from cookie:', token ? 'Found (length: ' + token.length + ')' : 'Not Found');
     
     if (!token) {
+      console.log('Protect: No token found in cookies');
       return res.status(401).json({ success: false, message: 'Not authorized, no token' });
     }
     
     // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log('Decoded token payload:', decoded);
     
     // Check if it's admin token
     if (decoded.type !== 'admin') {
+      console.log('Protect: Token type is not admin:', decoded.type);
       return res.status(401).json({ success: false, message: 'Not authorized as admin' });
     }
     
@@ -26,6 +33,7 @@ const protect = async (req, res, next) => {
     const admin = await Admin.findById(decoded.id).select('-password');
     
     if (!admin) {
+      console.log('Protect: Admin not found for id:', decoded.id);
       return res.status(401).json({ success: false, message: 'Admin not found' });
     }
     
@@ -33,7 +41,7 @@ const protect = async (req, res, next) => {
     req.adminToken = token;
     next();
   } catch (error) {
-    console.error(error);
+    console.error('Protect Middleware Error:', error);
     if (error.name === 'JsonWebTokenError') {
       return res.status(401).json({ success: false, message: 'Invalid token' });
     }
@@ -91,18 +99,19 @@ const refreshAdminToken = async (req, res) => {
     );
 
     // Set new cookies
+    const isProd = process.env.NODE_ENV === 'production';
     res.cookie('token', newToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: isProd,
+      sameSite: isProd ? 'none' : 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000,
       path: '/'
     });
 
     res.cookie('refreshToken', newRefreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: isProd,
+      sameSite: isProd ? 'none' : 'lax',
       maxAge: 30 * 24 * 60 * 60 * 1000,
       path: '/'
     });
